@@ -1,2 +1,3 @@
-# forward_stagewise_regression
-Generic regression performed in a forward stagewise manner, not to be confused with stepwise.
+# genestboost
+
+Python package to perform gradient boosting with any generic estimator along with some targeted/specific implementations for certain modeling algorithms
