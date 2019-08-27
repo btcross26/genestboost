@@ -29,6 +29,6 @@ class AbsoluteLoss(BaseLoss):
 
     def d2ldyp2(self, yt, yp):
         warnings.warn(
-            "second derivative of absolute value loss with " "respect to yp is zero"
+            "second derivative of absolute value loss with respect to yp is zero"
         )
         return 0.0
