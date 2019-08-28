@@ -13,5 +13,6 @@ setup(
     author_email="crossbt@vt.edu",
     py_modules=["genestboost",
                 "genestboost.link_functions",
-                "genestboost.loss_functions"],
+                "genestboost.loss_functions",
+                "genestboost.weak_learners"],
 )
