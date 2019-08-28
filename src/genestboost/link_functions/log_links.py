@@ -14,7 +14,7 @@ from .base_class import BaseLink
 
 class LogpLink(BaseLink):
     def __init__(self, summand=0.0):
-        super().__init__(self)
+        super().__init__()
         self.summand_ = summand
 
     def _link(self, y):
