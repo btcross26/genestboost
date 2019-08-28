@@ -25,7 +25,7 @@ class AbsoluteLoss(BaseLoss):
         return np.abs(yt - yp)
 
     def dldyp(self, yt, yp):
-        return np.where(yt - yp < 0, -1, 1)
+        return np.where(yt - yp < 0, 1, -1)
 
     def d2ldyp2(self, yt, yp):
         warnings.warn(
