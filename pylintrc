@@ -1,0 +1,16 @@
+[MESSAGES CONTROL]
+
+disable=
+    invalid-name,
+    missing-docstring,
+    too-few-public-methods,
+    wrong-import-order,       # isort
+    format                    # black
+
+[DESIGN]
+
+# Maximum number of arguments for function / method
+max-args=10
+
+# Maximum number of attributes for a class (see R0902).
+max-attributes=11
