@@ -28,7 +28,6 @@ class BoostedModel:
         alpha: float = 0.1,
         step_type: str = "default",
         track_loss: bool = True,
-        initial_yp: Optional[np.ndarray] = None,
         warm_start: bool = False,
     ):
         self._link = link
@@ -36,7 +35,7 @@ class BoostedModel:
         self.weights = weights
         self.alpha = alpha
         self.step_type = step_type
-        self.initial_yp = initial_yp
+        self.yp0_ = None,
         self._loss_list = list() if track_loss else None
         self.warm_start = warm_start
         self._model_list = list()
@@ -67,19 +66,14 @@ class BoostedModel:
     def _compute_alpha(self):
         return self.alpha
 
-    def _initialize_predictions(self, yt):
+    def _initialize_predictions(self, yt: np.ndarray) -> None:
         if not self._is_fit or not self.warm_start:
             # initialize predictions
-            self.initial_yp = (
-                yt.mean() * np.ones_like(yt)
-                if self.initial_yp is None
-                else self.initial_yp
-            )
+            self.yp0_ = yt.mean()
             self._loss_list = None if self._loss_list is None else list()
             self._model_list = list()
             self._model_weights = list()
             self._is_fit = True
-        return 1.0 * self.initial_yp
 
     def _fit_next_model(
         self,
@@ -107,7 +101,8 @@ class BoostedModel:
         iterations: int = 100,
         weights: Optional[np.ndarray] = None,
     ) -> None:
-        yp = self._initialize_predictions(yt)
+        self._initialize_predictions(yt)
+        yp = self.yp0_ * np.ones_like(yt)
         self._track_loss(yt, yp)
         eta_p = self.decision_function(X)
         model_ = model.clone()
@@ -120,11 +115,27 @@ class BoostedModel:
             model = model_.clone()
 
     def decision_function(self, X: np.ndarray) -> np.ndarray:
-        eta_p = self._link(self.initial_yp)
+        eta_p = self._link(self.yp0_) * np.ones(X.shape[0])
         for model in self._model_list:
-            eta_p += model.predict(X)
+            eta_p += self._compute_alpha() * model.predict(X)
         return eta_p
 
     def predict(self, X: np.ndarray) -> np.ndarray:
         eta_p = self.decision_function(X)
         return self._link(eta_p, inverse=True)
+
+    def prediction_history(self, X: np.ndarray) -> np.ndarray:
+        pred_history = np.zeros((X.shape[0], len(self._model_list) + 1),
+                                dtype=np.float64)
+        eta_p = self._link(self.yp0_) * np.ones(X.shape[0])
+        pred_history[:, 0] = self._link(eta_p, inverse=True)
+        for i, model in enumerate(self._model_list):
+            eta_p += self._compute_alpha() * model.predict(X)
+            pred_history[:, i + 1] = self._link(eta_p, inverse=True)
+        return pred_history
+
+    def loss_history(self, X: np.ndarray, yt: np.ndarray) -> np.ndarray:
+        loss_history = self.prediction_history(X)   # initialize with predictions
+        loss_history = self._loss(yt.reshape((-1, 1)), loss_history)
+        loss_history = loss_history.mean(axis=0)
+        return loss_history
