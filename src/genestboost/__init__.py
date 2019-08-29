@@ -7,4 +7,4 @@ genestboost module
 # created: 2019-08-28
 
 from .boosted_model import BoostedModel
-
+from .forward_stagewise_glm import ForwardStagewiseGLM
