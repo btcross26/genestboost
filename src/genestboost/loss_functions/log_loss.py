@@ -16,15 +16,20 @@ class LogLoss(BaseLoss):
     """
     Log loss function class
     """
+    def __init__(self, eps=1e-24):
+        super().__init__()
+        self._eps = eps
 
     def __call__(self, yt, yp):
         return self._loss(yt, yp)
 
     def _loss(self, yt, yp):
-        return -yt * np.log(yp) - (1.0 - yt) * np.log(1.0 - yp)
+        return (
+            -yt * np.log(yp + self._eps) - (1.0 - yt) * np.log(1.0 - yp + self._eps)
+        )
 
     def dldyp(self, yt, yp):
-        return -(yt / yp) + (1.0 - yt) / (1.0 - yp)
+        return -(yt / (yp + self._eps)) + (1.0 - yt) / (1.0 - yp + self._eps)
 
     def d2ldyp2(self, yt, yp):
-        return (yt / yp ** 2) + (1.0 - yt) / (1.0 - yp) ** 2
+        return (yt / (yp ** 2 + self._eps)) + (1.0 - yt) / ((1.0 - yp) ** 2 + self._eps)
