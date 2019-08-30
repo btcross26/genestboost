@@ -12,7 +12,7 @@ import numpy as np
 from .base_class import BaseLink
 
 
-class LogpLink(BaseLink):
+class LogLink(BaseLink):
     def __init__(self, summand=0.0):
         super().__init__()
         self.summand_ = summand
@@ -30,11 +30,6 @@ class LogpLink(BaseLink):
         return y + self.summand_
 
 
-class LogLink(LogpLink):
-    def __init__(self):
-        super().__init__(self)
-
-
-class Logp1Link(LogpLink):
+class Logp1Link(LogLink):
     def __init__(self):
         super().__init__(self, summand=1.0)

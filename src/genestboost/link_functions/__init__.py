@@ -8,6 +8,6 @@ genestboost.link_functions module
 
 from .cloglog import CLogLogLink
 from .identity import IdentityLink
-from .log_links import LogLink, Logp1Link, LogpLink
+from .log_links import LogLink, Logp1Link
 from .logit import LogitLink
 from .power_links import CubeRootLink, PowerLink, ReciprocalLink, SqrtLink
