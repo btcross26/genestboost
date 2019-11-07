@@ -42,3 +42,41 @@ class QuasiLogLoss(BaseLoss):
         v1 = self.dldyp(yt, yp - self._d2_eps)
         v2 = self.dldyp(yt, yp + self._d2_eps)
         return (v2 - v1) / (2.0 * self._d2_eps)
+
+
+class BetaLoss(QuasiLogLoss):
+    def __init__(self, alpha, beta, d0_n=100, d2_eps=None, log_eps=1e-8):
+        self.alpha = alpha
+        self.beta = beta
+        self.log_eps = log_eps
+
+        # define callback function
+        def vt_callback(yp):
+            return np.exp(np.log(beta_function(alpha, beta))
+                          + (1.0 - alpha) * np.log(yp + log_eps)
+                          + (1.0 - beta) * np.log(1.0 - yp + log_eps))
+
+        d2_eps = log_eps / 10.0 if d2_eps is None else d2_eps
+        super().__init__(vt_callback, d0_n=d0_n, d2_eps=d2_eps)
+
+
+class LeakyBetaLoss(BetaLoss):
+    def __init__(self, alpha, beta, gamma=1.0, d0_n=100, d2_eps=None, log_eps=1e-8):
+        self.gamma = gamma
+        super().__init__(alpha, beta, d0_n, d2_eps, log_eps)
+
+    def dldyp(self, yt, yp):
+        # calculate loss function values from regular beta
+        values = super().dldyp(yt, yp)
+
+        # find leaky point values
+        rL = self.alpha / (self.alpha + self.beta)
+        vL = self.gamma * super().dldyp(0.0, rL)
+        rR = 1.0 - rL
+        vR = self.gamma * super().dldyp(1.0, 1.0 - rR)
+
+        # edit values outside of ratio bounds
+        values = np.where((yt - yp < -rL) & (values < vL), vL,
+                          np.where((yt - yp > rR) & (values > vR), vR, values))
+
+        return values

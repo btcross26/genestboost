@@ -10,9 +10,10 @@ Forward stagewise GLM class implementation
 from typing import Optional
 
 import numpy as np
+from collections import OrderedDict
 
 from .boosted_model import BoostedModel
-from .weak_learners import SimpleOLS
+from .weak_learners import SimplePLS
 
 
 class ForwardStagewiseGLM(BoostedModel):
@@ -20,38 +21,108 @@ class ForwardStagewiseGLM(BoostedModel):
     Forward Stagewise GLM class implementation
     """
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self,
+                 link,
+                 loss,
+                 model_callback=SimplePLS,
+                 model_callback_kwargs=None,
+                 max_vars=None,
+                 filter_threshold=None,
+                 weights: Optional[str] = None,
+                 alpha: float = 1.0,
+                 step_type: str = "default",
+                 betas=None,
+                 init_type=None,
+                 random_state=None,
+                 validation_fraction=0.0,
+                 validation_stratify=False,
+                 validation_iter_stop=10,
+                 tol=1e-8):
 
-    def fit(
-        self,
-        X: np.ndarray,
-        yt: np.ndarray,
-        iterations: int = 100,
-        weights: Optional[np.ndarray] = None,
-    ) -> None:
-        model = SimpleOLS()
-        super().fit(X, yt, model, iterations, weights)
+        super().__init__(link,
+                         loss,
+                         model_callback,
+                         model_callback_kwargs,
+                         weights,
+                         alpha,
+                         step_type,
+                         betas,
+                         init_type,
+                         random_state,
+                         validation_fraction,
+                         validation_stratify,
+                         validation_iter_stop,
+                         tol)
 
-    def get_coefficient_order(self):
+        self.coef_ = None
+        self.intercept_ = None
+
+    def initialize_model(self, X: np.ndarray, yt: np.ndarray, weights=None):
+        yp, eta_p = super().initialize_model(X, yt, weights)
+        self.coef_ = np.zeros(X[:, :self._msi].shape[1])
+        self.intercept_ = self._model_init._value
+        return yp, eta_p
+
+    def boost(self, X, yt, yp, eta_p, model_callback, model_callback_kwargs=None, weights=None):
+        yp_next, eta_p_next = super().boost(X, yt, yp, eta_p, model_callback, model_callback_kwargs, weights)
+        model, lr = self._model_list[-1]
+        self.coef_ += lr * model.coef_
+        self.intercept_ += lr * model.intercept_
+        return yp_next, eta_p_next
+
+    def get_coefficient_order(self, scale=None):
+        scale = 1.0 if scale is None else scale
+        coef_order_dict = OrderedDict()
+        for model, _ in self._model_list:
+            coefs = model.coef_ * scale
+            nc = (coefs != 0.0).sum()
+            order = np.argsort(np.abs(coefs))[::-1].tolist()
+            coef_order_dict.update(OrderedDict.fromkeys(order[:nc]))
+        return list(coef_order_dict.keys())
+
+    def get_coefficient_history(self, scale=None):
+        scale = 1.0 if scale is None else scale.reshape((1, -1))
         if self._is_fit:
-            in_set = set()
-            var_order = list()
-            for model in self._model_list:
-                coef_index = model.coef_index_
-                if coef_index not in in_set:
-                    var_order.append(coef_index)
-                    in_set.add(coef_index)
-            return var_order
-
-    def get_coefficient_history(self, standardize=True):
-        if self._is_fit:
-            coef_array = (
-                np.zeros(self._model_list[0]._X_means.shape[1])
-            )
             coef_history = list()
-            for model in self._model_list:
-                index = model.coef_index_
-                coef_array[index] += model.coef_ * self.alpha
-                coef_history.append(1.0 * coef_array)
-        return np.vstack(coef_history)
+            for i, (model, lr) in enumerate(self._model_list):
+                coef = model.coef_ * lr
+                if i == 0:
+                    coef_history.append(coef)
+                    continue
+                coef = coef + coef_history[i - 1]
+                coef_history.append(coef)
+            coef_matrix = np.vstack([np.zeros_like(coef), coef_history])
+            coef_matrix *= scale
+            return coef_matrix
+        else:
+            raise AttributeError("model has not yet been fit")
+
+    def get_prediction_var_history(self, X, groups=None):
+        coef_history = self.get_coefficient_history()
+        pred_vars = np.zeros_like(coef_history)
+        Xc = X[:, :self._msi] - X[:, :self._msi].mean(axis=0).reshape((1, -1))
+
+        for i, coef in enumerate(coef_history):
+            preds = Xc * coef.reshape((1, -1))
+            pred_vars[i, :] = preds.var(axis=0)
+
+        if groups is not None:
+            groups = np.array(groups)
+            max_ind = np.max(groups)
+            group_vars = np.zeros((pred_vars.shape[0], max_ind + 1))
+            for i in range(max_ind + 1):
+                col_index = np.nonzero(groups == i)[0].tolist()
+                group_vars[:, i] = (
+                    np.sum((pred_vars[:, col_index] * coef_history[:, col_index]) ** 2, axis=1)
+                )
+            pred_vars = group_vars
+
+        return pred_vars
+
+    def decision_function(self, X: np.ndarray) -> np.ndarray:
+        if self.get_iterations() == 0:
+            eta_p = self._model_init.predict(X)
+        else:
+            eta_p = self.intercept_ + X[:, :self._msi].dot(self.coef_)
+        return eta_p
+
