@@ -14,7 +14,7 @@ from .base_class import BaseLink
 
 class PowerLink(BaseLink):
     def __init__(self, power, summand=0.0):
-        super().__init__(self)
+        super().__init__()
         if power == 0.0:
             raise ValueError("for power=0.0, use LogLink")
         self.power_ = power

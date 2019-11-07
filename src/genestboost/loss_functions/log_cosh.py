@@ -23,7 +23,7 @@ class LogCoshLoss(BaseLoss):
         return np.log(np.cosh(yt - yp))
 
     def dldyp(self, yt, yp):
-        return -np.sinh(yt - yp) / self._loss(yt, yp)
+        return -np.tanh(yt - yp)
 
     def d2ldyp2(self, yt, yp):
-        return -self.dldyp(yt, yp) ** 2 - np.cosh(yt - yp) / np.log(np.cosh(yt - yp))
+        return 1.0 / np.cosh(yt - yp) ** 2

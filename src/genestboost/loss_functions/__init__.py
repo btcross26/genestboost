@@ -6,9 +6,12 @@ genestboost.loss_functions module
 # email: btcross26@yahoo.com
 # created: 2019-08-26
 
+
 from .absolute_value import AbsoluteLoss
+from .base_class import BaseLoss
 from .least_squares import LeastSquaresLoss
 from .log_cosh import LogCoshLoss
 from .log_loss import LogLoss
 from .poisson import PoissonLoss
+from .quantile import QuantileLoss
 from .students_t import StudentTLoss

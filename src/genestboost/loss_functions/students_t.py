@@ -19,7 +19,7 @@ class StudentTLoss(BaseLoss):
     """
 
     def __init__(self, scale=1.0, dof=2):
-        super().__init__(self)
+        super().__init__()
         self.scale_ = scale
         self.nu_ = dof + 1.0
 

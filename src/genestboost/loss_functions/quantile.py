@@ -19,7 +19,7 @@ class QuantileLoss(BaseLoss):
     """
 
     def __init__(self, p):
-        super().__init__(self)
+        super().__init__()
         self.p_ = p
 
     def __call__(self, yt, yp):
@@ -30,7 +30,7 @@ class QuantileLoss(BaseLoss):
         return np.abs(yt - yp) * multiplier
 
     def dldyp(self, yt, yp):
-        return np.where(yt - yp < 0, -(1.0 - self.p_), self.p_)
+        return np.where(yt - yp < 0, 1.0 - self.p_, -self.p_)
 
     def d2ldyp2(self, yt, yp):
         warnings.warn(
