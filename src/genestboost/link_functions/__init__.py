@@ -10,7 +10,6 @@ genestboost.link_functions module
 from .base_class import BaseLink
 from .cloglog import CLogLogLink
 from .identity import IdentityLink
-from .leaky_relu import LeakyReluLink
 from .log_links import LogLink, Logp1Link
 from .logit import LogitLink
 from .power_links import CubeRootLink, PowerLink, ReciprocalLink, SqrtLink
