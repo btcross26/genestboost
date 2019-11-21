@@ -6,25 +6,31 @@ Link function abstract base class
 # email: btcross26@yahoo.com
 # created: 2019-08-26
 
+from abc import ABC, abstractmethod
 
-class BaseLink:
+
+class BaseLink(ABC):
     """
     Base class for link functions
     """
 
-    def __call__(self, y, inverse=False):
+    def __call__(self, y: np.ndarray, inverse: bool = False) -> np.ndarray:
         if inverse:
             return self._inverse_link(y)
         return self._link(y)
 
-    def _link(self, y):
-        raise NotImplementedError("class method:<_link> not implemented")
+    @abstractmethod
+    def _link(self, y: np.ndarray) -> np.ndarray:
+        pass
 
-    def _inverse_link(self, nu):
-        raise NotImplementedError("class method:<_inverse_link> not implemented")
+    @abstractmethod
+    def _inverse_link(self, nu: np.ndarray) -> np.ndarray:
+        pass
 
-    def dydnu(self, y):
-        raise NotImplementedError("class method:<dydnu> not implemented")
+    @abstractmethod
+    def dydnu(self, y: np.ndarray) -> np.ndarray:
+        pass
 
-    def d2ydnu2(self, y):
-        raise NotImplementedError("class method:<d2ydnu2> not implemented")
+    @abstractmethod
+    def d2ydnu2(self, y: np.ndarray) -> np.ndarray:
+        pass

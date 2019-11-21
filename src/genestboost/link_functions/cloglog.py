@@ -16,18 +16,19 @@ class CLogLogLink(BaseLink):
     """
     Complementary log-log link function
     """
-    def __init__(self, eps=1e-24):
+
+    def __init__(self, eps: float = 1e-24):
         super().__init__()
         self._eps = eps
 
-    def _link(self, y):
+    def _link(self, y: np.ndarray) -> np.ndarray:
         return np.log(-np.log(1.0 - y + self._eps))
 
-    def _inverse_link(self, nu):
+    def _inverse_link(self, nu: np.ndarray) -> np.ndarray:
         return 1.0 - np.exp(-np.exp(nu))
 
-    def dydnu(self, y):
+    def dydnu(self, y: np.ndarray) -> np.ndarray:
         return -(1.0 - y) * np.log(1.0 - y + self._eps)
 
-    def d2ydnu2(self, y):
+    def d2ydnu2(self, y: np.ndarray) -> np.ndarray:
         return self.dydnu(y) * (1.0 + np.log(1.0 - y + self._eps))

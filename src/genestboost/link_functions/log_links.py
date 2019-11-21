@@ -13,23 +13,23 @@ from .base_class import BaseLink
 
 
 class LogLink(BaseLink):
-    def __init__(self, summand=0.0):
+    def __init__(self, summand: float = 0.0):
         super().__init__()
         self.summand_ = summand
 
-    def _link(self, y):
+    def _link(self, y: np.ndarray) -> np.ndarray:
         return np.log(y + self.summand_)
 
-    def _inverse_link(self, nu):
+    def _inverse_link(self, nu: np.ndarray) -> np.ndarray:
         return np.exp(nu) - self.summand_
 
-    def dydnu(self, y):
+    def dydnu(self, y: np.ndarray) -> np.ndarray:
         return y + self.summand_
 
-    def d2ydnu2(self, y):
+    def d2ydnu2(self, y: np.ndarray) -> np.ndarray:
         return y + self.summand_
 
 
 class Logp1Link(LogLink):
-    def __init__(self):
-        super().__init__(self, summand=1.0)
+    def __init__(self) -> None:
+        super().__init__(summand=1.0)

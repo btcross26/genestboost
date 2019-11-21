@@ -13,14 +13,14 @@ from .base_class import BaseLink
 
 
 class LogitLink(BaseLink):
-    def _link(self, y):
+    def _link(self, y: np.ndarray) -> np.ndarray:
         return np.log(y / (1.0 - y))
 
-    def _inverse_link(self, nu):
+    def _inverse_link(self, nu: np.ndarray) -> np.ndarray:
         return 1.0 / (1.0 + np.exp(-nu))
 
-    def dydnu(self, y):
+    def dydnu(self, y: np.ndarray) -> np.ndarray:
         return y * (1.0 - y)
 
-    def d2ydnu2(self, y):
+    def d2ydnu2(self, y: np.ndarray) -> np.ndarray:
         return self.dydnu(y) * (1.0 - 2.0 * y)
