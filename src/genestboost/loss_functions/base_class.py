@@ -6,20 +6,27 @@ Loss function abstract base class
 # email: btcross26@yahoo.com
 # created: 2019-08-26
 
+from abc import ABC, abstractmethod
 
-class BaseLoss:
+import numpy as np
+
+
+class BaseLoss(ABC):
     """
     Base class for loss functions
     """
 
-    def __call__(self, yt, yp):
+    def __call__(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
         return self._loss(yt, yp)
 
-    def _loss(self, yt, yp):
-        raise NotImplementedError("class method:<_loss> not implemented")
+    @abstractmethod
+    def _loss(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
+        pass
 
-    def dldyp(self, yt, yp):
-        raise NotImplementedError("class method:<dydnu> not implemented")
+    @abstractmethod
+    def dldyp(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
+        pass
 
-    def d2ldyp2(self, yt, yp):
-        raise NotImplementedError("class method:<d2ydnu2> not implemented")
+    @abstractmethod
+    def d2ldyp2(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
+        pass

@@ -18,16 +18,13 @@ class AbsoluteLoss(BaseLoss):
     Absolute loss function class
     """
 
-    def __call__(self, yt, yp):
-        return self._loss(yt, yp)
-
-    def _loss(self, yt, yp):
+    def _loss(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
         return np.abs(yt - yp)
 
-    def dldyp(self, yt, yp):
+    def dldyp(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
         return np.where(yt - yp < 0, 1, -1)
 
-    def d2ldyp2(self, yt, yp):
+    def d2ldyp2(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
         warnings.warn(
             "second derivative of absolute value loss with respect to yp is zero"
         )

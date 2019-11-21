@@ -18,21 +18,18 @@ class QuantileLoss(BaseLoss):
     Quantile regression loss function class
     """
 
-    def __init__(self, p):
+    def __init__(self, p: float):
         super().__init__()
         self.p_ = p
 
-    def __call__(self, yt, yp):
-        return self._loss(yt, yp)
-
-    def _loss(self, yt, yp):
+    def _loss(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
         multiplier = np.where(yt - yp < 0, 1.0 - self.p_, self.p_)
         return np.abs(yt - yp) * multiplier
 
-    def dldyp(self, yt, yp):
+    def dldyp(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
         return np.where(yt - yp < 0, 1.0 - self.p_, -self.p_)
 
-    def d2ldyp2(self, yt, yp):
+    def d2ldyp2(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
         warnings.warn(
             "second derivative of quantile value loss with respect to yp is zero"
         )

@@ -16,14 +16,11 @@ class PoissonLoss(BaseLoss):
     Poisson loss function class
     """
 
-    def __call__(self, yt, yp):
-        return self._loss(yt, yp)
-
-    def _loss(self, yt, yp):
+    def _loss(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
         return yp - yt * np.log(yp)
 
-    def dldyp(self, yt, yp):
+    def dldyp(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
         return 1.0 - yt / yp
 
-    def d2ldyp2(self, yt, yp):
+    def d2ldyp2(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
         return yt / yp ** 2
