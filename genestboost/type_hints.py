@@ -6,6 +6,9 @@ Custom type hints for use in various places of module
 # email: btcross26@yahoo.com
 # created: 2019-11-15
 
+
+from __future__ import annotations
+
 import sys
 
 import numpy as np
@@ -14,7 +17,6 @@ import numpy as np
 if ".".join(map(str, sys.version_info[:2])) == "3.8":
     from typing import Protocol
 else:
-    from __future__ import annotations
     from typing_extensions import Protocol
 
 
