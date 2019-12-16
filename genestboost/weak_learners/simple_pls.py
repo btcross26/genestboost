@@ -17,27 +17,35 @@ from ..type_hints import Model
 
 class SimplePLS:
     """
-    Implementation for SimplePLS, a partial-PLS component regression model
+    Class SimplePLS initializer
+
+    Parameters
+    ----------
+    max_vars: int, optional
+        The maximum number of variables to use in the regression. The default value
+        is 1, which is the special case of simple one-variable least squares
+        regression.
+
+    filter_threshold: float, optional
+        The correlation filter threshold to use. If the ratio of the absolute value
+        of the correlation coefficient for a predictor to the absolute value of the
+        maximum correlation coefficient of all predictors is less than the filter
+        threshold value, then the predictor will be excluded from the regression.
+        The default value is None, in which case the filter threshold will be set
+        equal to 0.0.
+
+    Attributes
+    ----------
+    coef_ : numpy.ndarray, shape (n_predictors,)
+        The estimated coefficients for the regression problem
+
+    intercept_ : float
+        The estimated intercept (bias) for the regression problem
     """
 
     def __init__(self, max_vars: int = 1, filter_threshold: Optional[float] = None):
         """
-        Class initializer
-
-        Parameters
-        ----------
-        max_vars: int, optional
-            The maximum number of variables to use in the regression. The default value
-            is 1, which is the special case of simple one-variable least squares
-            regression.
-
-        filter_threshold: float, optional
-            The correlation filter threshold to use. If the ratio of the absolute value
-            of the correlation coefficient for a predictor to the absolute value of the
-            maximum correlation coefficient of all predictors is less than the filter
-            threshold value, then the predictor will be excluded from the regression.
-            The default value is None, in which case the filter threshold will be set
-            equal to 0.0.
+        Class initializer - refer to class level documentation
         """
         # initialized attributes
         self._max_vars = max_vars
@@ -62,17 +70,16 @@ class SimplePLS:
         """
         Calling this method on an instance fits a linear regression according to the
         specified initializer arguments. The fit process will result in several
-        instance attributes being populated, including the public attributes coef_
-        and intercept_.
+        instance attributes being populated, including the public attributes housing
+        the coefficients and intercept.
 
         Parameters
         ----------
-        X: numpy.ndarray
-            The input model matrix. Should be of dtype float and have dimensions
-            [n_samples, n_predictors].
+        X: numpy.ndarray, shape (n_samples, n_predictors)
+            The input model matrix. Should be of dtype float.
 
-        y: numpy.ndarray [n_samples]
-            The target vector. Should have dimensions [n_samples].
+        y: numpy.ndarray, shape (n_samples, )
+            The target vector
 
         weights: numpy.ndarray, optional
             A value of weights to use for the linear regression fit. The default value
@@ -84,7 +91,8 @@ class SimplePLS:
 
         Returns
         -------
-        self
+        SimplePLS
+            self
         """
         # initialize model
         self._is_fit = False
@@ -118,15 +126,15 @@ class SimplePLS:
 
         Parameters
         ----------
-        X: numpy.ndarray
-             The input model matrix. Should be of dtype float and have dimensions
-            [n_samples, n_predictors]. The number of columns, n_predictors, should be
-            the same number of columns as the X argument that was used to fit the model.
+        X: numpy.ndarray, shape (n_samples, n_predictors)
+             The input model matrix. Should be of dtype float. The number of columns
+             should be the same number of columns as the X argument that was used to
+             fit the model.
 
         Returns
         -------
-        numpy.ndarray
-            A vector of predictions of dtype float and dimensions [n_samples]
+        numpy.ndarray, shape (n_samples, )
+            A vector of predictions of dtype float
         """
         return self.intercept_ + X.dot(self.coef_)
 
@@ -147,19 +155,17 @@ class SimplePLS:
 
         Parameters
         ----------
-        coefs: numpy.ndarray
-            A vector of coefficients of size [n_predictors]. For selected variables,
-            the coefficients will be equal to the individual correlation coefficients
-            of the variables with the target. For variables that are not selected,
-            the coefficient values are equal to zero.
+        coefs: numpy.ndarray, shape (n_predictors, )
+            A vector of coefficients. For selected variables, the coefficients will be
+            equal to the individual correlation coefficients of the variables with the
+            target. For variables that are not selected, the coefficient values are
+            equal to zero.
 
-        Xs: numpy.ndarray
-            The standardized version of model matrix, X, that is being fitted. It will
-            have dimensions [n_samples, n_predictors].
+        Xs: numpy.ndarray, shape (n_samples, n_predictors)
+            The standardized version of model matrix, X, that is being fitted
 
-        ys: numpy.ndarray
-            The standardized version of target vector, y, that is being fitted. It will
-            have dimensions [n_samples].
+        ys: numpy.ndarray, shape (n_samples, )
+            The standardized version of target vector, y, that is being fitted
 
         Returns
         -------
@@ -198,11 +204,10 @@ class SimplePLS:
 
         Parameters
         ----------
-        coefs: numpy.ndarray
-            A vector of coefficients calculated during the fitting process having
-            dimensions [n_predictors]. The values of the coefficients in this case
-            are equal to the correlation coefficients of the predictors with the
-            target vector.
+        coefs: numpy.ndarray, shape (n_predictors, )
+            A vector of coefficients calculated during the fitting process. The values
+            of the coefficients in this case are equal to the correlation coefficients
+            of the predictors with the target vector.
 
         Returns
         -------
@@ -260,23 +265,20 @@ class SimplePLS:
 
         Parameters
         ----------
-        X: numpy.ndarray
-             The input model matrix. Should be of dtype float and have dimensions
-            [n_samples, n_predictors]. The number of columns, n_predictors, should be
-            the same number of columns as the X argument that was used to fit the model.
+        X: numpy.ndarray, shape (n_samples, n_predictors)
+            The input model matrix. The number of columns should be the same number of
+            columns as the X argument that was used to fit the model.
 
-        y: numpy.ndarray
-            The target vector. Should have dimensions [n_samples].
+        y: numpy.ndarray, shape (n_samples, )
+            The target vector
 
         Returns
         -------
-        Xs: numpy.ndarray
-            The standardized version of model matrix, X, that is being fitted. It will
-            have dimensions [n_samples, n_predictors].
+        Xs: numpy.ndarray, shape (n_samples, n_predictors)
+            The standardized version of model matrix, X, that is being fitted
 
-        ys: numpy.ndarray
-            The standardized version of target vector, y, that is being fitted. It will
-            have dimensions [n_samples].
+        ys: numpy.ndarray, shape (n_samples, )
+            The standardized version of target vector, y, that is being fitted
         """
         if not self._is_fit:
             self._X_means = X.mean(axis=0, keepdims=True)
