@@ -20,13 +20,13 @@ class LogLink(BaseLink):
     def _link(self, y: np.ndarray) -> np.ndarray:
         return np.log(y + self.summand_)
 
-    def _inverse_link(self, nu: np.ndarray) -> np.ndarray:
-        return np.exp(nu) - self.summand_
+    def _inverse_link(self, eta: np.ndarray) -> np.ndarray:
+        return np.exp(eta) - self.summand_
 
-    def dydnu(self, y: np.ndarray) -> np.ndarray:
+    def dydeta(self, y: np.ndarray) -> np.ndarray:
         return y + self.summand_
 
-    def d2ydnu2(self, y: np.ndarray) -> np.ndarray:
+    def d2ydeta2(self, y: np.ndarray) -> np.ndarray:
         return y + self.summand_
 
 

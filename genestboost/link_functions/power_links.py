@@ -17,26 +17,20 @@ from .base_class import BaseLink
 class PowerLink(BaseLink):
     def __init__(self, power: Union[float, int], summand: float = 0.0):
         super().__init__()
-        if power == 0.0:
-            raise ValueError("for power=0.0, use LogLink")
         self.power_ = power
         self.summand_ = summand
 
     def _link(self, y: np.ndarray) -> np.ndarray:
         return (y + self.summand_) ** self.power_
 
-    def _inverse_link(self, nu: np.ndarray) -> np.ndarray:
-        return np.exp(nu) - self.summand_
+    def _inverse_link(self, eta: np.ndarray) -> np.ndarray:
+        return eta ** (1.0 / self.power_) - self.summand_
 
-    def dydnu(self, y: np.ndarray) -> np.ndarray:
+    def dydeta(self, y: np.ndarray) -> np.ndarray:
         return (1.0 / self.power_) * (y + self.summand_) ** (1.0 - self.power_)
 
-    def d2ydnu2(self, y: np.ndarray) -> np.ndarray:
-        return (
-            self.dydnu(y)
-            * (1.0 / self.power_ - 1.0)
-            / (y + self.summand_) ** self.power_
-        )
+    def d2ydeta2(self, y: np.ndarray) -> np.ndarray:
+        return self.dydeta(y) * (1.0 / self.power_ - 1.0) / self._link(y)
 
 
 class SqrtLink(PowerLink):

@@ -26,13 +26,13 @@ class BaseLink(ABC):
         pass
 
     @abstractmethod
-    def _inverse_link(self, nu: np.ndarray) -> np.ndarray:
+    def _inverse_link(self, eta: np.ndarray) -> np.ndarray:
         pass
 
     @abstractmethod
-    def dydnu(self, y: np.ndarray) -> np.ndarray:
+    def dydeta(self, y: np.ndarray) -> np.ndarray:
         pass
 
     @abstractmethod
-    def d2ydnu2(self, y: np.ndarray) -> np.ndarray:
+    def d2ydeta2(self, y: np.ndarray) -> np.ndarray:
         pass
