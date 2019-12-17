@@ -33,4 +33,4 @@ class QuantileLoss(BaseLoss):
         warnings.warn(
             "second derivative of quantile value loss with respect to yp is zero"
         )
-        return 0.0
+        return np.zeros(yp.shape)

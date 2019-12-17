@@ -82,3 +82,39 @@ LOSS_TESTS.append(
         (0.001, 0.0001),
     )
 )
+
+# quantile loss test params - p = 0.05
+LOSS_TESTS.append(
+    (
+        "quantile_loss_05",
+        QuantileLoss(p=0.05),
+        np.array([[1.5, 2.0, 0.95 * 0.5],
+                  [5.0, 4.0, 0.05 * 1.0],
+                  [10.0, 15.0, 0.95 * 5.0]]),
+        (0.001, 0.0001),
+    )
+)
+
+# quantile loss test params - p = 0.50 (absolute loss proportional)
+LOSS_TESTS.append(
+    (
+        "quantile_loss_50",
+        QuantileLoss(p=0.50),
+        np.array([[1.5, 2.0, 0.50 * 0.5],
+                  [5.0, 4.0, 0.50 * 1.0],
+                  [10.0, 15.0, 0.50 * 5.0]]),
+        (0.001, 0.0001),
+    )
+)
+
+# quantile loss test params - p = 0.95
+LOSS_TESTS.append(
+    (
+        "quantile_loss_95",
+        QuantileLoss(p=0.95),
+        np.array([[1.5, 2.0, 0.05 * 0.5],
+                  [5.0, 4.0, 0.95 * 1.0],
+                  [10.0, 15.0, 0.05 * 5.0]]),
+        (0.001, 0.0001),
+    )
+)
