@@ -77,7 +77,7 @@ class TestLossFunction:
         yt = loss_test_values[:, 0]
         yp = loss_test_values[:, 1]
 
-        # WHEN the first derivative is approximated using central differences
+        # WHEN the second derivative is approximated using central differences
         def func(y):
             return loss(yt, y)
 

@@ -118,3 +118,15 @@ LOSS_TESTS.append(
         (0.001, 0.0001),
     )
 )
+
+# student-t loss test params
+LOSS_TESTS.append(
+    (
+        "student_t_loss",
+        StudentTLoss(dof=2),
+        np.array([[1.5, 2.0, 0.17667455348],
+                  [5.0, 4.0, 0.60819766216],
+                  [10.0, 15.0, 1.5 * np.log(1.0 + 25.0 / 2.0)]]),
+        (0.001, 0.0001),
+    )
+)
