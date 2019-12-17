@@ -28,4 +28,4 @@ class AbsoluteLoss(BaseLoss):
         warnings.warn(
             "second derivative of absolute value loss with respect to yp is zero"
         )
-        return 0.0
+        return np.zeros(yp.shape)

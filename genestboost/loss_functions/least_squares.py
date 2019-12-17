@@ -23,4 +23,4 @@ class LeastSquaresLoss(BaseLoss):
         return yp - yt
 
     def d2ldyp2(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
-        return 1.0
+        return np.ones(yp.shape)

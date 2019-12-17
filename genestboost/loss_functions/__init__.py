@@ -9,9 +9,11 @@ genestboost.loss_functions module
 
 from .absolute_value import AbsoluteLoss
 from .base_class import BaseLoss
+# from .beta_loss import BetaLoss
 from .least_squares import LeastSquaresLoss
 from .log_cosh import LogCoshLoss
 from .log_loss import LogLoss
 from .poisson import PoissonLoss
 from .quantile import QuantileLoss
+from .quasilog_loss import QuasiLogLoss
 from .students_t import StudentTLoss
