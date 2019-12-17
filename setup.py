@@ -16,5 +16,5 @@ setup(
                 "genestboost.loss_functions",
                 "genestboost.weak_learners",
                 "genestboost.utils"],
-    requires=['numpy']
+    requires=['numpy', 'pytest']
 )
