@@ -2,7 +2,6 @@
 Unit tests for link function implementations
 """
 
-
 # author: Benjamin Cross
 # email: btcross26@yahoo.com
 # created: 2019-12-16
@@ -94,6 +93,7 @@ class TestLinkFunction:
         # WHEN the second derivative is approximated using central differences
         def func(eta):
             return link(eta, inverse=True)
+
         calculated_values = d2_central_difference(func, eta, h=1e-6)
 
         # THEN the calculated values of the derivative should be close to the
