@@ -39,7 +39,7 @@ class QuasiLogLoss(BaseLoss):
         ).reshape(dims)
         ipts = np.expand_dims(yp, axis=-1) + np.expand_dims(yt - yp, axis=-1) * x
         values = np.sum(self.dldyp(np.expand_dims(yt, axis=-1), ipts) * iwts, axis=-1)
-        values *= (yp - yt) / (3.0 * self._d0_n)
+        values = values * (yp - yt) / (3.0 * self._d0_n)
         return values
 
     def dldyp(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
