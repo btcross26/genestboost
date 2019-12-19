@@ -8,3 +8,5 @@ genestboost module
 
 from .boosted_model import BoostedModel
 from .forward_stagewise_glm import ForwardStagewiseGLM
+
+__all__ = ["BoostedModel", "ForwardStagewiseGLM"]

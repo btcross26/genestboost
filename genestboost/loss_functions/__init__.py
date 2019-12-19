@@ -16,3 +16,15 @@ from .poisson import PoissonLoss
 from .quantile import QuantileLoss
 from .quasilog_loss import QuasiLogLoss
 from .students_t import StudentTLoss
+
+__all__ = [
+    "AbsoluteLoss",
+    "BaseLoss",
+    "LeastSquaresLoss",
+    "LogCoshLoss",
+    "LogLoss",
+    "PoissonLoss",
+    "QuantileLoss",
+    "QuasiLogLoss",
+    "StudentTLoss",
+]
