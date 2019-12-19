@@ -9,7 +9,6 @@ genestboost.loss_functions module
 
 from .absolute_value import AbsoluteLoss
 from .base_class import BaseLoss
-# from .beta_loss import BetaLoss
 from .least_squares import LeastSquaresLoss
 from .log_cosh import LogCoshLoss
 from .log_loss import LogLoss

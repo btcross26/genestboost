@@ -8,14 +8,13 @@ General boosting model class implementation
 
 
 import logging
-import warnings
 from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple, Union
 
 import numpy as np
 
 from .link_functions import BaseLink
 from .loss_functions import BaseLoss
-from .type_hints import *
+from .type_hints import ActivationCallback, Model, WeightsCallback
 
 LOGGER = logging.getLogger(__name__)
 
@@ -119,7 +118,7 @@ class BoostedModel:
         # get training/validation index
         self._tindex = [i for i in range(yt.shape[0])]
         np.random.seed(self.random_state)
-        if self.validation_stratify == True:
+        if self.validation_stratify is True:
             index_list = list()
             for group in np.unique(yt):
                 mask = yt == group
@@ -381,7 +380,7 @@ class BoostedModel:
         )
         model_links *= lr_array
         link_history = np.cumsum(model_links, axis=1)
-        if links == True:
+        if links is True:
             return link_history
         else:
             return self._link(link_history, inverse=True)

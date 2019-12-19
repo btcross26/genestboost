@@ -9,14 +9,12 @@ Custom type hints for use in various places of module
 
 from __future__ import annotations
 
-import sys
-
 import numpy as np
 
 # import Protocol and self return type type hints depending on Python version
-if ".".join(map(str, sys.version_info[:2])) == "3.8":
+try:  # Python 3.8 onwards
     from typing import Protocol
-else:
+except ImportError:  # prior to Python 3.8
     from typing_extensions import Protocol
 
 

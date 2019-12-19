@@ -46,10 +46,7 @@ class TestLossFunction:
         calculated_values = loss(yt, yp)
 
         # THEN the correct values of error should be returned
-        np.testing.assert_allclose(calculated_values,
-                                   error,
-                                   atol=1e-4,
-                                   rtol=1e-5)
+        np.testing.assert_allclose(calculated_values, error, atol=1e-4, rtol=1e-5)
 
     def test_d1_loss(self, test_name, loss, loss_test_values, tol):
         """

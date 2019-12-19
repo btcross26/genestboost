@@ -16,8 +16,8 @@ from genestboost.loss_functions import (
     LogLoss,
     PoissonLoss,
     QuantileLoss,
-    StudentTLoss,
     QuasiLogLoss,
+    StudentTLoss,
 )
 
 # setup link test params to loop through tests

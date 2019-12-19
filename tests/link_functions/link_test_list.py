@@ -9,15 +9,15 @@ List of test params to import into link_function_tests.py
 import numpy as np
 
 from genestboost.link_functions import (
+    CLogLogLink,
+    CubeRootLink,
     IdentityLink,
     LogitLink,
-    CLogLogLink,
     LogLink,
     Logp1Link,
     PowerLink,
-    SqrtLink,
-    CubeRootLink,
     ReciprocalLink,
+    SqrtLink,
 )
 
 # setup link test params to loop through tests

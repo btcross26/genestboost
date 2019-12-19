@@ -7,16 +7,16 @@ Forward stagewise GLM class implementation
 # created: 2019-08-26
 
 
+from collections import OrderedDict
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
-from collections import OrderedDict
+import numpy as np
 
 from .boosted_model import BoostedModel
-from .weak_learners import SimplePLS
-from .type_hints import *
-
 from .link_functions import BaseLink
 from .loss_functions import BaseLoss
+from .type_hints import Model, WeightsCallback
+from .weak_learners import SimplePLS
 
 
 class ForwardStagewiseGLM(BoostedModel):
