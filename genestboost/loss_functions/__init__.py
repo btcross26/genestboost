@@ -9,7 +9,7 @@ genestboost.loss_functions module
 
 from .absolute_value import AbsoluteLoss
 from .base_class import BaseLoss
-from .beta_loss import BetaLoss
+from .beta_loss import BetaLoss, LeakyBetaLoss
 from .least_squares import LeastSquaresLoss
 from .log_cosh import LogCoshLoss
 from .log_loss import LogLoss
@@ -22,6 +22,7 @@ __all__ = [
     "AbsoluteLoss",
     "BaseLoss",
     "BetaLoss",
+    "LeakyBetaLoss",
     "LeastSquaresLoss",
     "LogCoshLoss",
     "LogLoss",

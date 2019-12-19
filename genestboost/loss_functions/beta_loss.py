@@ -10,6 +10,7 @@ Least squares loss function implementation
 from typing import Callable
 
 import numpy as np
+from scipy.optimize import bisect
 from scipy.special import beta as beta_function
 from scipy.special import betainc
 
@@ -85,6 +86,90 @@ class BetaLoss(BaseLoss):
         return -(yt - yp) / self._vt_callback(yp)
 
     def d2ldyp2(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
+        v1 = self.dldyp(yt, yp - 5e-13)
+        v2 = self.dlyp(yt, yp + 5e-13)
+        return (v2 - v1) / 1e-12
+
+
+class LeakyBetaLoss(BetaLoss):
+    def __init__(self, alpha, beta, gamma=1.0, eps=1e-10, xtol=1e-8):
+        """
+        Class initializer
+
+        Parameters
+        ----------
+        alpha: float
+            Passed as the alpha argument to the BetaLoss initializer
+
+        beta: float
+            Passed as the beta argument to the BetaLoss initializer
+
+        eps: float, optional
+            Passed as the eps argument to the BetaLoss initializer (the default value
+            is 1e-10)
+
+        gamma: float, optional
+            A float in the range [0.0, 1.0] specifying ... (the default value is 1.0)
+
+        xtol: float, optional
+            Passed as the xtol argument to scipy.optimize.bisect (the default value is
+            1e-8)
+        """
+        self.gamma = gamma
+        super().__init__(alpha=alpha, beta=beta, eps=eps)
+
+        # find leaky point values
+        self.rL = self.alpha / (self.alpha + self.beta)  # left x
+        self.vL = super().dldyp(0.0, self.rL)  # left slope
+        self.rR = 1.0 - self.rL  # right x
+        self.vR = super().dldyp(1.0, 1.0 - self.rR)  # right slope
+
+        # leaky slopes
+        self.mL = self.gamma * self.vL
+        self.mR = self.gamma * self.vR
+
+        # transition pts
+        floss = super().dldyp
+        self.xL = bisect(
+            lambda x: floss(0.0, x) - self.mL, self.rL, 1.0 - 1e-10, xtol=xtol
+        )
+        self.yL = super()._loss(0.0, self.xL)
+        self.xR = bisect(
+            lambda x: floss(1.0, x) - self.mR, 1e-10, 1.0 - self.rR, xtol=xtol
+        )
+        self.yR = super()._loss(1.0 - self.xR)
+
+    def _loss(self, yt, yp):
+        # calculate loss function values from regular betaloss
+        values = super()._loss(yt, yp)
+
+        # modify left shelf
+        values = np.where(
+            yt - yp < -self.xL, self.yL - self.mL * (-yp * self.xL), values
+        )
+
+        # modify right shelf
+        values = np.where(
+            yt - yp > 1.0 - self.xR,
+            self.yR - self.mR * (yt - yp - 1.0 + self.xR),
+            values,
+        )
+
+        return values
+
+    def dldyp(self, yt, yp):
+        # calculate loss gradient values from regular betaloss
+        values = super().dldyp(yt, yp)
+
+        # modify left shelf
+        values = np.where(yt - yp < -self.xL, self.mL, values)
+
+        # modify right shelf
+        values = np.where(yt - yp > 1.0 - self.xR, self.mR, values)
+
+        return values
+
+    def d2ldyp2(self, yt, yp):
         v1 = self.dldyp(yt, yp - 5e-13)
         v2 = self.dlyp(yt, yp + 5e-13)
         return (v2 - v1) / 1e-12
