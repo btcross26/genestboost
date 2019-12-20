@@ -35,6 +35,7 @@ class BetaLoss(BaseLoss):
         """
         self.alpha = alpha
         self.beta = beta
+        self.eps = eps
         self.scale = 1.0 / beta_function(alpha, beta)
         self._vt_callback = self.beta_callback(alpha, beta, eps)
 
@@ -86,9 +87,13 @@ class BetaLoss(BaseLoss):
         return -(yt - yp) / self._vt_callback(yp)
 
     def d2ldyp2(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
-        v1 = self.dldyp(yt, yp - 5e-13)
-        v2 = self.dlyp(yt, yp + 5e-13)
-        return (v2 - v1) / 1e-12
+        callback_values = self._vt_callback(yp)
+        d_left = 1.0 / callback_values
+        du = (1.0 - self.alpha) / (yp + self.eps) - (1.0 - self.beta) / (
+            1.0 - yp + self.eps
+        )
+        d_right = du * (yt - yp) / callback_values
+        return d_left + d_right
 
 
 class LeakyBetaLoss(BetaLoss):
@@ -109,7 +114,7 @@ class LeakyBetaLoss(BetaLoss):
             is 1e-10)
 
         gamma: float, optional
-            A float in the range [0.0, 1.0] specifying ... (the default value is 1.0)
+            A float in the range (0.0, 1.0] specifying ... (the default value is 1.0)
 
         xtol: float, optional
             Passed as the xtol argument to scipy.optimize.bisect (the default value is
@@ -131,13 +136,13 @@ class LeakyBetaLoss(BetaLoss):
         # transition pts
         floss = super().dldyp
         self.xL = bisect(
-            lambda x: floss(0.0, x) - self.mL, self.rL, 1.0 - 1e-10, xtol=xtol
+            lambda x: floss(0.0, x) - self.mL, self.rL, 1.0 - 1e-8, xtol=xtol
         )
         self.yL = super()._loss(0.0, self.xL)
         self.xR = bisect(
-            lambda x: floss(1.0, x) - self.mR, 1e-10, 1.0 - self.rR, xtol=xtol
+            lambda x: floss(1.0, x) - self.mR, 1e-8, 1.0 - self.rR, xtol=xtol
         )
-        self.yR = super()._loss(1.0 - self.xR)
+        self.yR = super()._loss(1.0, self.xR)
 
     def _loss(self, yt, yp):
         # calculate loss function values from regular betaloss
@@ -170,6 +175,10 @@ class LeakyBetaLoss(BetaLoss):
         return values
 
     def d2ldyp2(self, yt, yp):
-        v1 = self.dldyp(yt, yp - 5e-13)
-        v2 = self.dlyp(yt, yp + 5e-13)
-        return (v2 - v1) / 1e-12
+        # calculate loss gradient values from regular betaloss
+        values = super().d2ldyp2(yt, yp)
+
+        # modify shelves with 0.0 second derivative
+        values = np.where((yt - yp < -self.xL) | (yt - yp > 1.0 - self.xR), 0.0, values)
+
+        return values
