@@ -12,10 +12,10 @@ from __future__ import annotations
 import numpy as np
 
 # import Protocol and self return type type hints depending on Python version
-try:  # Python 3.8 onwards
-    from typing import Protocol
-except ImportError:  # prior to Python 3.8
+try:  # pre-Python 3.8
     from typing_extensions import Protocol
+except ImportError:  # prior to Python 3.8
+    from typing import Protocol as Protocol  # type: ignore
 
 
 class Model(Protocol):
