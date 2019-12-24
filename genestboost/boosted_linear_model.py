@@ -1,5 +1,5 @@
 """
-Forward stagewise GLM class implementation
+BoostedLinearModel class implementation
 """
 
 # author: Benjamin Cross
@@ -19,9 +19,9 @@ from .type_hints import Model, WeightsCallback
 from .weak_learners import SimplePLS
 
 
-class ForwardStagewiseGLM(BoostedModel):
+class BoostedLinearModel(BoostedModel):
     """
-    Forward Stagewise GLM class implementation
+    BoostedLinearModel GLM class implementation
     """
 
     def __init__(
