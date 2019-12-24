@@ -90,7 +90,7 @@ class ForwardStagewiseGLM(BoostedModel):
 
     def get_coefficient_order(self, scale: Optional[np.ndarray] = None) -> List[int]:
         scale = 1.0 if scale is None else scale
-        coef_order_dict = OrderedDict()
+        coef_order_dict = OrderedDict()  # type: Dict
         for model, _ in self._model_list:
             coefs = model.coef_ * scale
             nc = (coefs != 0.0).sum()
