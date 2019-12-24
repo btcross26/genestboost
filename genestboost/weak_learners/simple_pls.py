@@ -17,40 +17,42 @@ from ..type_hints import Model
 
 class SimplePLS:
     """
-    Class SimplePLS initializer
-
-    Parameters
-    ----------
-    max_vars: int, optional
-        The maximum number of variables to use in the regression. The default value
-        is 1, which is the special case of simple one-variable least squares
-        regression.
-
-    filter_threshold: float, optional
-        The correlation filter threshold to use. If the ratio of the absolute value
-        of the correlation coefficient for a predictor to the absolute value of the
-        maximum correlation coefficient of all predictors is less than the filter
-        threshold value, then the predictor will be excluded from the regression.
-        The default value is None, in which case the filter threshold will be set
-        equal to 0.0.
-
-    Attributes
-    ----------
-    coef_ : numpy.ndarray, shape (n_predictors,)
-        The estimated coefficients for the regression problem
-
-    intercept_ : float
-        The estimated intercept (bias) for the regression problem
+    Implementation for SimplePLS, a partial-PLS component regression model
     """
 
-    def __init__(self, max_vars: int = 1, filter_threshold: Optional[float] = None):
+    def __init__(
+        self, max_vars: Optional[int] = 1, filter_threshold: Optional[float] = None
+    ):
         """
-        Class initializer - refer to class level documentation
+        Class SimplePLS initializer
+
+        Parameters
+        ----------
+        max_vars: int, optional
+            The maximum number of variables to use in the regression. The default value
+            is 1, which is the special case of simple one-variable least squares
+            regression. If None, then max_vars will be set to the number of variables
+            in the X model matrix during the fitting process.
+
+        filter_threshold: float, optional
+            The correlation filter threshold to use. If the ratio of the absolute value
+            of the correlation coefficient for a predictor to the absolute value of the
+            maximum correlation coefficient of all predictors is less than the filter
+            threshold value, then the predictor will be excluded from the regression.
+            The default value is None, in which case the filter threshold will be set
+            equal to 0.0.
+
+        Attributes
+        ----------
+        coef_ : numpy.ndarray, shape (n_predictors,)
+            The estimated coefficients for the regression problem
+
+        intercept_ : float
+            The estimated intercept (bias) for the regression problem
         """
         # initialized attributes
         self._max_vars = max_vars
         self._filter_threshold = 0.0 if filter_threshold is None else filter_threshold
-        self._is_fit: bool = False
 
         # public attributes initialized during class usage
         self.coef_: np.ndarray
@@ -95,7 +97,6 @@ class SimplePLS:
             self
         """
         # initialize model
-        self._is_fit = False
         Xs, ys = self._initialize_model(X, y)
 
         # calculate initial model coefficients
@@ -226,7 +227,14 @@ class SimplePLS:
             return coefs * coef_mask
 
         # edge case where all vars used
-        if (self._max_vars >= coefs.shape[0]) and self._filter_threshold <= 0.0:
+        num_vars = (
+            coefs.shape[0]
+            if self._max_vars is None
+            else min(self._max_vars, coefs.shape[0])
+        )
+        if num_vars == coefs.shape[0] and (
+            self._filter_threshold <= 0.0 or self._filter_threshold is None
+        ):
             return coefs
 
         # apply correlation filter
@@ -234,15 +242,13 @@ class SimplePLS:
         rel_coefs = coefs_abs / max_value
         if self._filter_threshold is not None:
             coef_mask = 1.0 * (rel_coefs >= self._filter_threshold)
-        else:
-            coef_mask = np.ones(coefs.shape[0])
 
         # apply max_vars intermediate case if specified
-        if self._max_vars is not None and coef_mask.sum() > self._max_vars:
+        if coef_mask.sum() > num_vars:
             heap_index = list()  # type: List[Tuple[float, int]]
             for i in np.nonzero(coef_mask == 1)[0]:
                 value = rel_coefs[i]
-                if len(heap_index) < self._max_vars:
+                if len(heap_index) < num_vars:
                     heapq.heappush(heap_index, (value, i))
                 else:
                     min_heap_tuple = heapq.heappop(heap_index)
@@ -260,8 +266,7 @@ class SimplePLS:
         """
         A private method that is called at the beginning of the fitting process and is
         not meant to be called on an instance. This method initializes the model by
-        setting the _is_fit attribut to True and calculating standardized versions of
-        the X and y fitted arrays.
+        calculating standardized versions of the X and y fitted arrays.
 
         Parameters
         ----------
@@ -280,12 +285,10 @@ class SimplePLS:
         ys: numpy.ndarray, shape (n_samples, )
             The standardized version of target vector, y, that is being fitted
         """
-        if not self._is_fit:
-            self._X_means = X.mean(axis=0, keepdims=True)
-            self._X_std = X.std(axis=0, keepdims=True)
-            self._X_std = np.where(self._X_std == 0, 1.0, self._X_std)
-            self._y_mean = y.mean()
-            self._y_std = y.std()
-            self._y_std = 1.0 if self._y_std == 0.0 else self._y_std
-            self._is_fit = True
+        self._X_means = X.mean(axis=0, keepdims=True)
+        self._X_std = X.std(axis=0, keepdims=True)
+        self._X_std = np.where(self._X_std == 0, 1.0, self._X_std)
+        self._y_mean = y.mean()
+        self._y_std = y.std()
+        self._y_std = 1.0 if self._y_std == 0.0 else self._y_std
         return (X - self._X_means) / self._X_std, (y - self._y_mean) / self._y_std

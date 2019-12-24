@@ -3,6 +3,11 @@ Dummy data for SimplePLS unit tests. The X-matrix is a randomly generated
 IID normal matrix. The y-vector is then generated as
 X[:,0] * 4 + X[:,3] * 2 - X[:,7] * 6 and has standard normal variabe noise
 added.
+
+# calculated relative filter thresholds for each X (non-absolute values)
+array([ 0.97543043,  0.16886885, -0.11959516,  0.62326294,  0.15992299,
+        0.25978179,  0.18755474, -1.])
+
 """
 
 # author: Benjamin Cross
