@@ -83,13 +83,13 @@ class BoostedModel:
         return self._is_fit
 
     def compute_gradients(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
-        return self._loss.dldyp(yt, yp) * self._link.dydnu(yp)
+        return self._loss.dldyp(yt, yp) * self._link.dydeta(yp)
 
     def compute_newton_weights(
         self, yt: np.ndarray, yp: np.ndarray, eps: float = 1e-8
     ) -> np.ndarray:
-        term_1 = self._loss.d2ldyp2(yt, yp) * self._link.dydnu(yp) ** 2
-        term_2 = self._loss.dldyp(yt, yp) * self._link.d2ydnu2(yp)
+        term_1 = self._loss.d2ldyp2(yt, yp) * self._link.dydeta(yp) ** 2
+        term_2 = self._loss.dldyp(yt, yp) * self._link.d2ydeta2(yp)
         denominator = term_1 + term_2
         denominator = np.where(
             denominator == 0, np.sign(denominator) * eps, denominator
