@@ -15,8 +15,7 @@ import numpy as np
 from .boosted_model import BoostedModel
 from .link_functions import BaseLink
 from .loss_functions import BaseLoss
-from .type_hints import Model, WeightsCallback
-from .weak_learners import SimplePLS
+from .type_hints import LinearModel, ModelCallback, WeightsCallback
 
 
 class BoostedLinearModel(BoostedModel):
@@ -28,13 +27,14 @@ class BoostedLinearModel(BoostedModel):
         self,
         link: BaseLink,
         loss: BaseLoss,
-        model_callback: Callable[..., Model] = SimplePLS,
+        model_callback: Callable[..., LinearModel],
         model_callback_kwargs: Optional[Dict[str, Any]] = None,
-        weights: Union[str, WeightsCallback] = None,
+        weights: Union[str, WeightsCallback] = "none",
         alpha: float = 1.0,
         step_type: str = "default",
-        betas: Optional[List[float]] = None,
-        init_type: Optional[str] = None,
+        step_decay_factor: float = 0.6,
+        betas: np.ndarray = np.logspace(-6, 0, 19),
+        init_type: str = "mean",
         random_state: Optional[int] = None,
         validation_fraction: float = 0.0,
         validation_stratify: bool = False,
@@ -50,6 +50,7 @@ class BoostedLinearModel(BoostedModel):
             weights,
             alpha,
             step_type,
+            step_decay_factor,
             betas,
             init_type,
             random_state,
@@ -76,7 +77,7 @@ class BoostedLinearModel(BoostedModel):
         yt: np.ndarray,
         yp: np.ndarray,
         eta_p: np.ndarray,
-        model_callback: Callable[..., Model],
+        model_callback: ModelCallback,
         model_callback_kwargs: Optional[Dict[str, Any]] = None,
         weights: Optional[np.ndarray] = None,
     ) -> Tuple[np.ndarray, np.ndarray]:
@@ -84,15 +85,15 @@ class BoostedLinearModel(BoostedModel):
             X, yt, yp, eta_p, model_callback, model_callback_kwargs, weights
         )
         model, lr = self._model_list[-1]
-        self.coef_ += lr * model.coef_
-        self.intercept_ += lr * model.intercept_
+        self.coef_ += lr * model.coef_  # type: ignore
+        self.intercept_ += lr * model.intercept_  # type: ignore
         return yp_next, eta_p_next
 
     def get_coefficient_order(self, scale: Optional[np.ndarray] = None) -> List[int]:
         scale = 1.0 if scale is None else scale
         coef_order_dict = OrderedDict()  # type: Dict
         for model, _ in self._model_list:
-            coefs = model.coef_ * scale
+            coefs = model.coef_ * scale  # type: ignore
             nc = (coefs != 0.0).sum()
             order = np.argsort(np.abs(coefs))[::-1].tolist()
             coef_order_dict.update(OrderedDict.fromkeys(order[:nc]))
@@ -103,7 +104,7 @@ class BoostedLinearModel(BoostedModel):
         if self._is_fit:
             coef_history = list()
             for i, (model, lr) in enumerate(self._model_list):
-                coef = model.coef_ * lr
+                coef = model.coef_ * lr  # type: ignore
                 if i == 0:
                     coef_history.append(coef)
                     continue

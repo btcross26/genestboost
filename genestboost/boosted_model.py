@@ -8,13 +8,13 @@ General boosting model class implementation
 
 
 import logging
-from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple, Union
+from typing import Any, Dict, Iterable, List, Optional, Tuple, Union
 
 import numpy as np
 
 from .link_functions import BaseLink
 from .loss_functions import BaseLoss
-from .type_hints import ActivationCallback, Model, WeightsCallback
+from .type_hints import ActivationCallback, Model, ModelCallback, WeightsCallback
 
 LOGGER = logging.getLogger(__name__)
 
@@ -29,19 +29,20 @@ class BoostedModel:
         self,
         link: BaseLink,
         loss: BaseLoss,
-        model_callback: Callable[..., Model],
+        model_callback: ModelCallback,
         model_callback_kwargs: Optional[Dict[str, Any]] = None,
-        weights: Union[str, WeightsCallback] = None,
+        weights: Union[str, WeightsCallback] = "none",
         alpha: float = 1.0,
         step_type: str = "default",
-        betas: Optional[List[float]] = None,
-        init_type: Optional[str] = None,
+        step_decay_factor: float = 0.6,
+        betas: np.ndarray = np.logspace(-6, 0, 19),
+        init_type: str = "mean",
         random_state: Optional[int] = None,
         validation_fraction: float = 0.0,
         validation_stratify: bool = False,
         validation_iter_stop: int = 10,
         tol: float = 1e-8,
-        activation_callback: Optional[ActivationCallback] = None,
+        activation_callback: ActivationCallback = lambda yp: yp,
     ):
         # set state based on initializer arguments
         self._link = link
@@ -49,27 +50,26 @@ class BoostedModel:
         self.model_callback = model_callback
         self.model_callback_kwargs = (
             dict() if model_callback_kwargs is None else model_callback_kwargs
-        )
+        )  # type: Dict[str, Any]
         self.weights = weights
         self.alpha = alpha
         self.step_type = step_type
+        self.step_decay_factor = step_decay_factor
         self.init_type = init_type
         self.random_state = random_state
         self.validation_fraction = validation_fraction
         self.validation_stratify = validation_stratify
         self.validation_iter_stop = validation_iter_stop
         self.tol = tol
-        self.betas = list(np.logspace(-6, 0, 19)) if betas is None else betas
-        self.activation_callback = (
-            (lambda x: x) if activation_callback is None else activation_callback
-        )
+        self.betas = betas
+        self.activation_callback = activation_callback
 
         # additional vars used during the fitting process
         self._msi = -1 if init_type in ["offset", "residuals"] else None
-        self._loss_list: Optional[Iterable[Tuple[float, float]]] = None
-        self._model_list: Optional[List[Model]] = None
+        self._loss_list: List[Tuple[float, float]] = list()
+        self._model_list: List[Tuple[Model, float]] = list()
         self._is_fit: bool = False
-        self._beta_index: Optional[int] = None
+        self._beta_index: int = -1
         self._tindex: Optional[Iterable[int]] = None
         self._vindex: Optional[Iterable[int]] = None
 
@@ -98,7 +98,7 @@ class BoostedModel:
         return 1.0 / denominator
 
     def compute_weights(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
-        if self.weights is None:
+        if self.weights == "none":
             return 1
         elif self.weights == "newton":
             return self.compute_newton_weights(yt, yp)
@@ -106,7 +106,7 @@ class BoostedModel:
             return self.weights(yt, yp)
         else:
             raise AttributeError(
-                "attribute:<weights> should be None, 'newton', or a callable"
+                "attribute:<weights> should be none, 'newton', or a callable"
             )
 
     def compute_p_residuals(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
@@ -156,8 +156,6 @@ class BoostedModel:
 
     def reset_model(self) -> None:
         self._is_fit = False
-        self._loss_list = None
-        self._model_list = None
 
     def boost(
         self,
@@ -165,7 +163,7 @@ class BoostedModel:
         yt: np.ndarray,
         yp: np.ndarray,
         eta_p: np.ndarray,
-        model_callback: Callable[..., Model],
+        model_callback: ModelCallback,
         model_callback_kwargs: Optional[Dict] = None,
         weights: Optional[np.ndarray] = None,
     ) -> Tuple[np.ndarray, np.ndarray]:
@@ -192,9 +190,11 @@ class BoostedModel:
         elif self.step_type == "decaying":
             return self._line_search_decaying(yt, eta_p, next_model_preds)
         elif self.step_type == "best":
-            return self._line_search_best
+            return self._line_search_best(yt, eta_p, next_model_preds)
         elif self.step_type == "constant":
             return self._line_search_constant(yt, eta_p, next_model_preds)
+        else:
+            raise AttributeError("init arg:<step_type> is mis-specified")
 
     def _track_loss(
         self,
@@ -205,17 +205,16 @@ class BoostedModel:
         yp_val: Optional[np.ndarray],
         weights_val: Optional[np.ndarray],
     ) -> None:
-        if self._loss_list is not None:
-            tloss = np.sum(
-                self._loss(yt_train, yp_train) * weights_train / np.sum(weights_train)
+        tloss = np.sum(
+            self._loss(yt_train, yp_train) * weights_train / np.sum(weights_train)
+        )
+        if yt_val is None or yp_val is None:
+            vloss = np.nan
+        else:
+            vloss = np.sum(self._loss(yt_val, yp_val) * weights_val) / np.sum(
+                weights_val
             )
-            if yt_val is None or yp_val is None:
-                vloss = None
-            else:
-                vloss = np.sum(self._loss(yt_val, yp_val) * weights_val) / np.sum(
-                    weights_val
-                )
-            self._loss_list.append((tloss, vloss))
+        self._loss_list.append((tloss, vloss))
 
     def _line_search_constant(
         self, yt: np.ndarray, eta_p: np.ndarray, next_model_preds: np.ndarray
@@ -229,13 +228,15 @@ class BoostedModel:
         preds = self._link(etas, inverse=True)
         loss_vector = self._loss(yt.reshape((-1, 1)), preds).mean(axis=0)
         argmin = np.argmin(loss_vector)
-        return self.betas[argmin]
+        beta = self.betas[argmin]  # type: float
+        return beta
 
     def _line_search_shrinking(
         self, yt: np.ndarray, eta_p: np.ndarray, next_model_preds: np.ndarray
     ) -> float:
         if self._beta_index == 0:
-            return self.betas[0]
+            beta = self.betas[0]  # type: float
+            return beta
         if len(self._model_list) == 0:
             beta = self._line_search_best(yt, eta_p, next_model_preds)
             self._beta_index = np.argwhere(self.betas == beta)[0, 0]
@@ -253,7 +254,8 @@ class BoostedModel:
                 loss0 = loss
             else:
                 break
-        return self.betas[self._beta_index]
+        value = self.betas[self._beta_index]  # type: float
+        return value
 
     def _line_search_decaying(
         self, yt: np.ndarray, eta_p: np.ndarray, next_model_preds: np.ndarray
@@ -280,7 +282,7 @@ class BoostedModel:
                 break
         return beta0
 
-    def _stop_model(self) -> None:
+    def _stop_model(self) -> bool:
         # training loss condition
         if self.tol is not None:
             tloss = self._loss_list[-1][0] - self._loss_list[-2][0]
@@ -400,10 +402,10 @@ class BoostedModel:
         return np.array(self._loss_list).astype(np.float)
 
     def get_iterations(self) -> int:
-        return 0 if self._model_list is None else len(self._model_list)
+        return len(self._model_list)
 
     class InitialModel:
-        def __init__(self, link: BaseLink, init_type: Optional[str] = None):
+        def __init__(self, link: BaseLink, init_type: str = "mean"):
             self._link = link  # type: BaseLink
             self._init_type = init_type  # type: str
             self._value = 0.0  # type: float
@@ -417,9 +419,11 @@ class BoostedModel:
             elif self._init_type == "offset":
                 values = self._link(yt) - X[:, -1]
                 self._value = np.sum(weights * values) / np.sum(weights)
-            elif self._init_type is None:
+            elif self._init_type == "mean":
                 value = np.sum(yt * weights) / np.sum(weights)
                 self._value = self._link(value)
+            else:
+                raise AttributeError("init arg:<init_type> is mis-specified")
 
             return self
 
