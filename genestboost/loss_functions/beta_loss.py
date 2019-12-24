@@ -74,7 +74,7 @@ class BetaLoss(BaseLoss):
 
         return vt_callback
 
-    def _loss(self, yt, yp):
+    def _loss(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
         c1 = betainc(self.alpha, self.beta, yt) - betainc(self.alpha, self.beta, yp)
         c2 = betainc(self.alpha + 1.0, self.beta, yt) - betainc(
             self.alpha + 1.0, self.beta, yp
@@ -97,7 +97,14 @@ class BetaLoss(BaseLoss):
 
 
 class LeakyBetaLoss(BetaLoss):
-    def __init__(self, alpha, beta, gamma=1.0, eps=1e-10, xtol=1e-8):
+    def __init__(
+        self,
+        alpha: float,
+        beta: float,
+        gamma: float = 1.0,
+        eps: float = 1e-10,
+        xtol: float = 1e-8,
+    ):
         """
         Class initializer
 
@@ -144,7 +151,7 @@ class LeakyBetaLoss(BetaLoss):
         )
         self.yR = super()._loss(1.0, self.xR)
 
-    def _loss(self, yt, yp):
+    def _loss(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
         # calculate loss function values from regular betaloss
         values = super()._loss(yt, yp)
 
@@ -162,7 +169,7 @@ class LeakyBetaLoss(BetaLoss):
 
         return values
 
-    def dldyp(self, yt, yp):
+    def dldyp(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
         # calculate loss gradient values from regular betaloss
         values = super().dldyp(yt, yp)
 
@@ -174,7 +181,7 @@ class LeakyBetaLoss(BetaLoss):
 
         return values
 
-    def d2ldyp2(self, yt, yp):
+    def d2ldyp2(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
         # calculate loss gradient values from regular betaloss
         values = super().d2ldyp2(yt, yp)
 
