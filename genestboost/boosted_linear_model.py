@@ -51,7 +51,6 @@ class BoostedLinearModel(BoostedModel):
             alpha,
             step_type,
             step_decay_factor,
-            betas,
             init_type,
             random_state,
             validation_fraction,
@@ -91,7 +90,7 @@ class BoostedLinearModel(BoostedModel):
 
     def get_coefficient_order(self, scale: Optional[np.ndarray] = None) -> List[int]:
         scale = 1.0 if scale is None else scale
-        coef_order_dict = OrderedDict()  # type: Dict
+        coef_order_dict = OrderedDict()  # type: Dict[int, None]
         for model, _ in self._model_list:
             coefs = model.coef_ * scale  # type: ignore
             nc = (coefs != 0.0).sum()

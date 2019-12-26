@@ -14,6 +14,7 @@ import numpy as np
 
 from .link_functions import BaseLink
 from .loss_functions import BaseLoss
+from .model_data_sets import ModelDataSets
 from .type_hints import ActivationCallback, Model, ModelCallback, WeightsCallback
 
 LOGGER = logging.getLogger(__name__)
@@ -33,9 +34,8 @@ class BoostedModel:
         model_callback_kwargs: Optional[Dict[str, Any]] = None,
         weights: Union[str, WeightsCallback] = "none",
         alpha: float = 1.0,
-        step_type: str = "default",
-        step_decay_factor: float = 0.6,
-        betas: np.ndarray = np.logspace(-6, 0, 19),
+        step_type: str = "decaying",
+        step_decay_factor: float = 0.48,
         init_type: str = "mean",
         random_state: Optional[int] = None,
         validation_fraction: float = 0.0,
@@ -61,10 +61,10 @@ class BoostedModel:
         self.validation_stratify = validation_stratify
         self.validation_iter_stop = validation_iter_stop
         self.tol = tol
-        self.betas = betas
         self.activation_callback = activation_callback
 
         # additional vars used during the fitting process
+        self._beta: float = 1.0 if step_type == "constant" else alpha
         self._msi = -1 if init_type in ["offset", "residuals"] else None
         self._loss_list: List[Tuple[float, float]] = list()
         self._model_list: List[Tuple[Model, float]] = list()
@@ -72,15 +72,16 @@ class BoostedModel:
         self._beta_index: int = -1
         self._tindex: Optional[Iterable[int]] = None
         self._vindex: Optional[Iterable[int]] = None
+        self._model_init: BoostedModel.InitialModel
+
+    def __bool__(self) -> bool:
+        return self._is_fit
 
     def compute_link(self, yp: np.ndarray, inverse: bool = False) -> np.ndarray:
         return self._link(yp, inverse)
 
     def compute_loss(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
         return self._loss(yt, yp)
-
-    def __bool__(self) -> bool:
-        return self._is_fit
 
     def compute_gradients(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
         return self._loss.dldyp(yt, yp) * self._link.dydeta(yp)
@@ -99,7 +100,7 @@ class BoostedModel:
 
     def compute_weights(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
         if self.weights == "none":
-            return 1
+            return 1.0
         elif self.weights == "newton":
             return self.compute_newton_weights(yt, yp)
         elif callable(self.weights):
@@ -114,30 +115,6 @@ class BoostedModel:
         denominator = self.compute_weights(yt, yp)
         return numerator / denominator
 
-    def _split_data(self, X: np.ndarray, yt: np.ndarray) -> None:
-        # get training/validation index
-        self._tindex = [i for i in range(yt.shape[0])]
-        np.random.seed(self.random_state)
-        if self.validation_stratify is True:
-            index_list = list()
-            for group in np.unique(yt):
-                mask = yt == group
-                n = np.sum(mask)
-                index = np.random.choice(
-                    np.arange(yt.shape[0])[mask],
-                    int(self.validation_fraction * n),
-                    replace=False,
-                )
-                index_list.append(index)
-            self._vindex = np.hstack(index_list)
-        else:
-            self._vindex = np.random.choice(
-                yt.shape[0], int(self.validation_fraction * yt.shape[0]), replace=False
-            )
-        self._vindex = sorted(self._vindex)
-        self._tindex = set(self._tindex).difference(set(self._vindex))
-        self._tindex = sorted(list(self._tindex))
-
     def initialize_model(
         self, X: np.ndarray, yt: np.ndarray, weights: Optional[np.ndarray] = None
     ) -> Tuple[np.ndarray, np.ndarray]:
@@ -147,10 +124,12 @@ class BoostedModel:
             self._model_list = list()
             self._model_init = self.InitialModel(self._link, self.init_type)
             self._model_init.fit(X, yt, weights)
+
+            # set _is_fit to True
             self._is_fit = True
 
         # calculate and return current eta_p and yp
-        eta_p = self._model_init.predict(X)
+        eta_p = self.predict(X)
         yp = self._link(eta_p, inverse=True)
         return yp, eta_p
 
@@ -164,7 +143,7 @@ class BoostedModel:
         yp: np.ndarray,
         eta_p: np.ndarray,
         model_callback: ModelCallback,
-        model_callback_kwargs: Optional[Dict] = None,
+        model_callback_kwargs: Optional[Dict[str, Any]] = None,
         weights: Optional[np.ndarray] = None,
     ) -> Tuple[np.ndarray, np.ndarray]:
         if model_callback_kwargs is None:
@@ -185,92 +164,47 @@ class BoostedModel:
     def _compute_beta(
         self, yt: np.ndarray, eta_p: np.ndarray, next_model_preds: np.ndarray
     ) -> float:
-        if self.step_type in ["default", "shrinking"]:
-            return self._line_search_shrinking(yt, eta_p, next_model_preds)
-        elif self.step_type == "decaying":
+        if self.step_type == "decaying":
             return self._line_search_decaying(yt, eta_p, next_model_preds)
         elif self.step_type == "best":
             return self._line_search_best(yt, eta_p, next_model_preds)
         elif self.step_type == "constant":
-            return self._line_search_constant(yt, eta_p, next_model_preds)
+            return 1.0
         else:
             raise AttributeError("init arg:<step_type> is mis-specified")
 
-    def _track_loss(
-        self,
-        yt_train: np.ndarray,
-        yp_train: np.ndarray,
-        weights_train: np.ndarray,
-        yt_val: Optional[np.ndarray],
-        yp_val: Optional[np.ndarray],
-        weights_val: Optional[np.ndarray],
-    ) -> None:
+    def _track_loss(self, yp_train: np.ndarray, model_data: ModelDataSets) -> None:
         tloss = np.sum(
-            self._loss(yt_train, yp_train) * weights_train / np.sum(weights_train)
+            self._loss(model_data.yt_train, yp_train)
+            * model_data.weights_train
+            / np.sum(model_data.weights_train)
         )
-        if yt_val is None or yp_val is None:
-            vloss = np.nan
+        if model_data.has_validation_set():
+            eta_p_val = self._model_init.predict(model_data.X_val)
+            yp_val = self._link(eta_p_val, inverse=True)
+            vloss = np.sum(
+                self._loss(model_data.yt_val, yp_val) * model_data.weights_val
+            ) / np.sum(model_data.weights_val)
         else:
-            vloss = np.sum(self._loss(yt_val, yp_val) * weights_val) / np.sum(
-                weights_val
-            )
+            vloss = np.nan
         self._loss_list.append((tloss, vloss))
-
-    def _line_search_constant(
-        self, yt: np.ndarray, eta_p: np.ndarray, next_model_preds: np.ndarray
-    ) -> float:
-        return 1.0
 
     def _line_search_best(
         self, yt: np.ndarray, eta_p: np.ndarray, next_model_preds: np.ndarray
     ) -> float:
-        etas = eta_p.reshape((-1, 1)) + next_model_preds.reshape((-1, 1)) * self.betas
-        preds = self._link(etas, inverse=True)
-        loss_vector = self._loss(yt.reshape((-1, 1)), preds).mean(axis=0)
-        argmin = np.argmin(loss_vector)
-        beta = self.betas[argmin]  # type: float
+        self._beta = self.alpha
+        beta = self._line_search_decaying(yt, eta_p, next_model_preds)
         return beta
-
-    def _line_search_shrinking(
-        self, yt: np.ndarray, eta_p: np.ndarray, next_model_preds: np.ndarray
-    ) -> float:
-        if self._beta_index == 0:
-            beta = self.betas[0]  # type: float
-            return beta
-        if len(self._model_list) == 0:
-            beta = self._line_search_best(yt, eta_p, next_model_preds)
-            self._beta_index = np.argwhere(self.betas == beta)[0, 0]
-
-        etas = eta_p + next_model_preds * self.betas[self._beta_index]
-        preds = self._link(etas, inverse=True)
-        loss0 = self._loss(yt, preds).mean()
-        while self._beta_index > 0:
-            index = self._beta_index - 1
-            etas = eta_p + next_model_preds * self.betas[index]
-            preds = self._link(etas, inverse=True)
-            loss = self._loss(yt, preds).mean()
-            if loss < loss0:
-                self._beta_index = index
-                loss0 = loss
-            else:
-                break
-        value = self.betas[self._beta_index]  # type: float
-        return value
 
     def _line_search_decaying(
         self, yt: np.ndarray, eta_p: np.ndarray, next_model_preds: np.ndarray
     ) -> float:
-        if self.get_iterations() == 0:
-            beta0 = self.alpha
-            self._beta_index = self.alpha
-        else:
-            beta0 = self._beta_index
-
+        beta0 = self._beta
         etas = eta_p + next_model_preds * beta0
         preds = self._link(etas, inverse=True)
         loss0 = self._loss(yt, preds).mean()
         while True:
-            beta = beta0 * self.betas
+            beta = beta0 * self.step_decay_factor
             etas = eta_p + next_model_preds * beta
             preds = self._link(etas, inverse=True)
             loss = self._loss(yt, preds).mean()
@@ -278,7 +212,7 @@ class BoostedModel:
                 loss0 = loss
                 beta0 = beta
             else:
-                self._beta_index = beta0
+                self._beta = beta0
                 break
         return beta0
 
@@ -306,63 +240,53 @@ class BoostedModel:
         iterations: int = 100,
         weights: Optional[np.ndarray] = None,
     ) -> Model:
-        # compute weights if null
+        # compute weights if null and create modeling data sets
         weights = np.ones_like(yt) if weights is None else weights
-
-        # split data if specified
-        if self._vindex is None and self.validation_fraction != 0.0:
-            self._split_data(X, yt)
-
-        if self._vindex is not None:
-            X_train = X[self._tindex]
-            yt_train = yt[self._tindex]
-            weights_train = weights[self._tindex]
-            X_val = X[self._vindex]
-            yt_val = yt[self._vindex]
-            weights_val = weights[self._vindex]
-        else:
-            X_train = X
-            yt_train = yt
-            weights_train = weights
-            X_val = None
-            yt_val = None
-            weights_val = None
+        model_data = ModelDataSets(
+            X,
+            yt,
+            weights,
+            self.validation_fraction,
+            self.validation_stratify,
+            self.random_state,
+        )
 
         # initialize model and get initial predictions
-        yp_train, eta_p_train = self.initialize_model(X_train, yt_train, weights_train)
+        yp_train, eta_p_train = self.initialize_model(
+            model_data.X_train, model_data.yt_train, model_data.weights_train
+        )
 
-        if X_val is not None:
-            eta_p_val = self._model_init.predict(X_val)
-            yp_val = self._link(eta_p_val, inverse=True)
-        else:
-            yp_val = None
-        self._track_loss(yt_train, yp_train, weights_train, yt_val, yp_val, weights_val)
+        # calculate initial loss if model has not started
+        if self.get_iterations() == 0:
+            self._track_loss(yp_train, model_data)
 
         # perform boosting iterations
         for _ in range(iterations):
+            # perform boosting step
             yp_train, eta_p_train = self.boost(
-                X_train,
-                yt_train,
+                model_data.X_train,
+                model_data.yt_train,
                 yp_train,
                 eta_p_train,
                 self.model_callback,
                 self.model_callback_kwargs,
-                weights_train,
+                model_data.weights_train,
             )
-            if X_val is not None:
-                eta_p_val += self.decision_function_last_model(X_val)
-                yp_val = self._link(eta_p_val, inverse=True)
-            self._track_loss(
-                yt_train, yp_train, weights_train, yt_val, yp_val, weights_val
-            )
+
+            # track loss
+            self._track_loss(yp_train, model_data)
+
+            # check stopping criteria
             if self._stop_model():
                 break
 
         return self
 
-    def decision_function(self, X: np.ndarray) -> np.ndarray:
+    def decision_function(
+        self, X: np.ndarray, model_index: Optional[int] = None
+    ) -> np.ndarray:
         eta_p = self._model_init.predict(X)
-        for model, lr in self._model_list:
+        for model, lr in self._model_list[:model_index]:
             eta_p += lr * self.activation_callback(model.predict(X[:, : self._msi]))
         return eta_p
 
@@ -371,8 +295,8 @@ class BoostedModel:
         eta_p = self.activation_callback(model.predict(X[:, : self._msi])) * lr
         return eta_p
 
-    def predict(self, X: np.ndarray) -> np.ndarray:
-        eta_p = self.decision_function(X)
+    def predict(self, X: np.ndarray, model_index: Optional[int] = None) -> np.ndarray:
+        eta_p = self.decision_function(X, model_index)
         return self._link(eta_p, inverse=True)
 
     def prediction_history(self, X: np.ndarray, links: bool = False) -> np.ndarray:
