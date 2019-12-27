@@ -77,6 +77,28 @@ class BoostedModel:
     def __bool__(self) -> bool:
         return self._is_fit
 
+    def boost(
+        self,
+        X: np.ndarray,
+        yt: np.ndarray,
+        yp: np.ndarray,
+        eta_p: np.ndarray,
+        model_callback: ModelCallback,
+        model_callback_kwargs: Dict[str, Any],
+        weights: Optional[np.ndarray] = None,
+    ) -> Tuple[np.ndarray, np.ndarray]:
+        model_ = model_callback(**model_callback_kwargs)
+        weights = 1.0 if weights is None else weights
+        p_residuals = self.compute_p_residuals(yt, yp) * weights
+        model_ = model_.fit(X[:, : self._msi], p_residuals)
+        preds = self.activation_callback(model_.predict(X[:, : self._msi]))
+        beta = self._compute_beta(yt, eta_p, preds)
+        learning_rate = self.alpha * beta
+        eta_p_next = eta_p + learning_rate * preds
+        yp_next = self._link(eta_p_next, inverse=True)
+        self._model_list.append((model_, learning_rate))
+        return yp_next, eta_p_next
+
     def compute_link(self, yp: np.ndarray, inverse: bool = False) -> np.ndarray:
         return self._link(yp, inverse)
 
@@ -86,34 +108,118 @@ class BoostedModel:
     def compute_gradients(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
         return self._loss.dldyp(yt, yp) * self._link.dydeta(yp)
 
-    def compute_newton_weights(
-        self, yt: np.ndarray, yp: np.ndarray, eps: float = 1e-8
-    ) -> np.ndarray:
+    def compute_newton_weights(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
         term_1 = self._loss.d2ldyp2(yt, yp) * self._link.dydeta(yp) ** 2
         term_2 = self._loss.dldyp(yt, yp) * self._link.d2ydeta2(yp)
         denominator = term_1 + term_2
-        denominator = np.where(
-            denominator == 0, np.sign(denominator) * eps, denominator
-        )
         denominator = denominator * yt.shape[0] / np.sum(denominator)
         return 1.0 / denominator
 
     def compute_weights(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
         if self.weights == "none":
             return 1.0
-        elif self.weights == "newton":
+
+        if self.weights == "newton":
             return self.compute_newton_weights(yt, yp)
-        elif callable(self.weights):
+
+        if callable(self.weights):
             return self.weights(yt, yp)
-        else:
-            raise AttributeError(
-                "attribute:<weights> should be none, 'newton', or a callable"
-            )
+
+        raise AttributeError(
+            "attribute:<weights> should be 'none', 'newton', or a callable"
+        )
 
     def compute_p_residuals(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
         numerator = -self.compute_gradients(yt, yp)
         denominator = self.compute_weights(yt, yp)
         return numerator / denominator
+
+    def decision_function(
+        self, X: np.ndarray, model_index: Optional[int] = None
+    ) -> np.ndarray:
+        eta_p = self._model_init.predict(X)
+        for model, lr in self._model_list[:model_index]:
+            eta_p += lr * self.activation_callback(model.predict(X[:, : self._msi]))
+        return eta_p
+
+    def fit(
+        self,
+        X: np.ndarray,
+        yt: np.ndarray,
+        iterations: int = 100,
+        weights: Optional[np.ndarray] = None,
+        min_iterations: Optional[int] = None,
+    ) -> Model:
+        # compute weights if null and create modeling data sets
+        weights = np.ones_like(yt) if weights is None else weights
+        model_data = ModelDataSets(
+            X,
+            yt,
+            weights,
+            self.validation_fraction,
+            self.validation_stratify,
+            self.random_state,
+        )
+
+        # initialize model and get initial predictions
+        yp_train, eta_p_train = self.initialize_model(
+            model_data.X_train, model_data.yt_train, model_data.weights_train
+        )
+
+        # calculate initial loss if model has not started
+        if self.get_iterations() == 0:
+            self._track_loss(yp_train, model_data)
+
+        # perform boosting iterations
+        min_iterations = 0 if min_iterations is None else min_iterations
+        for i in range(iterations):
+            # perform boosting step
+            yp_train, eta_p_train = self.boost(
+                model_data.X_train,
+                model_data.yt_train,
+                yp_train,
+                eta_p_train,
+                self.model_callback,
+                self.model_callback_kwargs,
+                model_data.weights_train,
+            )
+
+            # track loss
+            self._track_loss(yp_train, model_data)
+
+            # check stopping criteria
+            if i + 1 > min_iterations and self._stop_model():
+                break
+
+        return self
+
+    def get_model_links(self, X: np.ndarray) -> np.ndarray:
+        """
+        Does not apply lr to link columns
+
+        Parameters
+        ----------
+        X
+
+        Returns
+        -------
+
+        """
+        model_links = np.zeros(
+            (X.shape[0], len(self._model_list) + 1), dtype=np.float64
+        )
+        eta_p = self._model_init.predict(X)
+        model_links[:, 0] = eta_p
+        for i, (model, _) in enumerate(self._model_list):
+            eta_p = self.activation_callback(model.predict(X[:, : self._msi]))
+            model_links[:, i + 1] = eta_p
+        return model_links
+
+    def get_loss_history(self) -> np.ndarray:
+        return np.array(self._loss_list).astype(np.float)
+
+    def get_iterations(self) -> int:
+        return len(self._model_list)
 
     def initialize_model(
         self, X: np.ndarray, yt: np.ndarray, weights: Optional[np.ndarray] = None
@@ -131,63 +237,42 @@ class BoostedModel:
         # calculate and return current eta_p and yp
         eta_p = self.predict(X)
         yp = self._link(eta_p, inverse=True)
+
         return yp, eta_p
+
+    def predict(self, X: np.ndarray, model_index: Optional[int] = None) -> np.ndarray:
+        eta_p = self.decision_function(X, model_index)
+        return self._link(eta_p, inverse=True)
+
+    def prediction_history(self, X: np.ndarray, links: bool = False) -> np.ndarray:
+        model_links = self.get_model_links(X)
+        lr_array = np.hstack([[1], [tup[1] for tup in self._model_list]]).reshape(
+            (1, -1)
+        )
+        model_links *= lr_array
+        link_history = np.cumsum(model_links, axis=1)
+
+        if links is True:
+            return link_history
+
+        return self._link(link_history, inverse=True)
 
     def reset_model(self) -> None:
         self._is_fit = False
-
-    def boost(
-        self,
-        X: np.ndarray,
-        yt: np.ndarray,
-        yp: np.ndarray,
-        eta_p: np.ndarray,
-        model_callback: ModelCallback,
-        model_callback_kwargs: Optional[Dict[str, Any]] = None,
-        weights: Optional[np.ndarray] = None,
-    ) -> Tuple[np.ndarray, np.ndarray]:
-        if model_callback_kwargs is None:
-            model_ = model_callback()
-        else:
-            model_ = model_callback(**model_callback_kwargs)
-        weights = 1.0 if weights is None else weights
-        p_residuals = self.compute_p_residuals(yt, yp) * weights
-        model_ = model_.fit(X[:, : self._msi], p_residuals)
-        preds = self.activation_callback(model_.predict(X[:, : self._msi]))
-        beta = self._compute_beta(yt, eta_p, preds)
-        learning_rate = self.alpha * beta
-        eta_p_next = eta_p + learning_rate * preds
-        yp_next = self._link(eta_p_next, inverse=True)
-        self._model_list.append((model_, learning_rate))
-        return yp_next, eta_p_next
 
     def _compute_beta(
         self, yt: np.ndarray, eta_p: np.ndarray, next_model_preds: np.ndarray
     ) -> float:
         if self.step_type == "decaying":
             return self._line_search_decaying(yt, eta_p, next_model_preds)
-        elif self.step_type == "best":
-            return self._line_search_best(yt, eta_p, next_model_preds)
-        elif self.step_type == "constant":
-            return 1.0
-        else:
-            raise AttributeError("init arg:<step_type> is mis-specified")
 
-    def _track_loss(self, yp_train: np.ndarray, model_data: ModelDataSets) -> None:
-        tloss = np.sum(
-            self._loss(model_data.yt_train, yp_train)
-            * model_data.weights_train
-            / np.sum(model_data.weights_train)
-        )
-        if model_data.has_validation_set():
-            eta_p_val = self._model_init.predict(model_data.X_val)
-            yp_val = self._link(eta_p_val, inverse=True)
-            vloss = np.sum(
-                self._loss(model_data.yt_val, yp_val) * model_data.weights_val
-            ) / np.sum(model_data.weights_val)
-        else:
-            vloss = np.nan
-        self._loss_list.append((tloss, vloss))
+        if self.step_type == "best":
+            return self._line_search_best(yt, eta_p, next_model_preds)
+
+        if self.step_type == "constant":
+            return 1.0
+
+        raise AttributeError("init arg:<step_type> is mis-specified")
 
     def _line_search_best(
         self, yt: np.ndarray, eta_p: np.ndarray, next_model_preds: np.ndarray
@@ -216,6 +301,22 @@ class BoostedModel:
                 break
         return beta0
 
+    def _track_loss(self, yp_train: np.ndarray, model_data: ModelDataSets) -> None:
+        tloss = np.sum(
+            self._loss(model_data.yt_train, yp_train)
+            * model_data.weights_train
+            / np.sum(model_data.weights_train)
+        )
+        if model_data.has_validation_set():
+            eta_p_val = self._model_init.predict(model_data.X_val)
+            yp_val = self._link(eta_p_val, inverse=True)
+            vloss = np.sum(
+                self._loss(model_data.yt_val, yp_val) * model_data.weights_val
+            ) / np.sum(model_data.weights_val)
+        else:
+            vloss = np.nan
+        self._loss_list.append((tloss, vloss))
+
     def _stop_model(self) -> bool:
         # training loss condition
         if self.tol is not None:
@@ -232,101 +333,6 @@ class BoostedModel:
                     return True
 
         return False
-
-    def fit(
-        self,
-        X: np.ndarray,
-        yt: np.ndarray,
-        iterations: int = 100,
-        weights: Optional[np.ndarray] = None,
-    ) -> Model:
-        # compute weights if null and create modeling data sets
-        weights = np.ones_like(yt) if weights is None else weights
-        model_data = ModelDataSets(
-            X,
-            yt,
-            weights,
-            self.validation_fraction,
-            self.validation_stratify,
-            self.random_state,
-        )
-
-        # initialize model and get initial predictions
-        yp_train, eta_p_train = self.initialize_model(
-            model_data.X_train, model_data.yt_train, model_data.weights_train
-        )
-
-        # calculate initial loss if model has not started
-        if self.get_iterations() == 0:
-            self._track_loss(yp_train, model_data)
-
-        # perform boosting iterations
-        for _ in range(iterations):
-            # perform boosting step
-            yp_train, eta_p_train = self.boost(
-                model_data.X_train,
-                model_data.yt_train,
-                yp_train,
-                eta_p_train,
-                self.model_callback,
-                self.model_callback_kwargs,
-                model_data.weights_train,
-            )
-
-            # track loss
-            self._track_loss(yp_train, model_data)
-
-            # check stopping criteria
-            if self._stop_model():
-                break
-
-        return self
-
-    def decision_function(
-        self, X: np.ndarray, model_index: Optional[int] = None
-    ) -> np.ndarray:
-        eta_p = self._model_init.predict(X)
-        for model, lr in self._model_list[:model_index]:
-            eta_p += lr * self.activation_callback(model.predict(X[:, : self._msi]))
-        return eta_p
-
-    def decision_function_last_model(self, X: np.ndarray) -> np.ndarray:
-        model, lr = self._model_list[-1]
-        eta_p = self.activation_callback(model.predict(X[:, : self._msi])) * lr
-        return eta_p
-
-    def predict(self, X: np.ndarray, model_index: Optional[int] = None) -> np.ndarray:
-        eta_p = self.decision_function(X, model_index)
-        return self._link(eta_p, inverse=True)
-
-    def prediction_history(self, X: np.ndarray, links: bool = False) -> np.ndarray:
-        model_links = self.get_model_links(X)
-        lr_array = np.hstack([[1], [tup[1] for tup in self._model_list]]).reshape(
-            (1, -1)
-        )
-        model_links *= lr_array
-        link_history = np.cumsum(model_links, axis=1)
-        if links is True:
-            return link_history
-        else:
-            return self._link(link_history, inverse=True)
-
-    def get_model_links(self, X: np.ndarray) -> np.ndarray:
-        model_links = np.zeros(
-            (X.shape[0], len(self._model_list) + 1), dtype=np.float64
-        )
-        eta_p = self._model_init.predict(X)
-        model_links[:, 0] = eta_p
-        for i, (model, lr) in enumerate(self._model_list):
-            eta_p = self.activation_callback(model.predict(X[:, : self._msi]))
-            model_links[:, i + 1] = eta_p
-        return model_links
-
-    def get_loss_history(self) -> np.ndarray:
-        return np.array(self._loss_list).astype(np.float)
-
-    def get_iterations(self) -> int:
-        return len(self._model_list)
 
     class InitialModel:
         def __init__(self, link: BaseLink, init_type: str = "mean"):
@@ -354,7 +360,8 @@ class BoostedModel:
         def predict(self, X: np.ndarray) -> np.ndarray:
             if self._init_type == "residuals":
                 return self._link(X[:, -1])
-            elif self._init_type == "offset":
+
+            if self._init_type == "offset":
                 return self._value + X[:, -1]
-            else:
-                return np.ones(X.shape[0]) * self._value
+
+            return np.ones(X.shape[0]) * self._value
