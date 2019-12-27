@@ -8,7 +8,7 @@ and used in BoostedModel class
 # created: 2019-12-26
 
 
-from typing import Iterator, List, Optional
+from typing import Iterator, Optional
 
 import numpy as np
 
@@ -40,8 +40,8 @@ class ModelDataSets:
         self.weights_val: np.ndarray  # if validation_fraction > 0.0
 
         # private vars to be created during class usage
-        self._tindex: List[int]
-        self._vindex: List[int]  # if validation_fraction > 0.0
+        self._tindex: np.ndarray
+        self._vindex: np.ndarray  # if validation_fraction > 0.0
 
         # split data sets as necessary
         self._create_index(validation_fraction, validation_stratify)
@@ -64,13 +64,18 @@ class ModelDataSets:
         self, validation_fraction: float, validation_stratify: bool
     ) -> None:
         # initialize training index
-        self._tindex = np.arange(self.yt.shape[0])
+        self._tindex = np.arange(self.yt.shape[0]).astype(int)
 
         # create validation index if specified
         if validation_fraction > 0.0:
             if validation_stratify:
                 self._vindex = np.hstack(
-                    [self._stratify_groups_generator(validation_fraction)]
+                    [
+                        array
+                        for array in self._stratify_groups_generator(
+                            validation_fraction
+                        )
+                    ]
                 )
             else:
                 n = self.yt.shape[0]
@@ -79,6 +84,10 @@ class ModelDataSets:
                 )
             self._vindex.sort()
             self._tindex = np.setdiff1d(self._tindex, self._vindex, assume_unique=True)
+
+            # convert to int
+            self._vindex = self._vindex.astype(int)
+            self._tindex = self._tindex.astype(int)
 
     def _stratify_groups_generator(
         self, validation_fraction: float

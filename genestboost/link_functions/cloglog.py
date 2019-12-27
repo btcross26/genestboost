@@ -17,7 +17,7 @@ class CLogLogLink(BaseLink):
     Complementary log-log link function
     """
 
-    def __init__(self, eps: float = 1e-24):
+    def __init__(self, eps: float = 1e-10):
         super().__init__()
         self._eps = eps
 

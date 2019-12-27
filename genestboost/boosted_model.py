@@ -166,9 +166,16 @@ class BoostedModel:
             model_data.X_train, model_data.yt_train, model_data.weights_train
         )
 
+        # get validation set predictions
+        if model_data.has_validation_set():
+            eta_p_val = self.decision_function(model_data.X_val)
+            yp_val = self._link(eta_p_val, inverse=True)
+        else:
+            yp_val = None
+
         # calculate initial loss if model has not started
         if self.get_iterations() == 0:
-            self._track_loss(yp_train, model_data)
+            self._track_loss(yp_train, yp_val, model_data)
 
         # perform boosting iterations
         min_iterations = 0 if min_iterations is None else min_iterations
@@ -185,7 +192,11 @@ class BoostedModel:
             )
 
             # track loss
-            self._track_loss(yp_train, model_data)
+            if model_data.has_validation_set():
+                last_model, lr = self._model_list[-1]
+                eta_p_val = eta_p_val + lr * last_model.predict(model_data.X_val)
+                yp_val = self._link(eta_p_val, inverse=True)
+            self._track_loss(yp_train, yp_val, model_data)
 
             # check stopping criteria
             if i + 1 > min_iterations and self._stop_model():
@@ -235,7 +246,7 @@ class BoostedModel:
             self._is_fit = True
 
         # calculate and return current eta_p and yp
-        eta_p = self.predict(X)
+        eta_p = self.decision_function(X)
         yp = self._link(eta_p, inverse=True)
 
         return yp, eta_p
@@ -301,18 +312,22 @@ class BoostedModel:
                 break
         return beta0
 
-    def _track_loss(self, yp_train: np.ndarray, model_data: ModelDataSets) -> None:
+    def _track_loss(
+        self,
+        yp_train: np.ndarray,
+        yp_val: Optional[np.ndarray],
+        model_data: ModelDataSets,
+    ) -> None:
         tloss = np.sum(
-            self._loss(model_data.yt_train, yp_train)
-            * model_data.weights_train
-            / np.sum(model_data.weights_train)
-        )
+            self._loss(model_data.yt_train, yp_train) * model_data.weights_train
+        ) / np.sum(model_data.weights_train)
+
         if model_data.has_validation_set():
-            eta_p_val = self._model_init.predict(model_data.X_val)
-            yp_val = self._link(eta_p_val, inverse=True)
             vloss = np.sum(
-                self._loss(model_data.yt_val, yp_val) * model_data.weights_val
-            ) / np.sum(model_data.weights_val)
+                self._loss(model_data.yt_val, yp_val)
+                * model_data.weights_val
+                / np.sum(model_data.weights_val)
+            )
         else:
             vloss = np.nan
         self._loss_list.append((tloss, vloss))

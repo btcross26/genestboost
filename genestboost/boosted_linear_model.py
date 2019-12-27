@@ -7,6 +7,7 @@ BoostedLinearModel class implementation
 # created: 2019-08-26
 
 
+import warnings
 from collections import OrderedDict
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
@@ -33,7 +34,6 @@ class BoostedLinearModel(BoostedModel):
         alpha: float = 1.0,
         step_type: str = "default",
         step_decay_factor: float = 0.6,
-        betas: np.ndarray = np.logspace(-6, 0, 19),
         init_type: str = "mean",
         random_state: Optional[int] = None,
         validation_fraction: float = 0.0,
@@ -62,14 +62,6 @@ class BoostedLinearModel(BoostedModel):
         self.coef_: np.ndarray
         self.intercept_: float
 
-    def initialize_model(
-        self, X: np.ndarray, yt: np.ndarray, weights: Optional[np.ndarray] = None
-    ) -> Tuple[np.ndarray, np.ndarray]:
-        yp, eta_p = super().initialize_model(X, yt, weights)
-        self.coef_ = np.zeros(X[:, : self._msi].shape[1])
-        self.intercept_ = self._model_init._value
-        return yp, eta_p
-
     def boost(
         self,
         X: np.ndarray,
@@ -77,7 +69,7 @@ class BoostedLinearModel(BoostedModel):
         yp: np.ndarray,
         eta_p: np.ndarray,
         model_callback: ModelCallback,
-        model_callback_kwargs: Optional[Dict[str, Any]] = None,
+        model_callback_kwargs: Dict[str, Any],
         weights: Optional[np.ndarray] = None,
     ) -> Tuple[np.ndarray, np.ndarray]:
         yp_next, eta_p_next = super().boost(
@@ -87,6 +79,19 @@ class BoostedLinearModel(BoostedModel):
         self.coef_ += lr * model.coef_  # type: ignore
         self.intercept_ += lr * model.intercept_  # type: ignore
         return yp_next, eta_p_next
+
+    def decision_function(
+        self, X: np.ndarray, model_index: Optional[int] = None
+    ) -> np.ndarray:
+        if model_index is not None:
+            warnings.warn(
+                "arg:model_index is ignored for BoostedLinearModel.decision_function"
+            )
+        if self.get_iterations() == 0:
+            eta_p = self._model_init.predict(X)
+        else:
+            eta_p = self.intercept_ + X[:, : self._msi].dot(self.coef_)
+        return eta_p
 
     def get_coefficient_order(self, scale: Optional[np.ndarray] = None) -> List[int]:
         scale = 1.0 if scale is None else scale
@@ -139,9 +144,13 @@ class BoostedLinearModel(BoostedModel):
 
         return pred_vars
 
-    def decision_function(self, X: np.ndarray) -> np.ndarray:
+    def initialize_model(
+        self, X: np.ndarray, yt: np.ndarray, weights: Optional[np.ndarray] = None
+    ) -> Tuple[np.ndarray, np.ndarray]:
+        yp, eta_p = super().initialize_model(X, yt, weights)
+
         if self.get_iterations() == 0:
-            eta_p = self._model_init.predict(X)
-        else:
-            eta_p = self.intercept_ + X[:, : self._msi].dot(self.coef_)
-        return eta_p
+            self.coef_ = np.zeros(X[:, : self._msi].shape[1])
+            self.intercept_ = self._model_init._value
+
+        return yp, eta_p
