@@ -194,12 +194,14 @@ class BoostedModel:
             # track loss
             if model_data.has_validation_set():
                 last_model, lr = self._model_list[-1]
-                eta_p_val = eta_p_val + lr * last_model.predict(model_data.X_val)
+                eta_p_val = eta_p_val + lr * last_model.predict(
+                    model_data.X_val[:, : self._msi]
+                )
                 yp_val = self._link(eta_p_val, inverse=True)
             self._track_loss(yp_train, yp_val, model_data)
 
             # check stopping criteria
-            if i + 1 > min_iterations and self._stop_model():
+            if i + 1 > min_iterations and self._stop_model(model_data):
                 break
 
         return self
@@ -332,7 +334,7 @@ class BoostedModel:
             vloss = np.nan
         self._loss_list.append((tloss, vloss))
 
-    def _stop_model(self) -> bool:
+    def _stop_model(self, model_data: ModelDataSets) -> bool:
         # training loss condition
         if self.tol is not None:
             tloss = self._loss_list[-1][0] - self._loss_list[-2][0]
@@ -340,7 +342,7 @@ class BoostedModel:
                 return True
 
         # validation loss condition
-        if self._vindex is not None:
+        if model_data.has_validation_set():
             n = self.validation_iter_stop
             if self.get_iterations() >= 2 * n:
                 loss_array = np.array(self._loss_list[-2 * n :])[:, 1]
