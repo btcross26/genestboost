@@ -157,7 +157,7 @@ class LeakyBetaLoss(BetaLoss):
 
         # modify left shelf
         values = np.where(
-            yt - yp < -self.xL, self.yL - self.mL * (-yp * self.xL), values
+            yt - yp < -self.xL, self.yL - self.mL * (-yp + self.xL), values
         )
 
         # modify right shelf
