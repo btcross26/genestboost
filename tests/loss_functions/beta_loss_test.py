@@ -129,3 +129,54 @@ def test_leaky_beta_loss(leaky_beta_loss_objects):
 
     # THEN the values should equal ZERO
     np.testing.assert_allclose(leaky_calc_d2b, 0.0, atol=0.0, rtol=1e-8)
+
+
+# test for LeakyBetaLoss class transition points
+def test_leaky_beta_loss_transition(leaky_beta_loss_objects):
+    # GIVEN a LeakyBetaLoss instance
+    leaky_loss, _ = leaky_beta_loss_objects
+
+    # WHEN loss values are calculated just to the left and just to the right of the
+    # transition points (and first derivative)
+    eps = 1e-8
+
+    # yp/yt values
+    yp_left = np.array([leaky_loss.xL - eps, leaky_loss.xR - eps])
+    yp_right = np.array([leaky_loss.xL + eps, leaky_loss.xR + eps])
+    yt = np.array([0.0, 1.0])
+
+    # loss
+    loss_left = leaky_loss(yt, yp_left)
+    loss_right = leaky_loss(yt, yp_right)
+
+    # dldyp
+    dl_left = leaky_loss.dldyp(yt, yp_left)
+    dl_right = leaky_loss.dldyp(yt, yp_right)
+
+    # THEN the two calculations should be very close to one another for both
+    # loss and derivatives
+    np.testing.assert_allclose(loss_left, loss_right, atol=1e-6, rtol=0.0)
+    np.testing.assert_allclose(dl_left, dl_right, atol=1e-6, rtol=0.0)
+
+
+# test for LeakyBetaLoss class end points
+def test_leaky_beta_loss_transition(leaky_beta_loss_objects):
+    # GIVEN a LeakyBetaLoss instance
+    leaky_loss, _ = leaky_beta_loss_objects
+
+    # WHEN loss values are calculated close to the end points and at the
+    # transition points
+    eps = 1e-8
+
+    # yp/yt values
+    yp_transition = np.array([leaky_loss.xL, leaky_loss.xR])
+    yp_end = np.array([1.0 - eps, eps])
+    yt = np.array([0.0, 1.0])
+
+    # loss
+    loss_transition = leaky_loss(yt, yp_transition)
+    loss_end = leaky_loss(yt, yp_end)
+
+    # THEN the end point calculations should be greater than or equal to the transition
+    # point calculations
+    assert np.all(loss_end >= loss_transition)
