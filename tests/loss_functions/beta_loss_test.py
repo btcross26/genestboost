@@ -11,8 +11,7 @@ beta loss matches intent.
 
 import numpy as np
 import pytest
-
-from genestboost.loss_functions import BetaLoss, LeakyBetaLoss, QuasiLogLoss
+from loss_functions import BetaLoss, LeakyBetaLoss, QuasiLogLoss
 
 # module pytest fixtures
 

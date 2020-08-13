@@ -7,12 +7,11 @@ Unit tests for SimplePLS weak learner class
 # created: 2019-12-20
 
 
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import numpy as np
 import pytest
-
-from genestboost.weak_learners import SimplePLS
+from weak_learners import SimplePLS
 
 from .simple_pls_data import X, y
 

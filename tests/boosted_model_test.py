@@ -12,31 +12,7 @@ from unittest import mock
 import numpy as np
 import pytest
 
-from genestboost import BoostedModel
-from genestboost.link_functions import IdentityLink
-from genestboost.loss_functions import LeastSquaresLoss
-from genestboost.weak_learners import SimplePLS
-
 LOGGER = logging.getLogger(__name__)
-
-
-# module pytest fixtures
-
-# fixture for generic boosted model object
-@pytest.fixture(scope="function")
-def boosted_model_instance(request):
-    # setup
-    model = BoostedModel(
-        link=IdentityLink(),
-        loss=LeastSquaresLoss(),
-        model_callback=SimplePLS,
-        model_callback_kwargs={"max_vars": 3},
-    )
-    # yield objects
-    yield model
-
-    # teardown
-    del model
 
 
 # test init and that model is not fit after initialization
@@ -207,50 +183,3 @@ def test_compute_weights_exception(boosted_model_instance, weights_value):
         excinfo.value.args[0] == "attribute:<weights> should be 'none', 'newton', "
         "or a callable"
     )
-
-    #     if weights_value not in ["none", "newton"] and not callable(weights_value):
-    #         with pytest.raises(AttributeError) as exc_info:
-    #             weights = model.compute_weights(yt, yp)
-    #             assert exc_info.value.args[0] == "attribute:<weights> should be 'none', 'newton', or a callable"
-    #     else:
-    #
-    # # THEN all newton weights should be equal to 1.0
-    # np.all(weights == 1.0)
-
-
-# # test compute loss
-# # test init and that model is not fit after initialization
-# def test_leaky_beta_loss_transition():
-#     """
-#     Test for basic initialization and __bool__ magic method, which returns whether
-#     the model has been fit or not
-#     """
-#     # GIVEN a BoostedModel instance with internal link, loss, and model_callbacks
-#     model = BoostedModel(IdentityLink(),
-#                          LeastSquaresLoss(),
-#                          SimplePLS)
-#
-#     # WHEN checking model fit, False should be returned
-#     assert not model
-
-
-# def test_d2_link(self, test_name, link, link_test_values, d_test_values, tol):
-#     """
-#     Test link second derivative calculations
-#     """
-#     # GIVEN some y locations to calculate link derivatives
-#     y = d_test_values
-#     eta = link(d_test_values)
-#
-#     # WHEN the second derivative is approximated using central differences
-#     def func(eta):
-#         return link(eta, inverse=True)
-#
-#     calculated_values = d2_central_difference(func, eta, h=1e-6)
-#
-#     # THEN the calculated values of the derivative should be close to the
-#     # true implemented computed values
-#     expected_values = link.d2ydeta2(y)
-#     np.testing.assert_allclose(
-#         calculated_values, expected_values, atol=tol[0], rtol=tol[1]
-#     )

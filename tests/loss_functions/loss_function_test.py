@@ -12,8 +12,7 @@ import warnings
 
 import numpy as np
 import pytest
-
-from genestboost.utils import d1_central_difference, d2_central_difference
+from src.genestboost import d1_central_difference, d2_central_difference
 
 from .loss_test_list import LOSS_TESTS
 
