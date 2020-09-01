@@ -28,21 +28,21 @@ class BoostedModel:
 
     def __init__(
         self,
-        link,
-        loss,
-        model_callback,
-        model_callback_kwargs=None,
-        weights="none",
-        alpha=1.0,
-        step_type="decaying",
-        step_decay_factor=0.48,
-        init_type="mean",
-        random_state=None,
-        validation_fraction=0.0,
-        validation_stratify=False,
-        validation_iter_stop=10,
-        tol=1e-8,
-        activation_callback=lambda yp: yp,
+        link: BaseLink,
+        loss: BaseLoss,
+        model_callback: ModelCallback,
+        model_callback_kwargs: Optional[Dict[str, Any]] = None,
+        weights: Union[str, WeightsCallback] = "none",
+        alpha: float = 1.0,
+        step_type: str = "decaying",
+        step_decay_factor: float = 0.48,
+        init_type: str = "mean",
+        random_state: Optional[int] = None,
+        validation_fraction: float = 0.0,
+        validation_stratify: bool = False,
+        validation_iter_stop: int = 10,
+        tol: float = 1e-8,
+        activation_callback: ActivationCallback = lambda yp: yp,
     ):
         # set state based on initializer arguments
         self._link = link
@@ -112,11 +112,9 @@ class BoostedModel:
         term_1 = self._loss.d2ldyp2(yt, yp) * self._link.dydeta(yp) ** 2
         term_2 = self._loss.dldyp(yt, yp) * self._link.d2ydeta2(yp)
         denominator = term_1 + term_2
-        denominator = denominator * yt.shape[0] / np.sum(denominator)
+        if denominator.min() < 1.0:  # set smallest eigenvalue = 1.0
+            denominator = denominator + (1.0 - denominator.min())
         return 1.0 / denominator
-
-    def compute_newton_tr_weights(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
-        pass
 
     def compute_weights(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
         if self.weights == "none":
@@ -124,9 +122,6 @@ class BoostedModel:
 
         if self.weights == "newton":
             return self.compute_newton_weights(yt, yp)
-
-        if self.weights == "newton-tr":
-            return self.compute_newton_tr_weights(yt, yp)
 
         if callable(self.weights):
             return self.weights(yt, yp)
