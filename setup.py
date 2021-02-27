@@ -30,7 +30,7 @@ setup(
     python_requires="==3.*,>=3.7.0",
     author="Ben Cross",
     author_email="btcross26@yahoo.com",
-    packages=find_packages("src"),
+    packages=find_packages("src", include=['genestboost', 'genestboost.*']),
     package_dir={"": "src"},
     install_requires=["numpy==1.*,>=1.18.5", "scipy==1.*,>=1.4.1"],
     extras_require={
@@ -38,7 +38,6 @@ setup(
             "altair==4.*,>=4.1.0",
             "black==19.*,>=19.10.0.b0",
             "check-manifest==0.*,>=0.42.0",
-            "dephell==0.*,>=0.8.3",
             "flake8==3.*,>=3.8.3",
             "ipython==7.*,>=7.15.0",
             "isort==4.*,>=4.3.21",
