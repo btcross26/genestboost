@@ -34,6 +34,39 @@ INSTALL_REQUIRES = [
     'typing-extensions; python_version == "3.7"',
 ]
 
+EXTRAS_REQUIRES = {
+    "docs": ["sphinx", "sphinx_rtd_theme", "recommonmark"],
+    "tests": ["coverage", "mypy", "pytest", "pytest-cov", "toml"],
+    "qa": [
+        "pre-commit",
+        "black",
+        "mypy",
+        "tox",
+        "check-manifest",
+        "flake8",
+        "flake8-docstrings",
+    ],
+    "build": ["twine", "wheel"],
+    "notebooks": [
+        "jupyter",
+        "ipykernel",
+        "matplotlib==3.*,>=3.2.1",
+        "pandas==1.*,>=1.0.4",
+        "sklearn==0.*,>=0.22",
+    ],
+    "genestboost": ["genestboost"],
+}
+
+EXTRAS_REQUIRES["dev"] = (
+    EXTRAS_REQUIRES["tests"]
+    + EXTRAS_REQUIRES["docs"]
+    + EXTRAS_REQUIRES["qa"]
+    + EXTRAS_REQUIRES["build"]
+    + EXTRAS_REQUIRES["notebooks"]
+    + EXTRAS_REQUIRES["genestboost"]
+)
+
+
 HERE = Path(__file__).absolute().parent
 VERSION = "0.1.0"
 URL = PROJECT_URLS["Source Code"]
