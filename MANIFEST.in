@@ -5,6 +5,8 @@ include *.txt
 include *.toml
 include pylintrc
 include pyproject.toml
+include .isort.cfg
+include AUTHORS
 include tests/.coveragerc
 
 recursive-include tests *.py
