@@ -29,7 +29,13 @@ CLASSIFIERS = [
     "Programming Language :: Python :: 3.7",
 ]
 
-EXTRAS_REQUIRE = {
+INSTALL_REQUIRES = [
+    "numpy==1.*,>=1.18.5",
+    "scipy==1.*,>=1.4.1",
+    'typing-extensions; python_version == "3.7"',
+]
+
+EXTRAS_REQUIRES = {
     "docs": ["sphinx", "sphinx_rtd_theme", "recommonmark"],
     "tests": ["coverage", "mypy", "pytest", "pytest-cov", "toml"],
     "qa": [
@@ -52,17 +58,16 @@ EXTRAS_REQUIRE = {
     "genestboost": ["genestboost"],
 }
 
-EXTRAS_REQUIRE["dev"] = (
-    EXTRAS_REQUIRE["tests"]
-    + EXTRAS_REQUIRE["docs"]
-    + EXTRAS_REQUIRE["qa"]
-    + EXTRAS_REQUIRE["build"]
-    + EXTRAS_REQUIRE["notebooks"]
-    + EXTRAS_REQUIRE["genestboost"]
+EXTRAS_REQUIRES["dev"] = (
+    EXTRAS_REQUIRES["tests"]
+    + EXTRAS_REQUIRES["docs"]
+    + EXTRAS_REQUIRES["qa"]
+    + EXTRAS_REQUIRES["build"]
+    + EXTRAS_REQUIRES["notebooks"]
+    + EXTRAS_REQUIRES["genestboost"]
 )
 
 HERE = Path(__file__).absolute().parent
-INSTALL_REQUIRES = (HERE / "requirements.txt").read_text().split("\n")
 VERSION = "0.1.0"
 URL = PROJECT_URLS["Source Code"]
 LICENSE = (HERE / "LICENSE").read_text()
@@ -86,7 +91,7 @@ def install_pkg():
         packages=PACKAGES,
         install_requires=INSTALL_REQUIRES,
         classifiers=CLASSIFIERS,
-        extras_requires=EXTRAS_REQUIRE,
+        extras_requires=EXTRAS_REQUIRES,
         include_package_data=True,
         zip_safe=False,
     )
