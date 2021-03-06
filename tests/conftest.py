@@ -8,11 +8,11 @@ Meta-fixtures for unit tests
 
 
 import pytest
-from link_functions import IdentityLink
-from loss_functions import LeastSquaresLoss
-from weak_learners import SimplePLS
 
 from genestboost import BoostedModel
+from genestboost.link_functions import IdentityLink
+from genestboost.loss_functions import LeastSquaresLoss
+from genestboost.weak_learners import SimplePLS
 
 
 # fixture for generic boosted model object
