@@ -10,7 +10,7 @@ import logging
 
 import numpy as np
 import pytest
-from src.genestboost import d1_central_difference, d2_central_difference
+from genestboost import d1_central_difference, d2_central_difference
 
 from .link_test_list import LINK_TESTS
 

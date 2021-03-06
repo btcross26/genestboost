@@ -1,0 +1,12 @@
+include *.ini
+include *.md
+include *.rst
+include *.txt
+include *.toml
+include pylintrc
+include pyproject.toml
+include tests/.coveragerc
+
+recursive-include tests *.py
+recursive-include docs *.py
+recursive-include docs *.rst

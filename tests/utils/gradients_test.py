@@ -8,7 +8,7 @@ Tests for functions in genestboost.utils gradients.py src file
 
 
 import numpy as np
-from src.genestboost import d1_central_difference, d2_central_difference
+from genestboost import d1_central_difference, d2_central_difference
 
 
 # tests for central difference utils functions

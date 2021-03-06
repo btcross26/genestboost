@@ -12,7 +12,7 @@ import logging
 import numpy as np
 import pytest
 from link_functions import IdentityLink
-from src.genestboost import BoostedModel
+from genestboost import BoostedModel
 
 from .weak_learners.simple_pls_data import X, y
 
