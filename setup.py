@@ -34,7 +34,7 @@ INSTALL_REQUIRES = [
     'typing-extensions; python_version == "3.7"',
 ]
 
-EXTRAS_REQUIRES = {
+EXTRAS_REQUIRE = {
     "docs": ["sphinx", "sphinx_rtd_theme", "recommonmark"],
     "tests": ["coverage", "mypy", "pytest", "pytest-cov", "toml"],
     "qa": [
@@ -52,18 +52,16 @@ EXTRAS_REQUIRES = {
         "ipykernel",
         "matplotlib==3.*,>=3.2.1",
         "pandas==1.*,>=1.0.4",
-        "sklearn==0.*,>=0.22",
+        "scikit-learn==0.*,>=0.22",
     ],
-    "genestboost": ["genestboost"],
 }
 
-EXTRAS_REQUIRES["dev"] = (
-    EXTRAS_REQUIRES["tests"]
-    + EXTRAS_REQUIRES["docs"]
-    + EXTRAS_REQUIRES["qa"]
-    + EXTRAS_REQUIRES["build"]
-    + EXTRAS_REQUIRES["notebooks"]
-    + EXTRAS_REQUIRES["genestboost"]
+EXTRAS_REQUIRE["dev"] = (
+    EXTRAS_REQUIRE["tests"]
+    + EXTRAS_REQUIRE["docs"]
+    + EXTRAS_REQUIRE["qa"]
+    + EXTRAS_REQUIRE["build"]
+    + EXTRAS_REQUIRE["notebooks"]
 )
 
 
@@ -90,6 +88,7 @@ def install_pkg():
         packages=PACKAGES,
         install_requires=INSTALL_REQUIRES,
         classifiers=CLASSIFIERS,
+        extras_require=EXTRAS_REQUIRE,
         include_package_data=True,
         zip_safe=False,
     )
