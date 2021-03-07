@@ -24,7 +24,7 @@ repos:
     hooks:
       - id: flake8
         additional_dependencies: [flake8-docstrings]
-        exclude: (^tests/|^docs/)
+        exclude: (^tests/|^docs/|type_hints.py$)
         language_version: python3.7
   - repo: https://github.com/mgedmin/check-manifest
     rev: "0.42"
