@@ -1,6 +1,4 @@
-"""
-genestboost.link_functions module
-"""
+"""Link functions module - contains link functions for boosting."""
 
 # author: Benjamin Cross
 # email: btcross26@yahoo.com

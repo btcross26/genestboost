@@ -1,6 +1,4 @@
-"""
-genestboost.utils module
-"""
+"""genestboost.utils module."""
 
 # author: Benjamin Cross
 # email: btcross26@yahoo.com

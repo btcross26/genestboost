@@ -1,6 +1,4 @@
-"""
-genestboost.weak_learners module
-"""
+"""genestboost.weak_learners module."""
 
 # author: Benjamin Cross
 # email: btcross26@yahoo.com
