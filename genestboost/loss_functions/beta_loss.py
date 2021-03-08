@@ -1,6 +1,4 @@
-"""
-Least squares loss function implementation
-"""
+"""Least squares loss function implementation."""
 
 # author: Benjamin Cross
 # email: btcross26@yahoo.com
@@ -18,9 +16,13 @@ from . import BaseLoss
 
 
 class BetaLoss(BaseLoss):
+    """BetaLoss class implementation."""
+
     def __init__(self, alpha: float, beta: float, eps: float = 1e-10):
         """
-        Class initializer
+        Class initializer.
+
+        Extends BaseLoss.__init__.
 
         Parameters
         ----------
@@ -33,6 +35,7 @@ class BetaLoss(BaseLoss):
         eps: float
             Small value to use in log calculations to avoid numerical error
         """
+        super().__init__()
         self.alpha = alpha
         self.beta = beta
         self.eps = eps
@@ -44,7 +47,7 @@ class BetaLoss(BaseLoss):
         alpha: float, beta: float, eps: float = 1e-10
     ) -> Callable[[np.ndarray], np.ndarray]:
         """
-        Static method to return beta callback function for quasi-deviance
+        Compute the beta callback function for quasi-deviance.
 
         Parameters
         ----------
@@ -75,6 +78,11 @@ class BetaLoss(BaseLoss):
         return vt_callback
 
     def _loss(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
+        """
+        Calculate the per-observation loss as a function of `yt` and `yp`.
+
+        Overrides BaseLoss._loss.
+        """
         c1 = betainc(self.alpha, self.beta, yt) - betainc(self.alpha, self.beta, yp)
         c2 = betainc(self.alpha + 1.0, self.beta, yt) - betainc(
             self.alpha + 1.0, self.beta, yp
@@ -84,9 +92,19 @@ class BetaLoss(BaseLoss):
         return (yt * c1 * b1 - c2 * b2) * self.scale
 
     def dldyp(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
+        """
+        Calculate the first derivative of the loss with respect to `yp`.
+
+        Overrides BaseLoss.dldyp.
+        """
         return -(yt - yp) / self._vt_callback(yp)
 
     def d2ldyp2(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
+        """
+        Calculate the second derivative of the loss with respect to `yp`.
+
+        Overrides BaseLoss.d2ldyp2.
+        """
         callback_values = self._vt_callback(yp)
         d_left = 1.0 / callback_values
         du = (1.0 - self.alpha) / (yp + self.eps) - (1.0 - self.beta) / (
@@ -97,6 +115,8 @@ class BetaLoss(BaseLoss):
 
 
 class LeakyBetaLoss(BetaLoss):
+    """Class implementation of LeakyBetaLoss loss function."""
+
     def __init__(
         self,
         alpha: float,
@@ -106,7 +126,9 @@ class LeakyBetaLoss(BetaLoss):
         xtol: float = 1e-8,
     ):
         """
-        Class initializer
+        Class initializer.
+
+        Extends BetaLoss.__init__.
 
         Parameters
         ----------
@@ -170,6 +192,11 @@ class LeakyBetaLoss(BetaLoss):
         return values
 
     def dldyp(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
+        """
+        Calculate the first derivative of the loss with respect to `yp`.
+
+        Overrides BaseLoss.dldyp.
+        """
         # calculate loss gradient values from regular betaloss
         values = super().dldyp(yt, yp)
 
@@ -182,6 +209,11 @@ class LeakyBetaLoss(BetaLoss):
         return values
 
     def d2ldyp2(self, yt: np.ndarray, yp: np.ndarray) -> np.ndarray:
+        """
+        Calculate the second derivative of the loss with respect to `yp`.
+
+        Overrides BaseLoss.d2ldyp2.
+        """
         # calculate loss gradient values from regular betaloss
         values = super().d2ldyp2(yt, yp)
 

@@ -1,6 +1,7 @@
 """
-Helper functions to approximate gradients using central differences for
-use in testing and numerical derivatives
+Helper functions to approximate gradients.
+
+Uses central differences for use in testing and numerical derivatives
 """
 
 # author: Benjamin Cross
@@ -17,8 +18,9 @@ def d1_central_difference(
     func: Callable[[np.ndarray], np.ndarray], y: np.ndarray, h: float = 1e-8
 ) -> np.ndarray:
     """
-    Approximate the first derivative of func at y using a first-order central
-    difference with spacing h (error term O(h^2))
+    Approximate the first derivative of func at y.
+
+    Uses a first-order central difference with spacing `h` (error term O(h^2))
 
     Parameters
     ----------
@@ -45,8 +47,9 @@ def d2_central_difference(
     func: Callable[[np.ndarray], np.ndarray], y: np.ndarray, h: float = 1e-8
 ) -> np.ndarray:
     """
-    Approximate the first derivative of func at y using a first-order central
-    difference with spacing h (error term O(h^2))
+    Approximate the first derivative of func at y.
+
+    Uses a first-order central difference with spacing `h` (error term O(h^2))
 
     Parameters
     ----------
