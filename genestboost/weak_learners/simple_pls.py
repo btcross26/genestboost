@@ -1,6 +1,4 @@
-"""
-Implementation for SimplePLS, a partial-PLS component regression model
-"""
+"""Implementation for SimplePLS, a partial-PLS component regression model."""
 
 # author: Benjamin Cross
 # email: btcross26@yahoo.com
@@ -16,15 +14,13 @@ from ..type_hints import Model
 
 
 class SimplePLS:
-    """
-    Implementation for SimplePLS, a partial-PLS component regression model
-    """
+    """Implementation for SimplePLS, a partial-PLS component regression model."""
 
     def __init__(
         self, max_vars: Optional[int] = 1, filter_threshold: Optional[float] = None
     ):
         """
-        Class SimplePLS initializer
+        Class SimplePLS initializer.
 
         Parameters
         ----------
@@ -70,10 +66,10 @@ class SimplePLS:
         self, X: np.ndarray, y: np.ndarray, weights: Optional[np.ndarray] = None
     ) -> Model:
         """
-        Calling this method on an instance fits a linear regression according to the
-        specified initializer arguments. The fit process will result in several
-        instance attributes being populated, including the public attributes housing
-        the coefficients and intercept.
+        Fit a linear regression according to the specified initializer arguments.
+
+        The fit process will result in several instance attributes being populated,
+        including the public attributes housing the coefficients and intercept.
 
         Parameters
         ----------
@@ -93,8 +89,8 @@ class SimplePLS:
 
         Returns
         -------
-        SimplePLS
-            self
+        model: SimplePLS
+            Instance of self.
         """
         # initialize model
         Xs, ys = self._initialize_model(X, y)
@@ -123,7 +119,7 @@ class SimplePLS:
 
     def predict(self, X: np.ndarray) -> np.ndarray:
         """
-        Calculates and returns predictions for the given model matrix, X.
+        Compute model predictions for the given model matrix, X.
 
         Parameters
         ----------
@@ -143,9 +139,8 @@ class SimplePLS:
         self, coefs: np.ndarray, Xs: np.ndarray, ys: np.ndarray
     ) -> np.ndarray:
         """
-        A private method not meant to be called. This method is called during the
-        fitting process, and it is used to get the coefficient multiplier that is
-        applied to the coefficients of all variables that are used in the regression.
+        Get the coefficient multiplier that is applied to the coefficients (private).
+
         In the case of single variable regression, this multiplier will be equal to
         1.0. For multiple variables, A regression is applied to the summation of each
         selected standardized variable multiplied by its correlation coefficient. The
@@ -156,7 +151,7 @@ class SimplePLS:
 
         Parameters
         ----------
-        coefs: numpy.ndarray, shape (n_predictors, )
+        coefs: numpy.ndarray, shape (n_predictors,)
             A vector of coefficients. For selected variables, the coefficients will be
             equal to the individual correlation coefficients of the variables with the
             target. For variables that are not selected, the coefficient values are
@@ -165,7 +160,7 @@ class SimplePLS:
         Xs: numpy.ndarray, shape (n_samples, n_predictors)
             The standardized version of model matrix, X, that is being fitted
 
-        ys: numpy.ndarray, shape (n_samples, )
+        ys: numpy.ndarray, shape (n_samples,)
             The standardized version of target vector, y, that is being fitted
 
         Returns
@@ -195,9 +190,9 @@ class SimplePLS:
 
     def _mask_coefs(self, coefs: np.ndarray) -> np.ndarray:
         """
-        This is a private method used during the fitting process and not to be called.
-        This is where the initializer arguments max_vars and filter_threshold are
-        applied. If max_vars is 1 or filter_threshold is 1.0, then only the variable
+        Apply initializer arguments max_vars and filter_threshold (private).
+
+        If max_vars is 1 or filter_threshold is 1.0, then only the variable
         that is most correlated with the predictor will be selected. If max_vars is
         greater than or equal to the number of predictors and filter_threshold is
         <= 0.0, then all variables are selected. Otherwise, max_vars will be selected
@@ -205,7 +200,7 @@ class SimplePLS:
 
         Parameters
         ----------
-        coefs: numpy.ndarray, shape (n_predictors, )
+        coefs: numpy.ndarray, shape (n_predictors,)
             A vector of coefficients calculated during the fitting process. The values
             of the coefficients in this case are equal to the correlation coefficients
             of the predictors with the target vector.
@@ -264,9 +259,7 @@ class SimplePLS:
 
     def _initialize_model(self, X: np.ndarray, y: np.ndarray) -> np.ndarray:
         """
-        A private method that is called at the beginning of the fitting process and is
-        not meant to be called on an instance. This method initializes the model by
-        calculating standardized versions of the X and y fitted arrays.
+        Initialize the model by standardizing the X and y fitting arrays (private).
 
         Parameters
         ----------
