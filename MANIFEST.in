@@ -9,6 +9,9 @@ include .isort.cfg
 include AUTHORS
 include tests/.coveragerc
 
+exclude genestboost/model_ensemble.py
+exclude genestboost/residual_model.py
+
 recursive-include tests *.py
 recursive-include docs *.py
 recursive-include docs *.rst

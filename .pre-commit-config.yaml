@@ -1,13 +1,13 @@
 exclude: ^notebooks/
 default_language_version:
-  python: python3.7
+  python: python3.8
 repos:
   - repo: https://github.com/psf/black
     rev: 19.10b0
     hooks:
       - id: black
         types: [file, python]
-        language_version: python3.7
+        language_version: python3.8
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.4.0
     hooks:
@@ -18,16 +18,16 @@ repos:
     rev: 5.0.5
     hooks:
       - id: isort
-        language_version: python3.7
+        language_version: python3.8
   - repo: https://gitlab.com/pycqa/flake8
     rev: 3.8.3
     hooks:
       - id: flake8
         additional_dependencies: [flake8-docstrings]
         exclude: (^tests/|^docs/|type_hints.py$)
-        language_version: python3.7
+        language_version: python3.8
   - repo: https://github.com/mgedmin/check-manifest
     rev: "0.42"
     hooks:
       - id: check-manifest
-        language_version: python3.7
+        language_version: python3.8
