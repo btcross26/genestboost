@@ -1,2 +1,2 @@
-notebooks/* linguist-vendored
-*.ipynb linguist-detectable=false
+* linguist-vendored
+*.py linguist-vendored=false
