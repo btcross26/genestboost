@@ -10,7 +10,12 @@ Welcome to genestboost's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   genestboost
+   introduction
+   examples
+   quickstart
+   changelog
+   modules
+   GitHub Repo <https://github.com/btcross26/genestboost>
 
 
 Indices and tables

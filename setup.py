@@ -34,7 +34,7 @@ INSTALL_REQUIRES = [
 ]
 
 EXTRAS_REQUIRE = {
-    "docs": ["sphinx", "sphinx_rtd_theme", "recommonmark"],
+    "docs": ["sphinx", "sphinx_rtd_theme", "sphinx-autodoc-typehints", "recommonmark"],
     "tests": ["coverage", "mypy", "pytest", "pytest-cov", "toml"],
     "qa": [
         "pre-commit",
@@ -65,7 +65,7 @@ EXTRAS_REQUIRE["dev"] = (
 
 
 HERE = Path(__file__).absolute().parent
-VERSION = "0.1.0"
+VERSION = "0.1.0-beta"
 URL = PROJECT_URLS["Source Code"]
 AUTHORS = (HERE / "AUTHORS").read_text().split("\n")
 LICENSE = (HERE / "LICENSE.txt").read_text()
