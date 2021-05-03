@@ -52,6 +52,7 @@ EXTRAS_REQUIRE = {
         "matplotlib==3.*,>=3.2.1",
         "pandas==1.*,>=1.0.4",
         "scikit-learn==0.*,>=0.22",
+        "patsy==0.5.1",
     ],
 }
 
