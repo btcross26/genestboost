@@ -17,6 +17,7 @@ class ModelDataSets:
         self,
         X: np.ndarray,
         yt: np.ndarray,
+        scores: Optional[np.ndarray] = None,
         weights: Optional[np.ndarray] = None,
         validation_fraction: float = 0.0,
         validation_stratify: bool = False,
