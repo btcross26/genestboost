@@ -1,0 +1,835 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>genestboost package &mdash; genestboost  documentation</title>
+
+
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+
+
+
+
+
+
+
+
+
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+
+
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="genestboost.link_functions package" href="genestboost.link_functions.html" />
+    <link rel="prev" title="genestboost" href="modules.html" />
+</head>
+
+<body class="wy-body-for-nav">
+
+
+  <div class="wy-grid-for-nav">
+
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+            <a href="index.html" class="icon icon-home"> genestboost
+
+
+
+          </a>
+
+
+
+
+              <div class="version">
+                0.1.0-beta
+              </div>
+
+
+
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+
+
+
+
+
+
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">genestboost</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">genestboost package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="genestboost.link_functions.html">genestboost.link_functions package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="genestboost.loss_functions.html">genestboost.loss_functions package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="genestboost.utils.html">genestboost.utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="genestboost.weak_learners.html">genestboost.weak_learners package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-genestboost">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/btcross26/genestboost">GitHub Repo</a></li>
+</ul>
+
+
+
+        </div>
+
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+
+      <nav class="wy-nav-top" aria-label="top navigation">
+
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">genestboost</a>
+
+      </nav>
+
+
+      <div class="wy-nav-content">
+
+        <div class="rst-content style-external-links">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+
+          <li><a href="modules.html">genestboost</a> &raquo;</li>
+
+      <li>genestboost package</li>
+
+
+      <li class="wy-breadcrumbs-aside">
+
+
+            <a href="_sources/genestboost.rst.txt" rel="nofollow"> View page source</a>
+
+
+      </li>
+
+  </ul>
+
+
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <div class="section" id="genestboost-package">
+<h1>genestboost package<a class="headerlink" href="#genestboost-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="genestboost.link_functions.html">genestboost.link_functions package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="genestboost.link_functions.html#module-genestboost.link_functions">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="genestboost.loss_functions.html">genestboost.loss_functions package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="genestboost.loss_functions.html#module-genestboost.loss_functions">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="genestboost.utils.html">genestboost.utils package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="genestboost.utils.html#module-genestboost.utils">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="genestboost.weak_learners.html">genestboost.weak_learners package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="genestboost.weak_learners.html#module-genestboost.weak_learners">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="module-genestboost">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-genestboost" title="Permalink to this headline">¶</a></h2>
+<p>genestboost top-level module.</p>
+<dl class="py class">
+<dt id="genestboost.BoostedLinearModel">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">genestboost.</span></code><code class="sig-name descname"><span class="pre">BoostedLinearModel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">link</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_callback</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_callback_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'none'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_decay_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_fraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_stratify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_iter_stop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_linear_model.html#BoostedLinearModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedLinearModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">genestboost.boosted_model.BoostedModel</span></code></p>
+<p>BoostedLinearModel GLM class implementation.</p>
+<dl class="py method">
+<dt id="genestboost.BoostedLinearModel.boost">
+<code class="sig-name descname"><span class="pre">boost</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eta_p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_callback</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_callback_kwargs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_linear_model.html#BoostedLinearModel.boost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedLinearModel.boost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boost by one model iteration.</p>
+<p>Creates a model using the <cite>model_callback</cite> callable with <cite>model_callback_kwargs</cite>,
+then fits this model to the pseudo-residuals. The learning rate is determined
+according to the chosen method, and current predictions are updated and returned
+such that stopping criteria can be evaluated and boosting continued. The
+fitted model resulting from the iteration is appended to the underlying model
+ensemble.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>np.ndarray</em>) – The model matrix. If <cite>init_type</cite> was set as “residuals”, then the model
+scores for which to calculate residuals should form the last column of the
+input matrix.</p></li>
+<li><p><strong>yt</strong> (<em>np.ndarray</em>) – Observed target values.</p></li>
+<li><p><strong>yp</strong> (<em>np.ndarray</em>) – Predicted target values.</p></li>
+<li><p><strong>eta_p</strong> (<em>np.ndarray</em>) – The current link predictions corresponding to the model iteration. This can
+be found by transforming <cite>yp</cite>, but passing this as an argument avoids
+duplicate computations and improves performance.</p></li>
+<li><p><strong>model_callback</strong> (<em>Callable</em>) – A callable that returns a model object that implements fit and predict methods.</p></li>
+<li><p><strong>model_callback_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – A dictionary of keyword arguments to pass to <cite>model_callback</cite>.</p></li>
+<li><p><strong>weights</strong> (<em>np.ndarray</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Sample weights (by observation) to use for fitting. Should be positive.
+Observations with higher weights will affect the model fit more. If ‘None’,
+then all weights will be equal (1.0).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>yp_next, eta_p_next</strong> – A tuple of the updated target predictions and target prediction links.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple(np.ndarray, np.ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.BoostedLinearModel.decision_function">
+<code class="sig-name descname"><span class="pre">decision_function</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_linear_model.html#BoostedLinearModel.decision_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedLinearModel.decision_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the link of computed model predictions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>np.ndarray</em>) – The model matrix. If <cite>init_type</cite> was set as “residuals”, then the model
+scores for which to calculate residuals should form the last column of the
+input matrix.</p></li>
+<li><p><strong>model_index</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If None, then return the full model prediction as the sum of all models in
+the ensemble plus the initial model prediction. If an int, then return only
+the predictions from models up to <cite>model_index</cite> (i.e., [:model_index]).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The link of the computed model predictions.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.BoostedLinearModel.get_coefficient_history">
+<code class="sig-name descname"><span class="pre">get_coefficient_history</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_linear_model.html#BoostedLinearModel.get_coefficient_history"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedLinearModel.get_coefficient_history" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the history of coefficient values.</p>
+<p>Returns a matrix of coefficients, where each row is representative of the
+model coefficients at a specific boosting iteration (i.e., row 1 is after the
+first round of boosting, etc.)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>scale</strong> (<em>np.ndarray</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Vector to scale the coefficients in the history calculation. If None, then
+coefficients are not scaled (or alternatively, all coefficients are scaled
+by a factor of 1.0).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>coefficient_history</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray [n_boosting_iterations + 1, n_coefs]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.BoostedLinearModel.get_coefficient_order">
+<code class="sig-name descname"><span class="pre">get_coefficient_order</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_linear_model.html#BoostedLinearModel.get_coefficient_order"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedLinearModel.get_coefficient_order" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the order that coefficients were selected for the model.</p>
+<p>In the case that multiple coefficients were selected for the first time at the
+same model iteration, the “larger” coefficient will be considered to have been
+selected first. The <cite>scale</cite> argument can be used to standardize coefficients
+if models were fitted in a manner such that coefficients were not standardized.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>scale</strong> (<em>np.ndarray</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Vector to scale the coefficients in the ordering calculation. If None, then
+coefficients are not scaled (or alternatively, all coefficients are scaled
+by a factor of 1.0).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>coefficient_order</strong> – A list of zero-based indexes specifying the order that coefficients entered
+the boosted model.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.BoostedLinearModel.get_prediction_var_history">
+<code class="sig-name descname"><span class="pre">get_prediction_var_history</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_linear_model.html#BoostedLinearModel.get_prediction_var_history"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedLinearModel.get_prediction_var_history" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the history of prediction variance on the model matrix X.</p>
+<p>Returns a matrix of prediction variances at each round of boosting for each
+specified group of model coefficients. If <cite>groups</cite> is None, then each
+coefficient is considered separately as its own group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>np.ndarray</em>) – The model matrix. If <cite>init_type</cite> was set as “residuals”, then the model
+scores for which to calculate residuals should form the last column of the
+input matrix.</p></li>
+<li><p><strong>groups</strong> (<em>List</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – A list of indices representing coefficient groups. Indices for groups should
+start at zero and be sequenced in order to the number of groups minus one.
+If None, then each feature is its own group.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>pred_var</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray [n_boosting_iterations, n_groups]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.BoostedLinearModel.initialize_model">
+<code class="sig-name descname"><span class="pre">initialize_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_linear_model.html#BoostedLinearModel.initialize_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedLinearModel.initialize_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the boosted model.</p>
+<p>This is called internally within the fit function. If manual boosting is being
+performed using the ‘boost’ method, then this method should be called before
+beginning the manual boosting procedure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>np.ndarray</em><em> [</em><em>n_samples</em><em>, </em><em>n_features</em><em>]</em>) – The model matrix. If <cite>init_type</cite> was set as “residuals”, then the model
+scores for which to calculate residuals should form the last column of the
+input matrix.</p></li>
+<li><p><strong>yt</strong> (<em>np.ndarray</em>) – Observed target values.</p></li>
+<li><p><strong>weights</strong> (<em>np.ndarray</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Sample weights (by observation) to use for fitting. Should be positive.
+Observations with higher weights will affect the model fit more. If ‘None’,
+then all weights will be equal (1.0).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>yp, eta_p</strong> – The initial target predictions and link of target prediction arrays.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple(np.ndarray, np.ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="genestboost.BoostedModel">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">genestboost.</span></code><code class="sig-name descname"><span class="pre">BoostedModel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">link</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_callback</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_callback_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'none'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'decaying'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_decay_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.48</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_fraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_stratify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_iter_stop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_model.html#BoostedModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>General boosting model class implementation for any regression model.</p>
+<dl class="py class">
+<dt id="genestboost.BoostedModel.InitialModel">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">InitialModel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">link</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_model.html#BoostedModel.InitialModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedModel.InitialModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>InitialModel class implementation - internal to BoostedModel.</p>
+<dl class="py method">
+<dt id="genestboost.BoostedModel.InitialModel.fit">
+<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_model.html#BoostedModel.InitialModel.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedModel.InitialModel.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the InitialModel object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>np.ndarray</em>) – The model matrix. If <cite>init_type</cite> was set as “residuals”, then the model
+scores for which to calculate residuals should form the last column of the
+input matrix.</p></li>
+<li><p><strong>yt</strong> (<em>np.ndarray</em>) – Observed target values.</p></li>
+<li><p><strong>weights</strong> (<em>np.ndarray</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Sample weights (by observation) to use for fitting. Should be positive.
+Observations with higher weights will affect the model fit more. If ‘None’,
+then all weights will be equal (1.0).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.BoostedModel.InitialModel.predict">
+<code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_model.html#BoostedModel.InitialModel.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedModel.InitialModel.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute InitialModel predictions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>np.ndarray</em>) – The model matrix. If <cite>init_type</cite> was set as “residuals”, then the model
+scores for which to calculate residuals should form the last column of the
+input matrix.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>predictions</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.BoostedModel.boost">
+<code class="sig-name descname"><span class="pre">boost</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eta_p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_callback</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_callback_kwargs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_model.html#BoostedModel.boost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedModel.boost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boost by one model iteration.</p>
+<p>Creates a model using the <cite>model_callback</cite> callable with <cite>model_callback_kwargs</cite>,
+then fits this model to the pseudo-residuals. The learning rate is determined
+according to the chosen method, and current predictions are updated and returned
+such that stopping criteria can be evaluated and boosting continued. The
+fitted model resulting from the iteration is appended to the underlying model
+ensemble.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>np.ndarray</em>) – The model matrix. If <cite>init_type</cite> was set as “residuals”, then the model
+scores for which to calculate residuals should form the last column of the
+input matrix.</p></li>
+<li><p><strong>yt</strong> (<em>np.ndarray</em>) – Observed target values.</p></li>
+<li><p><strong>yp</strong> (<em>np.ndarray</em>) – Predicted target values.</p></li>
+<li><p><strong>eta_p</strong> (<em>np.ndarray</em>) – The current link predictions corresponding to the model iteration. This can
+be found by transforming <cite>yp</cite>, but passing this as an argument avoids
+duplicate computations and improves performance.</p></li>
+<li><p><strong>model_callback</strong> (<em>Callable</em>) – A callable that returns a model object that implements fit and predict methods.</p></li>
+<li><p><strong>model_callback_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – A dictionary of keyword arguments to pass to <cite>model_callback</cite>.</p></li>
+<li><p><strong>weights</strong> (<em>np.ndarray</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Sample weights (by observation) to use for fitting. Should be positive.
+Observations with higher weights will affect the model fit more. If ‘None’,
+then all weights will be equal (1.0).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>yp_next, eta_p_next</strong> – A tuple of the updated target predictions and target prediction links.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple(np.ndarray, np.ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.BoostedModel.compute_gradients">
+<code class="sig-name descname"><span class="pre">compute_gradients</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_model.html#BoostedModel.compute_gradients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedModel.compute_gradients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute element-wise gradients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>yt</strong> (<em>np.ndarray</em>) – Observed target values.</p></li>
+<li><p><strong>yp</strong> (<em>np.ndarray</em>) – Predicted target values.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.BoostedModel.compute_link">
+<code class="sig-name descname"><span class="pre">compute_link</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inverse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_model.html#BoostedModel.compute_link"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedModel.compute_link" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the element-wise link function or inverse link function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>yt</strong> (<em>np.ndarray</em>) – Observed target values.</p></li>
+<li><p><strong>yp</strong> (<em>np.ndarray</em>) – Predicted target values.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.BoostedModel.compute_loss">
+<code class="sig-name descname"><span class="pre">compute_loss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_model.html#BoostedModel.compute_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedModel.compute_loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute element-wise loss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>yt</strong> (<em>np.ndarray</em>) – Observed target values.</p></li>
+<li><p><strong>yp</strong> (<em>np.ndarray</em>) – Predicted target values.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.BoostedModel.compute_newton_weights">
+<code class="sig-name descname"><span class="pre">compute_newton_weights</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_model.html#BoostedModel.compute_newton_weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedModel.compute_newton_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute newton weights.</p>
+<p>This is a mixture of loss function derivatives and link function derivatives
+by application of chain rule. Using newton weights requires that the second
+derivatives of the loss and link function be defined. This method uses the
+computed second derivatives as-is - there are no adjustments to prevent
+the effects of ill-conditioning (very small second derivatives) or non-positive
+definiteness (negative second derivatives) on computed pseudo residuals.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>yt</strong> (<em>np.ndarray</em>) – Observed target values.</p></li>
+<li><p><strong>yp</strong> (<em>np.ndarray</em>) – Predicted target values.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The element-wise reciprocal of the second-derivative of the loss function
+with respect to the link function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.BoostedModel.compute_p_residuals">
+<code class="sig-name descname"><span class="pre">compute_p_residuals</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_model.html#BoostedModel.compute_p_residuals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedModel.compute_p_residuals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate pseudo-residuals.</p>
+<p>The psuedo-residuals are taken as the observation gradients times weights that
+are computed as per the selected weighting scheme (“none”, “newton”, callable).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>yt</strong> (<em>np.ndarray</em>) – Observed target values.</p></li>
+<li><p><strong>yp</strong> (<em>np.ndarray</em>) – Predicted target values.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.BoostedModel.compute_weights">
+<code class="sig-name descname"><span class="pre">compute_weights</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_model.html#BoostedModel.compute_weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedModel.compute_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute model weights that will be multiplied by observation gradients.</p>
+<p>The final result is the pseudo-residuals to be fit at the next boosting
+iteration. This essentially serves as a case/switch statement to redirect to
+the underlying calculation method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>yt</strong> (<em>np.ndarray</em>) – Observed target values.</p></li>
+<li><p><strong>yp</strong> (<em>np.ndarray</em>) – Predicted target values.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.BoostedModel.decision_function">
+<code class="sig-name descname"><span class="pre">decision_function</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_model.html#BoostedModel.decision_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedModel.decision_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the link of computed model predictions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>np.ndarray</em>) – The model matrix. If <cite>init_type</cite> was set as “residuals”, then the model
+scores for which to calculate residuals should form the last column of the
+input matrix.</p></li>
+<li><p><strong>model_index</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If None, then return the full model prediction as the sum of all models in
+the ensemble plus the initial model prediction. If an int, then return only
+the predictions from models up to <cite>model_index</cite> (i.e., [:model_index]).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The link of the computed model predictions.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.BoostedModel.fit">
+<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_model.html#BoostedModel.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedModel.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the boosted model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>np.ndarray</em>) – The model matrix. If <cite>init_type</cite> was set as “residuals”, then the model
+scores for which to calculate residuals should form the last column of the
+input matrix.</p></li>
+<li><p><strong>iterations</strong> (<em>int</em><em> (</em><em>default=100</em><em>)</em>) – The maximum number of boosting iterations to perform.</p></li>
+<li><p><strong>weights</strong> (<em>np.ndarray</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Sample weights (by observation) to use for fitting. Should be positive.
+Observations with higher weights will affect the model fit more. If ‘None’,
+then all weights will be equal (1.0).</p></li>
+<li><p><strong>min_iterations</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – The minimum number of boosting iterations to perform. If None (the default),
+then there is no minimum.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.BoostedModel.get_iterations">
+<code class="sig-name descname"><span class="pre">get_iterations</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_model.html#BoostedModel.get_iterations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedModel.get_iterations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the current number of model boosting iterations.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.BoostedModel.get_loss_history">
+<code class="sig-name descname"><span class="pre">get_loss_history</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_model.html#BoostedModel.get_loss_history"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedModel.get_loss_history" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the loss history for the fitted model (training and validation loss).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A two-column array with with training and holdout loss in each column,
+respectively.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.BoostedModel.get_model_links">
+<code class="sig-name descname"><span class="pre">get_model_links</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_model.html#BoostedModel.get_model_links"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedModel.get_model_links" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a matrix of model links (without applying learning rates).</p>
+<p>Returns a matrix of model links, where each column index corresponds to the
+same index in the model ensemble.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>np.ndarray</em><em> [</em><em>n_samples</em><em>, </em><em>n_features</em><em>]</em>) – The model matrix. If <cite>init_type</cite> was set as “residuals”, then the model
+scores for which to calculate residuals should form the last column of the
+input matrix.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>link_matrix</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray [n_samples, n_boosting_iterations]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.BoostedModel.initialize_model">
+<code class="sig-name descname"><span class="pre">initialize_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_model.html#BoostedModel.initialize_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedModel.initialize_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the boosted model.</p>
+<p>This is called internally within the fit function. If manual boosting is being
+performed using the ‘boost’ method, then this method should be called before
+beginning the manual boosting procedure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>np.ndarray</em><em> [</em><em>n_samples</em><em>, </em><em>n_features</em><em>]</em>) – The model matrix. If <cite>init_type</cite> was set as “residuals”, then the model
+scores for which to calculate residuals should form the last column of the
+input matrix.</p></li>
+<li><p><strong>yt</strong> (<em>np.ndarray</em>) – Observed target values.</p></li>
+<li><p><strong>weights</strong> (<em>np.ndarray</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Sample weights (by observation) to use for fitting. Should be positive.
+Observations with higher weights will affect the model fit more. If ‘None’,
+then all weights will be equal (1.0).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>yp, eta_p</strong> – The initial target predictions and link of target prediction arrays.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple(np.ndarray, np.ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.BoostedModel.predict">
+<code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_model.html#BoostedModel.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedModel.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute model predictions in the original target space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>np.ndarray</em>) – The model matrix. If <cite>init_type</cite> was set as “residuals”, then the model
+scores for which to calculate residuals should form the last column of the
+input matrix.</p></li>
+<li><p><strong>model_index</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If None, then return the full model prediction as the sum of all models in
+the ensemble plus the initial model prediction. If an int, then return only
+the predictions from models up to <cite>model_index</cite> (i.e., [:model_index]).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>predictions</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.BoostedModel.prediction_history">
+<code class="sig-name descname"><span class="pre">prediction_history</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">links</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_model.html#BoostedModel.prediction_history"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedModel.prediction_history" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a prediction history.</p>
+<p>This will compute a matrix of predictions with each column corresponding to the
+predictions up to the underlying ensemble at that column index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>np.ndarray</em>) – The model matrix. If <cite>init_type</cite> was set as “residuals”, then the model
+scores for which to calculate residuals should form the last column of the
+input matrix.</p></li>
+<li><p><strong>links</strong> (<em>bool</em><em> (</em><em>default=False</em><em>)</em>) – If true, then return the links of the prediction history. Otherwise, return
+the non-transformed predictions.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.BoostedModel.reset_model">
+<code class="sig-name descname"><span class="pre">reset_model</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_model.html#BoostedModel.reset_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedModel.reset_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the model fit status to False.</p>
+<p>This will cause the model to reinitialize if the fit method is called after
+the reset_model method.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="genestboost.ModelDataSets">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">genestboost.</span></code><code class="sig-name descname"><span class="pre">ModelDataSets</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_fraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_stratify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/model_data_sets.html#ModelDataSets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.ModelDataSets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>ModelDataSets class for abstracting data set implementation from BoostedModel.</p>
+<dl class="py method">
+<dt id="genestboost.ModelDataSets.has_validation_set">
+<code class="sig-name descname"><span class="pre">has_validation_set</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/model_data_sets.html#ModelDataSets.has_validation_set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.ModelDataSets.has_validation_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if the validation fraction is greater than zero.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="genestboost.link_functions.html" class="btn btn-neutral float-right" title="genestboost.link_functions package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="modules.html" class="btn btn-neutral float-left" title="genestboost" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Benjamin Cross.
+
+    </p>
+  </div>
+
+
+
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+
+
+
+
+
+</body>
+</html>

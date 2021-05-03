@@ -1,0 +1,575 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>genestboost.boosted_linear_model &mdash; genestboost  documentation</title>
+
+
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+
+
+
+
+
+
+
+
+
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+
+
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+</head>
+
+<body class="wy-body-for-nav">
+
+
+  <div class="wy-grid-for-nav">
+
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+            <a href="../../index.html" class="icon icon-home"> genestboost
+
+
+
+          </a>
+
+
+
+
+
+
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+
+
+
+
+
+
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../genestboost.html">genestboost package</a></li>
+</ul>
+
+
+
+        </div>
+
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+
+      <nav class="wy-nav-top" aria-label="top navigation">
+
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">genestboost</a>
+
+      </nav>
+
+
+      <div class="wy-nav-content">
+
+        <div class="rst-content">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+
+      <li>genestboost.boosted_linear_model</li>
+
+
+      <li class="wy-breadcrumbs-aside">
+
+      </li>
+
+  </ul>
+
+
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <h1>Source code for genestboost.boosted_linear_model</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;BoostedLinearModel implementation for boosting models with linear coefficients.&quot;&quot;&quot;</span>
+
+<span class="c1"># author: Benjamin Cross</span>
+<span class="c1"># email: btcross26@yahoo.com</span>
+<span class="c1"># created: 2019-08-26</span>
+
+
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">.boosted_model</span> <span class="kn">import</span> <span class="n">BoostedModel</span>
+<span class="kn">from</span> <span class="nn">.link_functions</span> <span class="kn">import</span> <span class="n">BaseLink</span>
+<span class="kn">from</span> <span class="nn">.loss_functions</span> <span class="kn">import</span> <span class="n">BaseLoss</span>
+<span class="kn">from</span> <span class="nn">.type_hints</span> <span class="kn">import</span> <span class="n">LinearModel</span><span class="p">,</span> <span class="n">ModelCallback</span><span class="p">,</span> <span class="n">WeightsCallback</span>
+
+
+<div class="viewcode-block" id="BoostedLinearModel"><a class="viewcode-back" href="../../genestboost.html#genestboost.boosted_linear_model.BoostedLinearModel">[docs]</a><span class="k">class</span> <span class="nc">BoostedLinearModel</span><span class="p">(</span><span class="n">BoostedModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;BoostedLinearModel GLM class implementation.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">link</span><span class="p">:</span> <span class="n">BaseLink</span><span class="p">,</span>
+        <span class="n">loss</span><span class="p">:</span> <span class="n">BaseLoss</span><span class="p">,</span>
+        <span class="n">model_callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">LinearModel</span><span class="p">],</span>
+        <span class="n">model_callback_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">weights</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">WeightsCallback</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">step_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
+        <span class="n">step_decay_factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.6</span><span class="p">,</span>
+        <span class="n">init_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+        <span class="n">random_state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">validation_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">validation_stratify</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">validation_iter_stop</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="n">tol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-8</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Class initializer.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        link: BaseLink</span>
+<span class="sd">            Link function to use in boosting iterations.</span>
+
+<span class="sd">        loss: BaseLoss</span>
+<span class="sd">            Loss function to use in boosting iterations.</span>
+
+<span class="sd">        model_callback: Callable</span>
+<span class="sd">            A callable that returns a model object that implements fit and predict</span>
+<span class="sd">            methods. The model object that is returned must be a linear model that</span>
+<span class="sd">            has &#39;coef_&#39; and &#39;intercept_&#39; attributes.</span>
+
+<span class="sd">        model_callback_kwargs: dict, optional (default=None)</span>
+<span class="sd">            A dictionary of keyword arguments to pass to `model_callback`.</span>
+
+<span class="sd">        weights: Union[str, WeightsCallback]: str or Callable</span>
+<span class="sd">            A string specificying the type of weights (one of &quot;none&quot; or &quot;newton&quot;), or a</span>
+<span class="sd">            callable of the form &#39;lambda yt, yp: weights`, where yt and yp are the</span>
+<span class="sd">            actual target and predicted target arrays. These weights are multiplied</span>
+<span class="sd">            element-wise by the model gradients to produce the pseudo-residuals that are</span>
+<span class="sd">            to be predicted at each model iteration.</span>
+
+<span class="sd">        alpha: float = 1.0</span>
+<span class="sd">            A parameter representing the intial trial learning rate. The learning rate that</span>
+<span class="sd">            actually gets used at each iteration is dependent upon the value of `step_type`.</span>
+
+<span class="sd">        step_type: str (default=&quot;decaying&quot;)</span>
+<span class="sd">            One of &quot;decaying&quot;, &quot;constant&quot;, or &quot;best&quot;. For &quot;decaying&quot;, the initial model</span>
+<span class="sd">            iteration will start with `alpha` as the learning parameter. If `alpha` times</span>
+<span class="sd">            `step_decay_factor` results in a greater reduction in loss than `alpha`, then</span>
+<span class="sd">            use the former. This is repeated until performance does not improve, and the</span>
+<span class="sd">            final chosen rate will serve as the &#39;initial&#39; rate for the next boosting</span>
+<span class="sd">            iteration. For &quot;constant&quot;, `alpha` will be used at every boosting iteration.</span>
+<span class="sd">            Using &quot;step_type&quot; best implements the same process as &quot;decaying&quot;, except the</span>
+<span class="sd">            next boosting iteration will reset the learning rate back to `alpha` as the</span>
+<span class="sd">            initial trial learning rate.</span>
+
+<span class="sd">        step_decay_factor: float (default=0.48)</span>
+<span class="sd">            The decaying factor to use with `step_type` &quot;decaying&quot; or &quot;best&quot;.</span>
+
+<span class="sd">        init_type: str (default=&quot;mean&quot;)</span>
+<span class="sd">            The type of intial prediction to use. If &quot;mean&quot;, then the initial link</span>
+<span class="sd">            prediction (prior to boosting iterations) will be taken as the link of the mean</span>
+<span class="sd">            of the non-transformed target. If &quot;residuals&quot; or &quot;zero&quot;, the initial link</span>
+<span class="sd">            prediction will be set to 0.0.</span>
+
+<span class="sd">        random_state: int, optional (default=None)</span>
+<span class="sd">            Random seed to be used for reproducability when random methods are used</span>
+<span class="sd">            internally.</span>
+
+<span class="sd">        validation_fraction: float (default=0.0)</span>
+<span class="sd">            If 0.0, then no validation set will be used and training will be performed</span>
+<span class="sd">            using the full training set. Otherwise, the fraction of observations to use</span>
+<span class="sd">            as a holdout set for early stopping.</span>
+
+<span class="sd">        validation_stratify: bool (default=False)</span>
+<span class="sd">            If true, than stratify the validation holdout set based on the target. Useful</span>
+<span class="sd">            when the target is binary.</span>
+
+<span class="sd">        validation_iter_stop: int (default=10)</span>
+<span class="sd">            Number of iterations to use for early stopping on the validation set. If the</span>
+<span class="sd">            holdout loss is greater at the current iteration than `validation_iter_stop`</span>
+<span class="sd">            iterations prior, then stop model fitting.</span>
+
+<span class="sd">        tol: float = 1e-8</span>
+<span class="sd">            Early stopping criteria based on training loss. If training loss fails to</span>
+<span class="sd">            improve by at least `tol`, then stop training.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">link</span><span class="p">,</span>
+            <span class="n">loss</span><span class="p">,</span>
+            <span class="n">model_callback</span><span class="p">,</span>
+            <span class="n">model_callback_kwargs</span><span class="p">,</span>
+            <span class="n">weights</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="p">,</span>
+            <span class="n">step_type</span><span class="p">,</span>
+            <span class="n">step_decay_factor</span><span class="p">,</span>
+            <span class="n">init_type</span><span class="p">,</span>
+            <span class="n">random_state</span><span class="p">,</span>
+            <span class="n">validation_fraction</span><span class="p">,</span>
+            <span class="n">validation_stratify</span><span class="p">,</span>
+            <span class="n">validation_iter_stop</span><span class="p">,</span>
+            <span class="n">tol</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">coef_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">intercept_</span><span class="p">:</span> <span class="nb">float</span>
+
+<div class="viewcode-block" id="BoostedLinearModel.boost"><a class="viewcode-back" href="../../genestboost.html#genestboost.boosted_linear_model.BoostedLinearModel.boost">[docs]</a>    <span class="k">def</span> <span class="nf">boost</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">yt</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">yp</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">eta_p</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">model_callback</span><span class="p">:</span> <span class="n">ModelCallback</span><span class="p">,</span>
+        <span class="n">model_callback_kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+        <span class="n">weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Boost by one model iteration.</span>
+
+<span class="sd">        Creates a model using the `model_callback` callable with `model_callback_kwargs`,</span>
+<span class="sd">        then fits this model to the pseudo-residuals. The learning rate is determined</span>
+<span class="sd">        according to the chosen method, and current predictions are updated and returned</span>
+<span class="sd">        such that stopping criteria can be evaluated and boosting continued. The</span>
+<span class="sd">        fitted model resulting from the iteration is appended to the underlying model</span>
+<span class="sd">        ensemble.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X: np.ndarray</span>
+<span class="sd">            The model matrix. If `init_type` was set as &quot;residuals&quot;, then the model</span>
+<span class="sd">            scores for which to calculate residuals should form the last column of the</span>
+<span class="sd">            input matrix.</span>
+
+<span class="sd">        yt: np.ndarray</span>
+<span class="sd">            Observed target values.</span>
+
+<span class="sd">        yp: np.ndarray</span>
+<span class="sd">            Predicted target values.</span>
+
+<span class="sd">        eta_p: np.ndarray</span>
+<span class="sd">            The current link predictions corresponding to the model iteration. This can</span>
+<span class="sd">            be found by transforming `yp`, but passing this as an argument avoids</span>
+<span class="sd">            duplicate computations and improves performance.</span>
+
+<span class="sd">        model_callback: Callable</span>
+<span class="sd">            A callable that returns a model object that implements fit and predict methods.</span>
+
+<span class="sd">        model_callback_kwargs: dict, optional (default=None)</span>
+<span class="sd">            A dictionary of keyword arguments to pass to `model_callback`.</span>
+
+<span class="sd">        weights: np.ndarray, optional (default=None)</span>
+<span class="sd">            Sample weights (by observation) to use for fitting. Should be positive.</span>
+<span class="sd">            Observations with higher weights will affect the model fit more. If &#39;None&#39;,</span>
+<span class="sd">            then all weights will be equal (1.0).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        yp_next, eta_p_next: tuple(np.ndarray, np.ndarray)</span>
+<span class="sd">            A tuple of the updated target predictions and target prediction links.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">yp_next</span><span class="p">,</span> <span class="n">eta_p_next</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">boost</span><span class="p">(</span>
+            <span class="n">X</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">eta_p</span><span class="p">,</span> <span class="n">model_callback</span><span class="p">,</span> <span class="n">model_callback_kwargs</span><span class="p">,</span> <span class="n">weights</span>
+        <span class="p">)</span>
+        <span class="n">model</span><span class="p">,</span> <span class="n">lr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coef_</span> <span class="o">+=</span> <span class="n">lr</span> <span class="o">*</span> <span class="n">model</span><span class="o">.</span><span class="n">coef_</span>  <span class="c1"># type: ignore</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">intercept_</span> <span class="o">+=</span> <span class="n">lr</span> <span class="o">*</span> <span class="n">model</span><span class="o">.</span><span class="n">intercept_</span>  <span class="c1"># type: ignore</span>
+        <span class="k">return</span> <span class="n">yp_next</span><span class="p">,</span> <span class="n">eta_p_next</span></div>
+
+<div class="viewcode-block" id="BoostedLinearModel.decision_function"><a class="viewcode-back" href="../../genestboost.html#genestboost.boosted_linear_model.BoostedLinearModel.decision_function">[docs]</a>    <span class="k">def</span> <span class="nf">decision_function</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">model_index</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the link of computed model predictions.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X: np.ndarray</span>
+<span class="sd">            The model matrix. If `init_type` was set as &quot;residuals&quot;, then the model</span>
+<span class="sd">            scores for which to calculate residuals should form the last column of the</span>
+<span class="sd">            input matrix.</span>
+
+<span class="sd">        model_index: int, optional (default=None)</span>
+<span class="sd">            If None, then return the full model prediction as the sum of all models in</span>
+<span class="sd">            the ensemble plus the initial model prediction. If an int, then return only</span>
+<span class="sd">            the predictions from models up to `model_index` (i.e., [:model_index]).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            The link of the computed model predictions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">model_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;arg:model_index is ignored for BoostedLinearModel.decision_function&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_iterations</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">eta_p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model_init</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">eta_p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">intercept_</span> <span class="o">+</span> <span class="n">X</span><span class="p">[:,</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_msi</span><span class="p">]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coef_</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">eta_p</span></div>
+
+<div class="viewcode-block" id="BoostedLinearModel.get_coefficient_order"><a class="viewcode-back" href="../../genestboost.html#genestboost.boosted_linear_model.BoostedLinearModel.get_coefficient_order">[docs]</a>    <span class="k">def</span> <span class="nf">get_coefficient_order</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the order that coefficients were selected for the model.</span>
+
+<span class="sd">        In the case that multiple coefficients were selected for the first time at the</span>
+<span class="sd">        same model iteration, the &quot;larger&quot; coefficient will be considered to have been</span>
+<span class="sd">        selected first. The `scale` argument can be used to standardize coefficients</span>
+<span class="sd">        if models were fitted in a manner such that coefficients were not standardized.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        scale: np.ndarray, optional (default=None)</span>
+<span class="sd">            Vector to scale the coefficients in the ordering calculation. If None, then</span>
+<span class="sd">            coefficients are not scaled (or alternatively, all coefficients are scaled</span>
+<span class="sd">            by a factor of 1.0).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        coefficient_order: List[int]</span>
+<span class="sd">            A list of zero-based indexes specifying the order that coefficients entered</span>
+<span class="sd">            the boosted model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="k">if</span> <span class="n">scale</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">scale</span>
+        <span class="n">coef_order_dict</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>  <span class="c1"># type: Dict[int, None]</span>
+        <span class="k">for</span> <span class="n">model</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model_list</span><span class="p">:</span>
+            <span class="n">coefs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">coef_</span> <span class="o">*</span> <span class="n">scale</span>  <span class="c1"># type: ignore</span>
+            <span class="n">nc</span> <span class="o">=</span> <span class="p">(</span><span class="n">coefs</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="n">order</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">coefs</span><span class="p">))[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="n">coef_order_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">OrderedDict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">order</span><span class="p">[:</span><span class="n">nc</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">coef_order_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="BoostedLinearModel.get_coefficient_history"><a class="viewcode-back" href="../../genestboost.html#genestboost.boosted_linear_model.BoostedLinearModel.get_coefficient_history">[docs]</a>    <span class="k">def</span> <span class="nf">get_coefficient_history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the history of coefficient values.</span>
+
+<span class="sd">        Returns a matrix of coefficients, where each row is representative of the</span>
+<span class="sd">        model coefficients at a specific boosting iteration (i.e., row 1 is after the</span>
+<span class="sd">        first round of boosting, etc.)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        scale: np.ndarray, optional (default=None)</span>
+<span class="sd">            Vector to scale the coefficients in the history calculation. If None, then</span>
+<span class="sd">            coefficients are not scaled (or alternatively, all coefficients are scaled</span>
+<span class="sd">            by a factor of 1.0).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        coefficient_history: np.ndarray [n_boosting_iterations + 1, n_coefs]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="k">if</span> <span class="n">scale</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">scale</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_fit</span><span class="p">:</span>
+            <span class="n">coef_history</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">lr</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model_list</span><span class="p">):</span>
+                <span class="n">coef</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">coef_</span> <span class="o">*</span> <span class="n">lr</span>  <span class="c1"># type: ignore</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">coef_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">coef</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="n">coef</span> <span class="o">=</span> <span class="n">coef</span> <span class="o">+</span> <span class="n">coef_history</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="n">coef_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">coef</span><span class="p">)</span>
+            <span class="n">coef_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">coef</span><span class="p">),</span> <span class="n">coef_history</span><span class="p">])</span>
+            <span class="n">coef_matrix</span> <span class="o">*=</span> <span class="n">scale</span>
+            <span class="k">return</span> <span class="n">coef_matrix</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;model has not yet been fit&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BoostedLinearModel.get_prediction_var_history"><a class="viewcode-back" href="../../genestboost.html#genestboost.boosted_linear_model.BoostedLinearModel.get_prediction_var_history">[docs]</a>    <span class="k">def</span> <span class="nf">get_prediction_var_history</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">groups</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the history of prediction variance on the model matrix X.</span>
+
+<span class="sd">        Returns a matrix of prediction variances at each round of boosting for each</span>
+<span class="sd">        specified group of model coefficients. If `groups` is None, then each</span>
+<span class="sd">        coefficient is considered separately as its own group.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X: np.ndarray</span>
+<span class="sd">            The model matrix. If `init_type` was set as &quot;residuals&quot;, then the model</span>
+<span class="sd">            scores for which to calculate residuals should form the last column of the</span>
+<span class="sd">            input matrix.</span>
+
+<span class="sd">        groups: List[int], optional (default=None)</span>
+<span class="sd">            A list of indices representing coefficient groups. Indices for groups should</span>
+<span class="sd">            start at zero and be sequenced in order to the number of groups minus one.</span>
+<span class="sd">            If None, then each feature is its own group.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pred_var: np.ndarray [n_boosting_iterations, n_groups]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">coef_history</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_coefficient_history</span><span class="p">()</span>
+        <span class="n">pred_vars</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">coef_history</span><span class="p">)</span>
+        <span class="n">Xc</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_msi</span><span class="p">]</span> <span class="o">-</span> <span class="n">X</span><span class="p">[:,</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_msi</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">coef</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">coef_history</span><span class="p">):</span>
+            <span class="n">preds</span> <span class="o">=</span> <span class="n">Xc</span> <span class="o">*</span> <span class="n">coef</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+            <span class="n">pred_vars</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">preds</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">groups</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">groups</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">groups</span><span class="p">)</span>
+            <span class="n">max_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">groups</span><span class="p">)</span>
+            <span class="n">group_vars</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">pred_vars</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">max_ind</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_ind</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">col_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">groups</span> <span class="o">==</span> <span class="n">i</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+                <span class="n">group_vars</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+                    <span class="p">(</span><span class="n">pred_vars</span><span class="p">[:,</span> <span class="n">col_index</span><span class="p">]</span> <span class="o">*</span> <span class="n">coef_history</span><span class="p">[:,</span> <span class="n">col_index</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
+                <span class="p">)</span>
+            <span class="n">pred_vars</span> <span class="o">=</span> <span class="n">group_vars</span>
+
+        <span class="k">return</span> <span class="n">pred_vars</span></div>
+
+<div class="viewcode-block" id="BoostedLinearModel.initialize_model"><a class="viewcode-back" href="../../genestboost.html#genestboost.boosted_linear_model.BoostedLinearModel.initialize_model">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_model</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">yt</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the boosted model.</span>
+
+<span class="sd">        This is called internally within the fit function. If manual boosting is being</span>
+<span class="sd">        performed using the &#39;boost&#39; method, then this method should be called before</span>
+<span class="sd">        beginning the manual boosting procedure.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X: np.ndarray [n_samples, n_features]</span>
+<span class="sd">            The model matrix. If `init_type` was set as &quot;residuals&quot;, then the model</span>
+<span class="sd">            scores for which to calculate residuals should form the last column of the</span>
+<span class="sd">            input matrix.</span>
+
+<span class="sd">        yt: np.ndarray</span>
+<span class="sd">            Observed target values.</span>
+
+<span class="sd">        weights: np.ndarray, optional (default=None)</span>
+<span class="sd">            Sample weights (by observation) to use for fitting. Should be positive.</span>
+<span class="sd">            Observations with higher weights will affect the model fit more. If &#39;None&#39;,</span>
+<span class="sd">            then all weights will be equal (1.0).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        yp, eta_p: tuple(np.ndarray, np.ndarray)</span>
+<span class="sd">            The initial target predictions and link of target prediction arrays.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">yp</span><span class="p">,</span> <span class="n">eta_p</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize_model</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_iterations</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coef_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_msi</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">intercept_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model_init</span><span class="o">.</span><span class="n">_value</span>
+
+        <span class="k">return</span> <span class="n">yp</span><span class="p">,</span> <span class="n">eta_p</span></div></div>
+</pre></div>
+
+           </div>
+
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Benjamin Cross.
+
+    </p>
+  </div>
+
+
+
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+
+
+
+
+
+</body>
+</html>

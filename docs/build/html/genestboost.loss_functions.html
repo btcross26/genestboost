@@ -1,0 +1,490 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>genestboost.loss_functions package &mdash; genestboost  documentation</title>
+
+
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+
+
+
+
+
+
+
+
+
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+
+
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="genestboost.utils package" href="genestboost.utils.html" />
+    <link rel="prev" title="genestboost.link_functions package" href="genestboost.link_functions.html" />
+</head>
+
+<body class="wy-body-for-nav">
+
+
+  <div class="wy-grid-for-nav">
+
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+            <a href="index.html" class="icon icon-home"> genestboost
+
+
+
+          </a>
+
+
+
+
+              <div class="version">
+                0.1.0-beta
+              </div>
+
+
+
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+
+
+
+
+
+
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">genestboost</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="genestboost.html">genestboost package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="genestboost.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="genestboost.link_functions.html">genestboost.link_functions package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">genestboost.loss_functions package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="genestboost.utils.html">genestboost.utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="genestboost.weak_learners.html">genestboost.weak_learners package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="genestboost.html#module-genestboost">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/btcross26/genestboost">GitHub Repo</a></li>
+</ul>
+
+
+
+        </div>
+
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+
+      <nav class="wy-nav-top" aria-label="top navigation">
+
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">genestboost</a>
+
+      </nav>
+
+
+      <div class="wy-nav-content">
+
+        <div class="rst-content style-external-links">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+
+          <li><a href="modules.html">genestboost</a> &raquo;</li>
+
+          <li><a href="genestboost.html">genestboost package</a> &raquo;</li>
+
+      <li>genestboost.loss_functions package</li>
+
+
+      <li class="wy-breadcrumbs-aside">
+
+
+            <a href="_sources/genestboost.loss_functions.rst.txt" rel="nofollow"> View page source</a>
+
+
+      </li>
+
+  </ul>
+
+
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <div class="section" id="genestboost-loss-functions-package">
+<h1>genestboost.loss_functions package<a class="headerlink" href="#genestboost-loss-functions-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-genestboost.loss_functions">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-genestboost.loss_functions" title="Permalink to this headline">¶</a></h2>
+<p>genestboost.loss_functions module.</p>
+<dl class="py class">
+<dt id="genestboost.loss_functions.AbsoluteLoss">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">genestboost.loss_functions.</span></code><code class="sig-name descname"><span class="pre">AbsoluteLoss</span></code><a class="reference internal" href="_modules/genestboost/loss_functions/absolute_value.html#AbsoluteLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.AbsoluteLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">genestboost.loss_functions.base_class.BaseLoss</span></code></p>
+<p>Absolute loss function class.</p>
+<dl class="py method">
+<dt id="genestboost.loss_functions.AbsoluteLoss.d2ldyp2">
+<code class="sig-name descname"><span class="pre">d2ldyp2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/absolute_value.html#AbsoluteLoss.d2ldyp2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.AbsoluteLoss.d2ldyp2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the second derivative of the loss with respect to <cite>yp</cite>.</p>
+<p>Overrides BaseLoss.d2ldyp2.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.loss_functions.AbsoluteLoss.dldyp">
+<code class="sig-name descname"><span class="pre">dldyp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/absolute_value.html#AbsoluteLoss.dldyp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.AbsoluteLoss.dldyp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the first derivative of the loss with respect to <cite>yp</cite>.</p>
+<p>Overrides BaseLoss.dldyp.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="genestboost.loss_functions.BaseLoss">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">genestboost.loss_functions.</span></code><code class="sig-name descname"><span class="pre">BaseLoss</span></code><a class="reference internal" href="_modules/genestboost/loss_functions/base_class.html#BaseLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.BaseLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Base class for loss functions.</p>
+<dl class="py method">
+<dt id="genestboost.loss_functions.BaseLoss.d2ldyp2">
+<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">d2ldyp2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/base_class.html#BaseLoss.d2ldyp2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.BaseLoss.d2ldyp2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the second derivative of the loss with respect to <cite>yp</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.loss_functions.BaseLoss.dldyp">
+<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">dldyp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/base_class.html#BaseLoss.dldyp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.BaseLoss.dldyp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the first derivative of the loss with respect to <cite>yp</cite>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="genestboost.loss_functions.BetaLoss">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">genestboost.loss_functions.</span></code><code class="sig-name descname"><span class="pre">BetaLoss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/beta_loss.html#BetaLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.BetaLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">genestboost.loss_functions.base_class.BaseLoss</span></code></p>
+<p>BetaLoss class implementation.</p>
+<dl class="py method">
+<dt id="genestboost.loss_functions.BetaLoss.beta_callback">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">beta_callback</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/beta_loss.html#BetaLoss.beta_callback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.BetaLoss.beta_callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the beta callback function for quasi-deviance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alpha</strong> (<em>float</em>) – Value of alpha in beta loss denominator, mu ** (1 - alpha)</p></li>
+<li><p><strong>beta</strong> (<em>float</em>) – Value of beta in beta loss denominator, (1 - mu) ** (1 - beta)</p></li>
+<li><p><strong>eps</strong> (<em>float</em>) – Small value to use in log calculations to avoid numerical error</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A callable that takes an np.ndarray and returns an np.ndarray after
+calculating the beta quasi-deviance denominator</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>callable</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.loss_functions.BetaLoss.d2ldyp2">
+<code class="sig-name descname"><span class="pre">d2ldyp2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/beta_loss.html#BetaLoss.d2ldyp2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.BetaLoss.d2ldyp2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the second derivative of the loss with respect to <cite>yp</cite>.</p>
+<p>Overrides BaseLoss.d2ldyp2.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.loss_functions.BetaLoss.dldyp">
+<code class="sig-name descname"><span class="pre">dldyp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/beta_loss.html#BetaLoss.dldyp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.BetaLoss.dldyp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the first derivative of the loss with respect to <cite>yp</cite>.</p>
+<p>Overrides BaseLoss.dldyp.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="genestboost.loss_functions.LeakyBetaLoss">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">genestboost.loss_functions.</span></code><code class="sig-name descname"><span class="pre">LeakyBetaLoss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/beta_loss.html#LeakyBetaLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.LeakyBetaLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">genestboost.loss_functions.beta_loss.BetaLoss</span></code></p>
+<p>Class implementation of LeakyBetaLoss loss function.</p>
+<dl class="py method">
+<dt id="genestboost.loss_functions.LeakyBetaLoss.d2ldyp2">
+<code class="sig-name descname"><span class="pre">d2ldyp2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/beta_loss.html#LeakyBetaLoss.d2ldyp2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.LeakyBetaLoss.d2ldyp2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the second derivative of the loss with respect to <cite>yp</cite>.</p>
+<p>Overrides BaseLoss.d2ldyp2.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.loss_functions.LeakyBetaLoss.dldyp">
+<code class="sig-name descname"><span class="pre">dldyp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/beta_loss.html#LeakyBetaLoss.dldyp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.LeakyBetaLoss.dldyp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the first derivative of the loss with respect to <cite>yp</cite>.</p>
+<p>Overrides BaseLoss.dldyp.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="genestboost.loss_functions.LeastSquaresLoss">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">genestboost.loss_functions.</span></code><code class="sig-name descname"><span class="pre">LeastSquaresLoss</span></code><a class="reference internal" href="_modules/genestboost/loss_functions/least_squares.html#LeastSquaresLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.LeastSquaresLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">genestboost.loss_functions.base_class.BaseLoss</span></code></p>
+<p>Least squares loss function class.</p>
+<dl class="py method">
+<dt id="genestboost.loss_functions.LeastSquaresLoss.d2ldyp2">
+<code class="sig-name descname"><span class="pre">d2ldyp2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/least_squares.html#LeastSquaresLoss.d2ldyp2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.LeastSquaresLoss.d2ldyp2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the second derivative of the loss with respect to <cite>yp</cite>.</p>
+<p>Overrides BaseLoss.d2ldyp2.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.loss_functions.LeastSquaresLoss.dldyp">
+<code class="sig-name descname"><span class="pre">dldyp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/least_squares.html#LeastSquaresLoss.dldyp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.LeastSquaresLoss.dldyp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the first derivative of the loss with respect to <cite>yp</cite>.</p>
+<p>Overrides BaseLoss.dldyp.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="genestboost.loss_functions.LogCoshLoss">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">genestboost.loss_functions.</span></code><code class="sig-name descname"><span class="pre">LogCoshLoss</span></code><a class="reference internal" href="_modules/genestboost/loss_functions/log_cosh.html#LogCoshLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.LogCoshLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">genestboost.loss_functions.base_class.BaseLoss</span></code></p>
+<p>Log cosh loss function class.</p>
+<dl class="py method">
+<dt id="genestboost.loss_functions.LogCoshLoss.d2ldyp2">
+<code class="sig-name descname"><span class="pre">d2ldyp2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/log_cosh.html#LogCoshLoss.d2ldyp2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.LogCoshLoss.d2ldyp2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the second derivative of the loss with respect to <cite>yp</cite>.</p>
+<p>Overrides BaseLoss.d2ldyp2.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.loss_functions.LogCoshLoss.dldyp">
+<code class="sig-name descname"><span class="pre">dldyp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/log_cosh.html#LogCoshLoss.dldyp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.LogCoshLoss.dldyp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the first derivative of the loss with respect to <cite>yp</cite>.</p>
+<p>Overrides BaseLoss.dldyp.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="genestboost.loss_functions.LogLoss">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">genestboost.loss_functions.</span></code><code class="sig-name descname"><span class="pre">LogLoss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-12</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/log_loss.html#LogLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.LogLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">genestboost.loss_functions.base_class.BaseLoss</span></code></p>
+<p>Log loss function class.</p>
+<dl class="py method">
+<dt id="genestboost.loss_functions.LogLoss.d2ldyp2">
+<code class="sig-name descname"><span class="pre">d2ldyp2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/log_loss.html#LogLoss.d2ldyp2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.LogLoss.d2ldyp2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the second derivative of the loss with respect to <cite>yp</cite>.</p>
+<p>Overrides BaseLoss.d2ldyp2.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.loss_functions.LogLoss.dldyp">
+<code class="sig-name descname"><span class="pre">dldyp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/log_loss.html#LogLoss.dldyp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.LogLoss.dldyp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the first derivative of the loss with respect to <cite>yp</cite>.</p>
+<p>Overrides BaseLoss.dldyp.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="genestboost.loss_functions.PoissonLoss">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">genestboost.loss_functions.</span></code><code class="sig-name descname"><span class="pre">PoissonLoss</span></code><a class="reference internal" href="_modules/genestboost/loss_functions/poisson.html#PoissonLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.PoissonLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">genestboost.loss_functions.base_class.BaseLoss</span></code></p>
+<p>Poisson loss function class.</p>
+<dl class="py method">
+<dt id="genestboost.loss_functions.PoissonLoss.d2ldyp2">
+<code class="sig-name descname"><span class="pre">d2ldyp2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/poisson.html#PoissonLoss.d2ldyp2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.PoissonLoss.d2ldyp2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the second derivative of the loss with respect to <cite>yp</cite>.</p>
+<p>Overrides BaseLoss.d2ldyp2.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.loss_functions.PoissonLoss.dldyp">
+<code class="sig-name descname"><span class="pre">dldyp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/poisson.html#PoissonLoss.dldyp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.PoissonLoss.dldyp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the first derivative of the loss with respect to <cite>yp</cite>.</p>
+<p>Overrides BaseLoss.dldyp.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="genestboost.loss_functions.QuantileLoss">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">genestboost.loss_functions.</span></code><code class="sig-name descname"><span class="pre">QuantileLoss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/quantile.html#QuantileLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.QuantileLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">genestboost.loss_functions.base_class.BaseLoss</span></code></p>
+<p>Quantile regression loss function class.</p>
+<dl class="py method">
+<dt id="genestboost.loss_functions.QuantileLoss.d2ldyp2">
+<code class="sig-name descname"><span class="pre">d2ldyp2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/quantile.html#QuantileLoss.d2ldyp2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.QuantileLoss.d2ldyp2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the second derivative of the loss with respect to <cite>yp</cite>.</p>
+<p>Overrides BaseLoss.d2ldyp2.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.loss_functions.QuantileLoss.dldyp">
+<code class="sig-name descname"><span class="pre">dldyp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/quantile.html#QuantileLoss.dldyp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.QuantileLoss.dldyp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the first derivative of the loss with respect to <cite>yp</cite>.</p>
+<p>Overrides BaseLoss.dldyp.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="genestboost.loss_functions.QuasiLogLoss">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">genestboost.loss_functions.</span></code><code class="sig-name descname"><span class="pre">QuasiLogLoss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vt_callback</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d0_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d2_eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-12</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/quasilog_loss.html#QuasiLogLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.QuasiLogLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">genestboost.loss_functions.base_class.BaseLoss</span></code></p>
+<p>QuasiLogLoss loss function class.</p>
+<dl class="py method">
+<dt id="genestboost.loss_functions.QuasiLogLoss.d2ldyp2">
+<code class="sig-name descname"><span class="pre">d2ldyp2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/quasilog_loss.html#QuasiLogLoss.d2ldyp2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.QuasiLogLoss.d2ldyp2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the second derivative of the loss with respect to <cite>yp</cite>.</p>
+<p>Overrides BaseLoss.d2ldyp2.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.loss_functions.QuasiLogLoss.dldyp">
+<code class="sig-name descname"><span class="pre">dldyp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/quasilog_loss.html#QuasiLogLoss.dldyp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.QuasiLogLoss.dldyp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the first derivative of the loss with respect to <cite>yp</cite>.</p>
+<p>Overrides BaseLoss.dldyp.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="genestboost.loss_functions.StudentTLoss">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">genestboost.loss_functions.</span></code><code class="sig-name descname"><span class="pre">StudentTLoss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dof</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/students_t.html#StudentTLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.StudentTLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">genestboost.loss_functions.base_class.BaseLoss</span></code></p>
+<p>Student’s t loss function class.</p>
+<dl class="py method">
+<dt id="genestboost.loss_functions.StudentTLoss.d2ldyp2">
+<code class="sig-name descname"><span class="pre">d2ldyp2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/students_t.html#StudentTLoss.d2ldyp2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.StudentTLoss.d2ldyp2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the second derivative of the loss with respect to <cite>yp</cite>.</p>
+<p>Overrides BaseLoss.d2ldyp2.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.loss_functions.StudentTLoss.dldyp">
+<code class="sig-name descname"><span class="pre">dldyp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/students_t.html#StudentTLoss.dldyp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.StudentTLoss.dldyp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the first derivative of the loss with respect to <cite>yp</cite>.</p>
+<p>Overrides BaseLoss.dldyp.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="genestboost.utils.html" class="btn btn-neutral float-right" title="genestboost.utils package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="genestboost.link_functions.html" class="btn btn-neutral float-left" title="genestboost.link_functions package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Benjamin Cross.
+
+    </p>
+  </div>
+
+
+
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,279 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>genestboost.loss_functions.quasilog_loss &mdash; genestboost  documentation</title>
+
+
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+
+
+
+
+
+
+
+
+
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+
+
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+</head>
+
+<body class="wy-body-for-nav">
+
+
+  <div class="wy-grid-for-nav">
+
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+            <a href="../../../index.html" class="icon icon-home"> genestboost
+
+
+
+          </a>
+
+
+
+
+
+
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+
+
+
+
+
+
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../genestboost.html">genestboost package</a></li>
+</ul>
+
+
+
+        </div>
+
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+
+      <nav class="wy-nav-top" aria-label="top navigation">
+
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">genestboost</a>
+
+      </nav>
+
+
+      <div class="wy-nav-content">
+
+        <div class="rst-content">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+
+      <li>genestboost.loss_functions.quasilog_loss</li>
+
+
+      <li class="wy-breadcrumbs-aside">
+
+      </li>
+
+  </ul>
+
+
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <h1>Source code for genestboost.loss_functions.quasilog_loss</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;QuasiLogLoss function implementation.&quot;&quot;&quot;</span>
+
+<span class="c1"># author: Benjamin Cross</span>
+<span class="c1"># email: btcross26@yahoo.com</span>
+<span class="c1"># created: 2019-10-16</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">.base_class</span> <span class="kn">import</span> <span class="n">BaseLoss</span>
+
+
+<div class="viewcode-block" id="QuasiLogLoss"><a class="viewcode-back" href="../../../genestboost.loss_functions.html#genestboost.loss_functions.quasilog_loss.QuasiLogLoss">[docs]</a><span class="k">class</span> <span class="nc">QuasiLogLoss</span><span class="p">(</span><span class="n">BaseLoss</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;QuasiLogLoss loss function class.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">vt_callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+        <span class="n">d0_n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+        <span class="n">d2_eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-12</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Class initializer.</span>
+
+<span class="sd">        Extends BaseLoss.__init__.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        vt_callback: callable(yp) -&gt; np.ndarray</span>
+<span class="sd">            Callable that takes the predicted value and calculates the denominator of</span>
+<span class="sd">            the quasilog loss integral for each observation.</span>
+
+<span class="sd">        d0_n: int</span>
+<span class="sd">            The number of points to use for integration.</span>
+
+<span class="sd">        d2_eps: float</span>
+<span class="sd">            A small float used to calculate the second derivative via the central</span>
+<span class="sd">            difference formula - 2*d2_eps the interval used to calculate the derivative</span>
+<span class="sd">            from first derivative values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vt_callback</span> <span class="o">=</span> <span class="n">vt_callback</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_d0_n</span> <span class="o">=</span> <span class="n">d0_n</span> <span class="o">+</span> <span class="p">(</span><span class="n">d0_n</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_d2_eps</span> <span class="o">=</span> <span class="n">d2_eps</span>
+
+    <span class="k">def</span> <span class="nf">_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yt</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">yp</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the per-observation loss as a function of `yt` and `yp`.</span>
+
+<span class="sd">        Overrides BaseLoss._loss.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># use Simpson&#39;s rule to numerically integrate</span>
+        <span class="n">dims</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">yp</span><span class="o">.</span><span class="n">ndim</span> <span class="o">+</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_d0_n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span>
+        <span class="n">iwts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span>
+            <span class="p">[[</span><span class="mf">1.0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">([</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_d0_n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">),</span> <span class="p">[</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]]</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span>
+        <span class="n">ipts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">yp</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">yt</span> <span class="o">-</span> <span class="n">yp</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">x</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dldyp</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">yt</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">),</span> <span class="n">ipts</span><span class="p">)</span> <span class="o">*</span> <span class="n">iwts</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">values</span> <span class="o">*</span> <span class="p">(</span><span class="n">yp</span> <span class="o">-</span> <span class="n">yt</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">3.0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_d0_n</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">values</span>
+
+<div class="viewcode-block" id="QuasiLogLoss.dldyp"><a class="viewcode-back" href="../../../genestboost.loss_functions.html#genestboost.loss_functions.quasilog_loss.QuasiLogLoss.dldyp">[docs]</a>    <span class="k">def</span> <span class="nf">dldyp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yt</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">yp</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the first derivative of the loss with respect to `yp`.</span>
+
+<span class="sd">        Overrides BaseLoss.dldyp.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="o">-</span><span class="p">(</span><span class="n">yt</span> <span class="o">-</span> <span class="n">yp</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vt_callback</span><span class="p">(</span><span class="n">yp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="QuasiLogLoss.d2ldyp2"><a class="viewcode-back" href="../../../genestboost.loss_functions.html#genestboost.loss_functions.quasilog_loss.QuasiLogLoss.d2ldyp2">[docs]</a>    <span class="k">def</span> <span class="nf">d2ldyp2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yt</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">yp</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the second derivative of the loss with respect to `yp`.</span>
+
+<span class="sd">        Overrides BaseLoss.d2ldyp2.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">v1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dldyp</span><span class="p">(</span><span class="n">yt</span><span class="p">,</span> <span class="n">yp</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_d2_eps</span><span class="p">)</span>
+        <span class="n">v2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dldyp</span><span class="p">(</span><span class="n">yt</span><span class="p">,</span> <span class="n">yp</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_d2_eps</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">v2</span> <span class="o">-</span> <span class="n">v1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_d2_eps</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Benjamin Cross.
+
+    </p>
+  </div>
+
+
+
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+
+
+
+
+
+</body>
+</html>
