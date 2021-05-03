@@ -49,7 +49,10 @@ def dedupe_submodules():
             generated_content = f.read()
 
         new_content = re.sub(
-            "Submodules.*\n(?=Module contents)", "", generated_content, flags=re.DOTALL
+            "Submodules.*\nModule contents\n-*\n",
+            "",
+            generated_content,
+            flags=re.DOTALL,
         )
 
         with open(fn, "wt") as f:

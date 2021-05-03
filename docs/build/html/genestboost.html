@@ -103,7 +103,6 @@
 <li class="toctree-l4"><a class="reference internal" href="genestboost.weak_learners.html">genestboost.weak_learners package</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#module-genestboost">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -184,28 +183,13 @@
 <h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="genestboost.link_functions.html">genestboost.link_functions package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="genestboost.link_functions.html#module-genestboost.link_functions">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="genestboost.loss_functions.html">genestboost.loss_functions package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="genestboost.loss_functions.html#module-genestboost.loss_functions">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="genestboost.utils.html">genestboost.utils package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="genestboost.utils.html#module-genestboost.utils">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="genestboost.weak_learners.html">genestboost.weak_learners package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="genestboost.weak_learners.html#module-genestboost.weak_learners">Module contents</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="genestboost.link_functions.html">genestboost.link_functions package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genestboost.loss_functions.html">genestboost.loss_functions package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genestboost.utils.html">genestboost.utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genestboost.weak_learners.html">genestboost.weak_learners package</a></li>
 </ul>
 </div>
-</div>
-<div class="section" id="module-genestboost">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-genestboost" title="Permalink to this headline">¶</a></h2>
-<p>genestboost top-level module.</p>
+<span class="target" id="module-genestboost"></span><p>genestboost top-level module.</p>
 <dl class="py class">
 <dt id="genestboost.BoostedLinearModel">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">genestboost.</span></code><code class="sig-name descname"><span class="pre">BoostedLinearModel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">link</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_callback</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_callback_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'none'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_decay_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_fraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_stratify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_iter_stop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_linear_model.html#BoostedLinearModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedLinearModel" title="Permalink to this definition">¶</a></dt>

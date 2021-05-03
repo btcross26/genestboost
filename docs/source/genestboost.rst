@@ -12,8 +12,6 @@ Subpackages
    genestboost.utils
    genestboost.weak_learners
 
-Module contents
----------------
 
 .. automodule:: genestboost
    :members:
