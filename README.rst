@@ -14,9 +14,9 @@ Note that separating the two algorithms may not give the most optimal performanc
 
 In the future, the library will be restructured slightly under the hood, and there are plans to parallelize ensemble prediction and move some performance bottlenecks to Nim (i.e., C-extensions).
 
-Quick Demonstration
+Quick Examples
 -------------------
-Lorem ipsum.
+Coming soon.
 
 Installation
 ------------
@@ -25,12 +25,12 @@ Create a virtual environment with Python 3.8 and install from git:
 
 .. code-block::
 
-    $ pip install git+https://https://github.com/btcross26/genestboost.git
+    $ pip install git+https://github.com/btcross26/genestboost.git
 
 Documentation
 -------------
 
-Documentation is a work in progress. Current documentation is available on `GitHub Pages <https://github.com/btcross26/genestboost>`_
+Documentation is a work in progress. The most recent documentation is available on `GitHub Pages <https://btcross26.github.io/genestboost/build/html/index.html>`_
 
 Bugs / Requests
 ---------------
@@ -40,4 +40,4 @@ Please use the `GitHub issue tracker <https://github.com/btcross26/genestboost/i
 Changelog
 ---------
 
-Consult the `Changelog <https://github.com/btcross26/genestboost/issues>`_ for the latest release information.
+Consult the `Changelog <https://btcross26.github.io/genestboost/build/html/changelog.html>`_ for the latest release information.
