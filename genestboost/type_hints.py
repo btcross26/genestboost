@@ -9,22 +9,25 @@ Custom type hints for use in various places of module
 
 from __future__ import annotations
 
+# import sys
+# PYTHON_VERSION = float("{:d}.{:d}".format(_sys.version_info[:2]))
+# import Protocol and self return type type hints depending on Python version
+# if PYTHON_VERSION < 3.8:
+#     from typing_extensions import Protocol
+# else:  # Python 3.8+
 from typing import Any, Dict
+from typing import Protocol as Protocol  # type: ignore
 
 import numpy as np
 
-# import Protocol and self return type type hints depending on Python version
-try:  # pre-Python 3.8
-    from typing_extensions import Protocol
-except ImportError:  # Python 3.8+
-    from typing import Protocol as Protocol  # type: ignore
 
-
-class Model(Protocol):
-    def fit(self, X: np.ndarray, y: np.ndarray) -> Model:
+class Predictor(Protocol):
+    def predict(self, X: np.ndarray) -> np.ndarray:
         ...
 
-    def predict(self, X: np.ndarray) -> np.ndarray:
+
+class Model(Predictor, Protocol):
+    def fit(self, X: np.ndarray, y: np.ndarray) -> Model:
         ...
 
 
@@ -35,17 +38,9 @@ class LinearModel(Model, Protocol):
     def fit(self, X: np.ndarray, y: np.ndarray) -> LinearModel:
         ...
 
-    def predict(self, X: np.ndarray) -> np.ndarray:
-        ...
-
 
 class ModelCallback(Protocol):
     def __call__(self, **kwargs: Dict[str, Any]) -> Model:
-        ...
-
-
-class ActivationCallback(Protocol):
-    def __call__(self, yp: np.ndarray) -> np.ndarray:
         ...
 
 

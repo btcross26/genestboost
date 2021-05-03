@@ -25,13 +25,12 @@ CLASSIFIERS = [
     "Intended Audience :: Everyone",
     "Natural Language :: English",
     "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
 ]
 
 INSTALL_REQUIRES = [
     "numpy==1.*,>=1.18.5",
     "scipy==1.*,>=1.4.1",
-    'typing-extensions; python_version == "3.7"',
 ]
 
 EXTRAS_REQUIRE = {
@@ -84,7 +83,7 @@ def install_pkg():
         author=AUTHORS,
         maintainer=AUTHORS[0],
         license=LICENSE,
-        python_requires=">=3.7.0",
+        python_requires=">=3.8.0",
         packages=PACKAGES,
         install_requires=INSTALL_REQUIRES,
         classifiers=CLASSIFIERS,
