@@ -8,6 +8,7 @@ include pyproject.toml
 include .isort.cfg
 include AUTHORS
 include tests/.coveragerc
+include .nojekyll
 
 exclude genestboost/model_ensemble.py
 exclude genestboost/residual_model.py
