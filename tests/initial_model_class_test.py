@@ -22,9 +22,7 @@ LOGGER = logging.getLogger(__name__)
 
 # test init types
 @pytest.mark.parametrize(
-    "init_type",
-    ["zero", "residuals", "offset", "mean"],
-    ids=["zero", "residuals", "offset", "mean"],
+    "init_type", ["zero", "residuals", "mean"], ids=["zero", "residuals", "mean"],
 )
 def test_init_types(init_type):
     """
@@ -40,8 +38,6 @@ def test_init_types(init_type):
     # when weights are not specified
     if init_type in ["zero", "residuals"]:
         assert model._value == 0.0
-    elif init_type == "offset":
-        assert model._value == np.mean(y - X[:, -1])
     elif init_type == "mean":
         assert model._value == model._link(np.mean(y))
 
