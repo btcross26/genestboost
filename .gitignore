@@ -209,3 +209,7 @@ vignettes/*.pdf
 
 
 .idea/
+
+docs/.DS_Store
+
+.DS_Store

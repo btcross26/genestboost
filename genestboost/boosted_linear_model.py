@@ -18,7 +18,7 @@ from .type_hints import LinearModel, ModelCallback, WeightsCallback
 
 
 class BoostedLinearModel(BoostedModel):
-    """BoostedLinearModel GLM class implementation."""
+    """BoostedLinearModel class implementation."""
 
     def __init__(
         self,
@@ -35,7 +35,7 @@ class BoostedLinearModel(BoostedModel):
         validation_fraction: float = 0.0,
         validation_stratify: bool = False,
         validation_iter_stop: int = 10,
-        tol: float = 1e-8,
+        tol: Optional[float] = None,
     ):
         """
         Class initializer.
@@ -105,9 +105,10 @@ class BoostedLinearModel(BoostedModel):
             holdout loss is greater at the current iteration than `validation_iter_stop`
             iterations prior, then stop model fitting.
 
-        tol: float = 1e-8
+        tol: float, optional (default=None)
             Early stopping criteria based on training loss. If training loss fails to
-            improve by at least `tol`, then stop training.
+            improve by at least `tol`, then stop training. If None, then training loss
+            criteria is not checked to determine early stopping.
         """
         super().__init__(
             link,
