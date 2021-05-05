@@ -33,6 +33,18 @@ sys.path.insert(0, os.path.abspath("../.."))
 
 
 # HELPER functions
+def skip(app, what, name, obj, would_skip, options):
+    """Document __init__ class method."""
+    if name == "__init__":
+        return False
+    return would_skip
+
+
+def setup(app):
+    """Implement the above skip method."""
+    app.connect("autodoc-skip-member", skip)
+
+
 def dedupe_submodules():
     """
     Clear out duplicate submodules.
