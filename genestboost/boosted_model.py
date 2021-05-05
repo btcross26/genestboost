@@ -128,12 +128,11 @@ class BoostedModel:
         self.tol = tol
 
         # additional vars used during the fitting process
-        self._beta: float = 1.0 if step_type == "constant" else alpha
+        self._beta: float = alpha
         self._msi = -1 if init_type in ["offset", "residuals"] else None
         self._loss_list: List[Tuple[float, float]] = list()
         self._model_list: List[Tuple[Model, float]] = list()
         self._is_fit: bool = False
-        self._beta_index: int = -1
         self._tindex: Optional[Iterable[int]] = None
         self._vindex: Optional[Iterable[int]] = None
         self._model_init: BoostedModel.InitialModel
@@ -207,8 +206,7 @@ class BoostedModel:
         p_residuals = self.compute_p_residuals(yt, yp) * weights
         model_ = model_.fit(X[:, : self._msi], p_residuals)
         preds = model_.predict(X[:, : self._msi])
-        beta = self._compute_beta(yt, eta_p, preds)
-        learning_rate = self.alpha * beta
+        learning_rate = self._compute_beta(yt, eta_p, preds)
         eta_p_next = eta_p + learning_rate * preds
         yp_next = self._link(eta_p_next, inverse=True)
         self._model_list.append((model_, learning_rate))
@@ -632,7 +630,7 @@ class BoostedModel:
             return self._line_search_best(yt, eta_p, next_model_preds)
 
         if self.step_type == "constant":
-            return 1.0
+            return self._beta
 
         raise AttributeError("init arg:<step_type> is mis-specified")
 
