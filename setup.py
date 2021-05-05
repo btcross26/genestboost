@@ -1,5 +1,6 @@
 """Package setup file."""
 
+import re
 from pathlib import Path
 
 from setuptools import find_packages, setup
@@ -66,7 +67,10 @@ EXTRAS_REQUIRE["dev"] = (
 
 
 HERE = Path(__file__).absolute().parent
-VERSION = "0.1.0-beta"
+PACKAGE_INIT = HERE / "genestboost" / "__init__.py"
+VERSION = re.match(
+    r".*__version__ *= *\"([\w\.-]+)*?\".*", PACKAGE_INIT.read_text(), re.DOTALL
+).group(1)
 URL = PROJECT_URLS["Source Code"]
 AUTHORS = (HERE / "AUTHORS").read_text().split("\n")
 LICENSE = (HERE / "LICENSE.txt").read_text()

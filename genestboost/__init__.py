@@ -8,4 +8,6 @@ from .boosted_linear_model import BoostedLinearModel
 from .boosted_model import BoostedModel
 from .model_data_sets import ModelDataSets
 
-__all__ = ["BoostedLinearModel", "BoostedModel", "ModelDataSets"]
+__version__ = "0.1.1-beta"
+
+__all__ = ["BoostedLinearModel", "BoostedModel", "ModelDataSets", "__version__"]
