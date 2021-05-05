@@ -6,3 +6,4 @@ Examples
 
    quantile_regression_example
    binary_target_with_custom_wrapper_example
+   boosted_linear_model_example
