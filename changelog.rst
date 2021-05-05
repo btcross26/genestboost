@@ -1,6 +1,14 @@
 Changelog
 =========
 
+0.1.1-beta
+----------
+
+A bugfix release that comes with enhanced/updated documentation. The release comes with the following bugfixes:
+
+- Fixes both training and holdout stopping criteria in the main BoostedModel class `(#18) <https://github.com/btcross26/genestboost/issues/18>`_; and
+- Fixes internal learning rate calculation logic in the BoostedModel class `(#17) <https://github.com/btcross26/genestboost/issues/17>`_.
+
 
 0.1.0-beta
 ----------
