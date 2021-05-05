@@ -51,7 +51,7 @@ class BoostedLinearModel(BoostedModel):
         model_callback: Callable
             A callable that returns a model object that implements fit and predict
             methods. The model object that is returned must be a linear model that
-            has 'coef_' and 'intercept_' attributes.
+            has coef_ and intercept_ attributes.
 
         model_callback_kwargs: dict, optional (default=None)
             A dictionary of keyword arguments to pass to `model_callback`.
@@ -63,7 +63,7 @@ class BoostedLinearModel(BoostedModel):
             element-wise by the model gradients to produce the pseudo-residuals that are
             to be predicted at each model iteration.
 
-        alpha: float = 1.0
+        alpha: float (default=1.0)
             A parameter representing the intial trial learning rate. The learning rate that
             actually gets used at each iteration is dependent upon the value of `step_type`.
 
