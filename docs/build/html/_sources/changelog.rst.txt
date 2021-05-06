@@ -1,13 +1,3 @@
-Changelog
-============
+.. use changelog.rst from repo root
 
-First section
--------------
-
-Let's put some code here.
-
-.. code-block:: bash
-
-   rm -rf /
-
-Uh oh!
+.. include:: ../../changelog.rst

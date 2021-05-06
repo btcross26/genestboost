@@ -63,7 +63,7 @@
 
 
               <div class="version">
-                0.1.0-beta
+                0.1.1-beta
               </div>
 
 
@@ -91,9 +91,12 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_link_function.html">Custom Link Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_loss_function.html">Custom Loss Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_callbacks.html">Model Callbacks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="weak_learners.html">Weak Learners</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">genestboost</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="genestboost.html">genestboost package</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="genestboost.html#subpackages">Subpackages</a><ul class="current">
@@ -107,6 +110,7 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/btcross26/genestboost">GitHub Repo</a></li>
 </ul>
 
@@ -228,6 +232,22 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">genestboost.loss_functions.base_class.BaseLoss</span></code></p>
 <p>BetaLoss class implementation.</p>
 <dl class="py method">
+<dt id="genestboost.loss_functions.BetaLoss.__init__">
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/beta_loss.html#BetaLoss.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.BetaLoss.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class initializer.</p>
+<p>Extends BaseLoss.__init__.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alpha</strong> (<em>float</em>) – Value of alpha in beta loss denominator, mu ** (1 - alpha)</p></li>
+<li><p><strong>beta</strong> (<em>float</em>) – Value of beta in beta loss denominator, (1 - mu) ** (1 - beta)</p></li>
+<li><p><strong>eps</strong> (<em>float</em>) – Small value to use in log calculations to avoid numerical error</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="genestboost.loss_functions.BetaLoss.beta_callback">
 <em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">beta_callback</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/beta_loss.html#BetaLoss.beta_callback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.BetaLoss.beta_callback" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the beta callback function for quasi-deviance.</p>
@@ -270,6 +290,26 @@ calculating the beta quasi-deviance denominator</p>
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">genestboost.loss_functions.</span></code><code class="sig-name descname"><span class="pre">LeakyBetaLoss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/beta_loss.html#LeakyBetaLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.LeakyBetaLoss" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">genestboost.loss_functions.beta_loss.BetaLoss</span></code></p>
 <p>Class implementation of LeakyBetaLoss loss function.</p>
+<dl class="py method">
+<dt id="genestboost.loss_functions.LeakyBetaLoss.__init__">
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/beta_loss.html#LeakyBetaLoss.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.LeakyBetaLoss.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class initializer.</p>
+<p>Extends BetaLoss.__init__.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alpha</strong> (<em>float</em>) – Passed as the alpha argument to the BetaLoss initializer</p></li>
+<li><p><strong>beta</strong> (<em>float</em>) – Passed as the beta argument to the BetaLoss initializer</p></li>
+<li><p><strong>eps</strong> (<em>float</em><em>, </em><em>optional</em>) – Passed as the eps argument to the BetaLoss initializer (the default value
+is 1e-10)</p></li>
+<li><p><strong>gamma</strong> (<em>float</em><em>, </em><em>optional</em>) – A float in the range (0.0, 1.0] specifying … (the default value is 1.0)</p></li>
+<li><p><strong>xtol</strong> (<em>float</em><em>, </em><em>optional</em>) – Passed as the xtol argument to scipy.optimize.bisect (the default value is
+1e-8)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt id="genestboost.loss_functions.LeakyBetaLoss.d2ldyp2">
 <code class="sig-name descname"><span class="pre">d2ldyp2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/beta_loss.html#LeakyBetaLoss.d2ldyp2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.LeakyBetaLoss.d2ldyp2" title="Permalink to this definition">¶</a></dt>
@@ -334,6 +374,17 @@ calculating the beta quasi-deviance denominator</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">genestboost.loss_functions.base_class.BaseLoss</span></code></p>
 <p>Log loss function class.</p>
 <dl class="py method">
+<dt id="genestboost.loss_functions.LogLoss.__init__">
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-12</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/log_loss.html#LogLoss.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.LogLoss.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class initializer.</p>
+<p>Extends the BaseLoss class intializer.</p>
+<dl class="simple">
+<dt>eps: float (default = 1e-10)</dt><dd><p>A small constant float to prevent log from returning negative infinity.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="genestboost.loss_functions.LogLoss.d2ldyp2">
 <code class="sig-name descname"><span class="pre">d2ldyp2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/log_loss.html#LogLoss.d2ldyp2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.LogLoss.d2ldyp2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the second derivative of the loss with respect to <cite>yp</cite>.</p>
@@ -376,6 +427,18 @@ calculating the beta quasi-deviance denominator</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">genestboost.loss_functions.base_class.BaseLoss</span></code></p>
 <p>Quantile regression loss function class.</p>
 <dl class="py method">
+<dt id="genestboost.loss_functions.QuantileLoss.__init__">
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/quantile.html#QuantileLoss.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.QuantileLoss.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class initializer.</p>
+<p>Extends BaseLoss.__init__.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>p</strong> (<em>float</em>) – Value in the interval (0, 1) representing the quantile to regress on.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="genestboost.loss_functions.QuantileLoss.d2ldyp2">
 <code class="sig-name descname"><span class="pre">d2ldyp2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/quantile.html#QuantileLoss.d2ldyp2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.QuantileLoss.d2ldyp2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the second derivative of the loss with respect to <cite>yp</cite>.</p>
@@ -397,6 +460,25 @@ calculating the beta quasi-deviance denominator</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">genestboost.loss_functions.base_class.BaseLoss</span></code></p>
 <p>QuasiLogLoss loss function class.</p>
 <dl class="py method">
+<dt id="genestboost.loss_functions.QuasiLogLoss.__init__">
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vt_callback</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d0_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d2_eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-12</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/quasilog_loss.html#QuasiLogLoss.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.QuasiLogLoss.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class initializer.</p>
+<p>Extends BaseLoss.__init__.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vt_callback</strong> (<em>callable</em><em>(</em><em>yp</em><em>) </em><em>-&gt; np.ndarray</em>) – Callable that takes the predicted value and calculates the denominator of
+the quasilog loss integral for each observation.</p></li>
+<li><p><strong>d0_n</strong> (<em>int</em>) – The number of points to use for integration.</p></li>
+<li><p><strong>d2_eps</strong> (<em>float</em>) – A small float used to calculate the second derivative via the central
+difference formula - 2*d2_eps the interval used to calculate the derivative
+from first derivative values.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="genestboost.loss_functions.QuasiLogLoss.d2ldyp2">
 <code class="sig-name descname"><span class="pre">d2ldyp2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/quasilog_loss.html#QuasiLogLoss.d2ldyp2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.QuasiLogLoss.d2ldyp2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the second derivative of the loss with respect to <cite>yp</cite>.</p>
@@ -417,6 +499,22 @@ calculating the beta quasi-deviance denominator</p>
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">genestboost.loss_functions.</span></code><code class="sig-name descname"><span class="pre">StudentTLoss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dof</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/students_t.html#StudentTLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.StudentTLoss" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">genestboost.loss_functions.base_class.BaseLoss</span></code></p>
 <p>Student’s t loss function class.</p>
+<dl class="py method">
+<dt id="genestboost.loss_functions.StudentTLoss.__init__">
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dof</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/students_t.html#StudentTLoss.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.StudentTLoss.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class initializer.</p>
+<p>Extends BaseLoss.__init__.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scale</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – The <cite>scale</cite> of the Student’s t distribution to use. If set to None, the
+default, then taken as (<cite>dof</cite> + 1.0) / 2.0.</p></li>
+<li><p><strong>dof</strong> (<em>int</em>) – The number of degrees of freedom for the Student’s t distribution to use.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt id="genestboost.loss_functions.StudentTLoss.d2ldyp2">
 <code class="sig-name descname"><span class="pre">d2ldyp2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/loss_functions/students_t.html#StudentTLoss.d2ldyp2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.loss_functions.StudentTLoss.d2ldyp2" title="Permalink to this definition">¶</a></dt>

@@ -18,7 +18,7 @@ from .type_hints import LinearModel, ModelCallback, WeightsCallback
 
 
 class BoostedLinearModel(BoostedModel):
-    """BoostedLinearModel GLM class implementation."""
+    """BoostedLinearModel class implementation."""
 
     def __init__(
         self,
@@ -35,7 +35,7 @@ class BoostedLinearModel(BoostedModel):
         validation_fraction: float = 0.0,
         validation_stratify: bool = False,
         validation_iter_stop: int = 10,
-        tol: float = 1e-8,
+        tol: Optional[float] = None,
     ):
         """
         Class initializer.
@@ -51,7 +51,7 @@ class BoostedLinearModel(BoostedModel):
         model_callback: Callable
             A callable that returns a model object that implements fit and predict
             methods. The model object that is returned must be a linear model that
-            has 'coef_' and 'intercept_' attributes.
+            has coef_ and intercept_ attributes.
 
         model_callback_kwargs: dict, optional (default=None)
             A dictionary of keyword arguments to pass to `model_callback`.
@@ -63,7 +63,7 @@ class BoostedLinearModel(BoostedModel):
             element-wise by the model gradients to produce the pseudo-residuals that are
             to be predicted at each model iteration.
 
-        alpha: float = 1.0
+        alpha: float (default=1.0)
             A parameter representing the intial trial learning rate. The learning rate that
             actually gets used at each iteration is dependent upon the value of `step_type`.
 
@@ -105,9 +105,10 @@ class BoostedLinearModel(BoostedModel):
             holdout loss is greater at the current iteration than `validation_iter_stop`
             iterations prior, then stop model fitting.
 
-        tol: float = 1e-8
+        tol: float, optional (default=None)
             Early stopping criteria based on training loss. If training loss fails to
-            improve by at least `tol`, then stop training.
+            improve by at least `tol`, then stop training. If None, then training loss
+            criteria is not checked to determine early stopping.
         """
         super().__init__(
             link,

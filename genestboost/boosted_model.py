@@ -6,7 +6,7 @@
 
 
 import logging
-from typing import Any, Dict, Iterable, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 
@@ -37,7 +37,7 @@ class BoostedModel:
         validation_fraction: float = 0.0,
         validation_stratify: bool = False,
         validation_iter_stop: int = 10,
-        tol: float = 1e-8,
+        tol: Optional[float] = None,
     ):
         """
         Class initializer.
@@ -105,9 +105,10 @@ class BoostedModel:
             holdout loss is greater at the current iteration than `validation_iter_stop`
             iterations prior, then stop model fitting.
 
-        tol: float = 1e-8
+        tol: float, optional (default=None)
             Early stopping criteria based on training loss. If training loss fails to
-            improve by at least `tol`, then stop training.
+            improve by at least `tol`, then stop training. If None, then training loss
+            criteria is not checked to determine early stopping.
         """
         # set state based on initializer arguments
         self._link = link
@@ -128,14 +129,11 @@ class BoostedModel:
         self.tol = tol
 
         # additional vars used during the fitting process
-        self._beta: float = 1.0 if step_type == "constant" else alpha
+        self._beta: float = alpha
         self._msi = -1 if init_type in ["offset", "residuals"] else None
         self._loss_list: List[Tuple[float, float]] = list()
         self._model_list: List[Tuple[Model, float]] = list()
         self._is_fit: bool = False
-        self._beta_index: int = -1
-        self._tindex: Optional[Iterable[int]] = None
-        self._vindex: Optional[Iterable[int]] = None
         self._model_init: BoostedModel.InitialModel
 
     def __bool__(self) -> bool:
@@ -207,8 +205,7 @@ class BoostedModel:
         p_residuals = self.compute_p_residuals(yt, yp) * weights
         model_ = model_.fit(X[:, : self._msi], p_residuals)
         preds = model_.predict(X[:, : self._msi])
-        beta = self._compute_beta(yt, eta_p, preds)
-        learning_rate = self.alpha * beta
+        learning_rate = self._compute_beta(yt, eta_p, preds)
         eta_p_next = eta_p + learning_rate * preds
         yp_next = self._link(eta_p_next, inverse=True)
         self._model_list.append((model_, learning_rate))
@@ -632,7 +629,7 @@ class BoostedModel:
             return self._line_search_best(yt, eta_p, next_model_preds)
 
         if self.step_type == "constant":
-            return 1.0
+            return self._beta
 
         raise AttributeError("init arg:<step_type> is mis-specified")
 
@@ -695,15 +692,16 @@ class BoostedModel:
         """Private method that contains the logic for the stopping criteria."""
         # training loss condition
         if self.tol is not None:
-            tloss = self._loss_list[-1][0] - self._loss_list[-2][0]
-            if np.abs(tloss) < self.tol:
+            tloss = self._loss_list[-2][0] - self._loss_list[-1][0]
+            if tloss < self.tol:
                 return True
 
         # validation loss condition
         if model_data.has_validation_set():
             if (
                 self.get_iterations() > self.validation_iter_stop
-                and self._loss_list[-self.validation_iter_stop] < self._loss_list[-1]
+                and self._loss_list[-self.validation_iter_stop][1]
+                < self._loss_list[-1][1]
             ):
                 return True
 

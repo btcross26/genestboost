@@ -63,7 +63,7 @@
 
 
               <div class="version">
-                0.1.0-beta
+                0.1.1-beta
               </div>
 
 
@@ -91,9 +91,12 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_link_function.html">Custom Link Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_loss_function.html">Custom Loss Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_callbacks.html">Model Callbacks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="weak_learners.html">Weak Learners</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">genestboost</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">genestboost package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
@@ -107,6 +110,7 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/btcross26/genestboost">GitHub Repo</a></li>
 </ul>
 
@@ -192,9 +196,61 @@
 <span class="target" id="module-genestboost"></span><p>genestboost top-level module.</p>
 <dl class="py class">
 <dt id="genestboost.BoostedLinearModel">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">genestboost.</span></code><code class="sig-name descname"><span class="pre">BoostedLinearModel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">link</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_callback</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_callback_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'none'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_decay_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_fraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_stratify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_iter_stop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_linear_model.html#BoostedLinearModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedLinearModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">genestboost.</span></code><code class="sig-name descname"><span class="pre">BoostedLinearModel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">link</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_callback</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_callback_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'none'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_decay_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_fraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_stratify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_iter_stop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_linear_model.html#BoostedLinearModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedLinearModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">genestboost.boosted_model.BoostedModel</span></code></p>
-<p>BoostedLinearModel GLM class implementation.</p>
+<p>BoostedLinearModel class implementation.</p>
+<dl class="py method">
+<dt id="genestboost.BoostedLinearModel.__init__">
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">link</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_callback</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_callback_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'none'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_decay_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_fraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_stratify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_iter_stop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_linear_model.html#BoostedLinearModel.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedLinearModel.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class initializer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>link</strong> (<a class="reference internal" href="genestboost.link_functions.html#genestboost.link_functions.BaseLink" title="genestboost.link_functions.BaseLink"><em>BaseLink</em></a>) – Link function to use in boosting iterations.</p></li>
+<li><p><strong>loss</strong> (<a class="reference internal" href="genestboost.loss_functions.html#genestboost.loss_functions.BaseLoss" title="genestboost.loss_functions.BaseLoss"><em>BaseLoss</em></a>) – Loss function to use in boosting iterations.</p></li>
+<li><p><strong>model_callback</strong> (<em>Callable</em>) – A callable that returns a model object that implements fit and predict
+methods. The model object that is returned must be a linear model that
+has <a href="#id1"><span class="problematic" id="id2">coef_</span></a> and <a href="#id3"><span class="problematic" id="id4">intercept_</span></a> attributes.</p></li>
+<li><p><strong>model_callback_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – A dictionary of keyword arguments to pass to <cite>model_callback</cite>.</p></li>
+<li><p><strong>weights</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>WeightsCallback</em><em>]</em><em>: str</em><em> or </em><em>Callable</em>) – A string specificying the type of weights (one of “none” or “newton”), or a
+callable of the form ‘lambda yt, yp: weights`, where yt and yp are the
+actual target and predicted target arrays. These weights are multiplied
+element-wise by the model gradients to produce the pseudo-residuals that are
+to be predicted at each model iteration.</p></li>
+<li><p><strong>alpha</strong> (<em>float</em><em> (</em><em>default=1.0</em><em>)</em>) – A parameter representing the intial trial learning rate. The learning rate that
+actually gets used at each iteration is dependent upon the value of <cite>step_type</cite>.</p></li>
+<li><p><strong>step_type</strong> (<em>str</em><em> (</em><em>default=&quot;decaying&quot;</em><em>)</em>) – One of “decaying”, “constant”, or “best”. For “decaying”, the initial model
+iteration will start with <cite>alpha</cite> as the learning parameter. If <cite>alpha</cite> times
+<cite>step_decay_factor</cite> results in a greater reduction in loss than <cite>alpha</cite>, then
+use the former. This is repeated until performance does not improve, and the
+final chosen rate will serve as the ‘initial’ rate for the next boosting
+iteration. For “constant”, <cite>alpha</cite> will be used at every boosting iteration.
+Using “step_type” best implements the same process as “decaying”, except the
+next boosting iteration will reset the learning rate back to <cite>alpha</cite> as the
+initial trial learning rate.</p></li>
+<li><p><strong>step_decay_factor</strong> (<em>float</em><em> (</em><em>default=0.48</em><em>)</em>) – The decaying factor to use with <cite>step_type</cite> “decaying” or “best”.</p></li>
+<li><p><strong>init_type</strong> (<em>str</em><em> (</em><em>default=&quot;mean&quot;</em><em>)</em>) – The type of intial prediction to use. If “mean”, then the initial link
+prediction (prior to boosting iterations) will be taken as the link of the mean
+of the non-transformed target. If “residuals” or “zero”, the initial link
+prediction will be set to 0.0.</p></li>
+<li><p><strong>random_state</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Random seed to be used for reproducability when random methods are used
+internally.</p></li>
+<li><p><strong>validation_fraction</strong> (<em>float</em><em> (</em><em>default=0.0</em><em>)</em>) – If 0.0, then no validation set will be used and training will be performed
+using the full training set. Otherwise, the fraction of observations to use
+as a holdout set for early stopping.</p></li>
+<li><p><strong>validation_stratify</strong> (<em>bool</em><em> (</em><em>default=False</em><em>)</em>) – If true, than stratify the validation holdout set based on the target. Useful
+when the target is binary.</p></li>
+<li><p><strong>validation_iter_stop</strong> (<em>int</em><em> (</em><em>default=10</em><em>)</em>) – Number of iterations to use for early stopping on the validation set. If the
+holdout loss is greater at the current iteration than <cite>validation_iter_stop</cite>
+iterations prior, then stop model fitting.</p></li>
+<li><p><strong>tol</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Early stopping criteria based on training loss. If training loss fails to
+improve by at least <cite>tol</cite>, then stop training. If None, then training loss
+criteria is not checked to determine early stopping.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt id="genestboost.BoostedLinearModel.boost">
 <code class="sig-name descname"><span class="pre">boost</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eta_p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_callback</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_callback_kwargs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_linear_model.html#BoostedLinearModel.boost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedLinearModel.boost" title="Permalink to this definition">¶</a></dt>
@@ -361,7 +417,7 @@ then all weights will be equal (1.0).</p></li>
 
 <dl class="py class">
 <dt id="genestboost.BoostedModel">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">genestboost.</span></code><code class="sig-name descname"><span class="pre">BoostedModel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">link</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_callback</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_callback_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'none'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'decaying'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_decay_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.48</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_fraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_stratify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_iter_stop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_model.html#BoostedModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">genestboost.</span></code><code class="sig-name descname"><span class="pre">BoostedModel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">link</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_callback</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_callback_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'none'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'decaying'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_decay_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.48</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_fraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_stratify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_iter_stop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_model.html#BoostedModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>General boosting model class implementation for any regression model.</p>
 <dl class="py class">
@@ -369,6 +425,20 @@ then all weights will be equal (1.0).</p></li>
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">InitialModel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">link</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_model.html#BoostedModel.InitialModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedModel.InitialModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>InitialModel class implementation - internal to BoostedModel.</p>
+<dl class="py method">
+<dt id="genestboost.BoostedModel.InitialModel.__init__">
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">link</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_model.html#BoostedModel.InitialModel.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedModel.InitialModel.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class initializer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>link</strong> (<a class="reference internal" href="genestboost.link_functions.html#genestboost.link_functions.BaseLink" title="genestboost.link_functions.BaseLink"><em>BaseLink</em></a>) – Link function to use for initialization.</p></li>
+<li><p><strong>init_type</strong> (<em>str</em><em> (</em><em>default=&quot;mean&quot;</em><em>)</em>) – One of “mean”, “residuals”, or “zero”.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt id="genestboost.BoostedModel.InitialModel.fit">
 <code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_model.html#BoostedModel.InitialModel.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedModel.InitialModel.fit" title="Permalink to this definition">¶</a></dt>
@@ -413,6 +483,56 @@ input matrix.</p>
 </dl>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.BoostedModel.__init__">
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">link</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_callback</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_callback_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'none'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'decaying'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_decay_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.48</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_fraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_stratify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_iter_stop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_model.html#BoostedModel.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedModel.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class initializer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>link</strong> (<a class="reference internal" href="genestboost.link_functions.html#genestboost.link_functions.BaseLink" title="genestboost.link_functions.BaseLink"><em>BaseLink</em></a>) – Link function to use in boosting iterations.</p></li>
+<li><p><strong>loss</strong> (<a class="reference internal" href="genestboost.loss_functions.html#genestboost.loss_functions.BaseLoss" title="genestboost.loss_functions.BaseLoss"><em>BaseLoss</em></a>) – Loss function to use in boosting iterations.</p></li>
+<li><p><strong>model_callback</strong> (<em>Callable</em>) – A callable that returns a model object that implements fit and predict methods.</p></li>
+<li><p><strong>model_callback_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – A dictionary of keyword arguments to pass to <cite>model_callback</cite>.</p></li>
+<li><p><strong>weights</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>WeightsCallback</em><em>]</em><em>: str</em><em> or </em><em>Callable</em>) – A string specificying the type of weights (one of “none” or “newton”), or a
+callable of the form ‘lambda yt, yp: weights`, where yt and yp are the
+actual target and predicted target arrays. These weights are multiplied
+element-wise by the model gradients to produce the pseudo-residuals that are
+to be predicted at each model iteration.</p></li>
+<li><p><strong>alpha</strong> (<em>float = 1.0</em>) – A parameter representing the intial trial learning rate. The learning rate that
+actually gets used at each iteration is dependent upon the value of <cite>step_type</cite>.</p></li>
+<li><p><strong>step_type</strong> (<em>str</em><em> (</em><em>default=&quot;decaying&quot;</em><em>)</em>) – One of “decaying”, “constant”, or “best”. For “decaying”, the initial model
+iteration will start with <cite>alpha</cite> as the learning parameter. If <cite>alpha</cite> times
+<cite>step_decay_factor</cite> results in a greater reduction in loss than <cite>alpha</cite>, then
+use the former. This is repeated until performance does not improve, and the
+final chosen rate will serve as the ‘initial’ rate for the next boosting
+iteration. For “constant”, <cite>alpha</cite> will be used at every boosting iteration.
+Using “step_type” best implements the same process as “decaying”, except the
+next boosting iteration will reset the learning rate back to <cite>alpha</cite> as the
+initial trial learning rate.</p></li>
+<li><p><strong>step_decay_factor</strong> (<em>float</em><em> (</em><em>default=0.48</em><em>)</em>) – The decaying factor to use with <cite>step_type</cite> “decaying” or “best”.</p></li>
+<li><p><strong>init_type</strong> (<em>str</em><em> (</em><em>default=&quot;mean&quot;</em><em>)</em>) – The type of intial prediction to use. If “mean”, then the initial link
+prediction (prior to boosting iterations) will be taken as the link of the mean
+of the non-transformed target. If “residuals” or “zero”, the initial link
+prediction will be set to 0.0.</p></li>
+<li><p><strong>random_state</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Random seed to be used for reproducability when random methods are used
+internally.</p></li>
+<li><p><strong>validation_fraction</strong> (<em>float</em><em> (</em><em>default=0.0</em><em>)</em>) – If 0.0, then no validation set will be used and training will be performed
+using the full training set. Otherwise, the fraction of observations to use
+as a holdout set for early stopping.</p></li>
+<li><p><strong>validation_stratify</strong> (<em>bool</em><em> (</em><em>default=False</em><em>)</em>) – If true, than stratify the validation holdout set based on the target. Useful
+when the target is binary.</p></li>
+<li><p><strong>validation_iter_stop</strong> (<em>int</em><em> (</em><em>default=10</em><em>)</em>) – Number of iterations to use for early stopping on the validation set. If the
+holdout loss is greater at the current iteration than <cite>validation_iter_stop</cite>
+iterations prior, then stop model fitting.</p></li>
+<li><p><strong>tol</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Early stopping criteria based on training loss. If training loss fails to
+improve by at least <cite>tol</cite>, then stop training. If None, then training loss
+criteria is not checked to determine early stopping.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -757,6 +877,26 @@ the reset_model method.</p>
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">genestboost.</span></code><code class="sig-name descname"><span class="pre">ModelDataSets</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_fraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_stratify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/model_data_sets.html#ModelDataSets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.ModelDataSets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>ModelDataSets class for abstracting data set implementation from BoostedModel.</p>
+<dl class="py method">
+<dt id="genestboost.ModelDataSets.__init__">
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_fraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_stratify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/model_data_sets.html#ModelDataSets.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.ModelDataSets.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class initializer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Feature matrix of type float.</p></li>
+<li><p><strong>yt</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – Target vector.</p></li>
+<li><p><strong>weights</strong> (<em>numpy.ndarray</em><em> (</em><em>optional</em><em>, </em><em>default=None</em><em>)</em><em>, </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – Sample weights to be used in the fitting process.</p></li>
+<li><p><strong>validation_fraction</strong> (<em>float</em><em> (</em><em>optional</em><em>, </em><em>default=0.0</em><em>)</em>) – Fraction of dataset to use as validation set for early stopping.</p></li>
+<li><p><strong>validation_stratify</strong> (<em>bool</em><em> (</em><em>default=False</em><em>)</em>) – If True, stratify the validation sample and the training sample using the
+model target. This only makes sense for classification problems.</p></li>
+<li><p><strong>random_state</strong> (<em>int</em><em> (</em><em>optional</em><em>, </em><em>default=None</em><em>)</em>) – Set the random state of the instance so that the data set split can be
+reproduced.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt id="genestboost.ModelDataSets.has_validation_set">
 <code class="sig-name descname"><span class="pre">has_validation_set</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/model_data_sets.html#ModelDataSets.has_validation_set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.ModelDataSets.has_validation_set" title="Permalink to this definition">¶</a></dt>

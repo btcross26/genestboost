@@ -25,6 +25,7 @@
 import os
 import re
 import sys
+from pathlib import Path
 
 from recommonmark.parser import CommonMarkParser
 
@@ -32,6 +33,18 @@ sys.path.insert(0, os.path.abspath("../.."))
 
 
 # HELPER functions
+def skip(app, what, name, obj, would_skip, options):
+    """Document __init__ class method."""
+    if name == "__init__":
+        return False
+    return would_skip
+
+
+def setup(app):
+    """Implement the above skip method."""
+    app.connect("autodoc-skip-member", skip)
+
+
 def dedupe_submodules():
     """
     Clear out duplicate submodules.
@@ -61,10 +74,14 @@ def dedupe_submodules():
 
 # -- Project information -----------------------------------------------------
 
+REPO = Path(__file__).absolute().parent.parent.parent  # repo path from conf.py
+PACKAGE_INIT = REPO / "genestboost" / "__init__.py"
 project = "genestboost"
 copyright = "2021, Benjamin Cross"
 author = "Benjamin Cross"
-version = "0.1.0-beta"  # for now, need to update this manually
+version = re.match(
+    r".*__version__ *= *\"([\w\.-]+)*?\".*", PACKAGE_INIT.read_text(), re.DOTALL
+).group(1)
 
 
 # -- General configuration ---------------------------------------------------

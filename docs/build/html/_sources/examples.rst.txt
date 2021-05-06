@@ -1,13 +1,10 @@
 Examples
 ============
 
-First section
--------------
+.. toctree::
+   :maxdepth: 1
 
-Let's put some code here.
-
-.. code-block:: bash
-
-   rm -rf /
-
-Uh oh!
+   quantile_regression_example
+   binary_target_with_custom_wrapper_example
+   boosted_linear_model_example
+   alternative_fitting_procedure_example

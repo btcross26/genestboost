@@ -1,0 +1,399 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Binary Target Boosting with Custom Model Callback Wrapper &mdash; genestboost  documentation</title>
+
+
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+
+
+
+
+
+
+
+
+
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+
+
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="BoostedLinearModel with SimplePLS Algorithm Example" href="boosted_linear_model_example.html" />
+    <link rel="prev" title="Quantile Regression with Different Algorithms" href="quantile_regression_example.html" />
+</head>
+
+<body class="wy-body-for-nav">
+
+
+  <div class="wy-grid-for-nav">
+
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+            <a href="index.html" class="icon icon-home"> genestboost
+
+
+
+          </a>
+
+
+
+
+              <div class="version">
+                0.1.1-beta
+              </div>
+
+
+
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+
+
+
+
+
+
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="quantile_regression_example.html">Quantile Regression with Different Algorithms</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Binary Target Boosting with Custom Model Callback Wrapper</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#create-a-dummy-classification-dataset">Create a dummy classification dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-a-custom-model-wrapper">Create a Custom Model Wrapper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fit-the-model-using-logitlink-and-logloss">Fit the model using LogitLink and LogLoss</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plot-the-loss-history">Plot the loss history</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#try-a-different-link-and-loss-pair">Try a Different Link and Loss Pair</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plot-the-loss-history-again-for-cloglog-and-leakybetaloss">Plot the loss history again for CLogLog and LeakyBetaLoss</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="boosted_linear_model_example.html">BoostedLinearModel with SimplePLS Algorithm Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="alternative_fitting_procedure_example.html">Alternative Fitting Procedure with Surrogate Loss Function</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="custom_link_function.html">Custom Link Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_loss_function.html">Custom Loss Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_callbacks.html">Model Callbacks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="weak_learners.html">Weak Learners</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">genestboost</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/btcross26/genestboost">GitHub Repo</a></li>
+</ul>
+
+
+
+        </div>
+
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+
+      <nav class="wy-nav-top" aria-label="top navigation">
+
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">genestboost</a>
+
+      </nav>
+
+
+      <div class="wy-nav-content">
+
+        <div class="rst-content style-external-links">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+
+          <li><a href="examples.html">Examples</a> &raquo;</li>
+
+      <li>Binary Target Boosting with Custom Model Callback Wrapper</li>
+
+
+      <li class="wy-breadcrumbs-aside">
+
+
+            <a href="_sources/binary_target_with_custom_wrapper_example.rst.txt" rel="nofollow"> View page source</a>
+
+
+      </li>
+
+  </ul>
+
+
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <div class="section" id="binary-target-boosting-with-custom-model-callback-wrapper">
+<h1>Binary Target Boosting with Custom Model Callback Wrapper<a class="headerlink" href="#binary-target-boosting-with-custom-model-callback-wrapper" title="Permalink to this headline">¶</a></h1>
+<p>This example will demonstrate the following uses of the library:</p>
+<ol class="arabic simple">
+<li><p>Supervised learning with a binary target</p></li>
+<li><p>Wrapping a custom model callback to perform CV at each boosting
+iteration</p></li>
+<li><p>Interchanging link and loss function</p></li>
+</ol>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">scst</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="kn">import</span> <span class="n">DecisionTreeRegressor</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">GridSearchCV</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">scale</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_classification</span>
+
+<span class="kn">from</span> <span class="nn">genestboost</span> <span class="kn">import</span> <span class="n">BoostedModel</span>
+<span class="kn">from</span> <span class="nn">genestboost.link_functions</span> <span class="kn">import</span> <span class="n">LogitLink</span><span class="p">,</span> <span class="n">CLogLogLink</span>
+<span class="kn">from</span> <span class="nn">genestboost.loss_functions</span> <span class="kn">import</span> <span class="n">LogLoss</span><span class="p">,</span> <span class="n">LeakyBetaLoss</span>
+
+<span class="o">%</span><span class="k">matplotlib</span> inline
+</pre></div>
+</div>
+<div class="section" id="create-a-dummy-classification-dataset">
+<h2>Create a dummy classification dataset<a class="headerlink" href="#create-a-dummy-classification-dataset" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">20000</span><span class="p">,</span>
+                           <span class="n">n_features</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+                           <span class="n">n_informative</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                           <span class="n">weights</span><span class="o">=</span><span class="p">(</span><span class="mf">0.85</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">),</span>
+                           <span class="n">random_state</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">scale</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="create-a-custom-model-wrapper">
+<h2>Create a Custom Model Wrapper<a class="headerlink" href="#create-a-custom-model-wrapper" title="Permalink to this headline">¶</a></h2>
+<p>Here, let’s create a custom model wrapper that will allow us to perform
+a 3-fold cross-validation over decision tree hyperparameters at each
+model iteration. We just need to make sure that we provide a callback
+that returns a model with a fit and predict method. <code class="docutils literal notranslate"><span class="pre">GridSearchCV</span></code> has
+a fit method, and after the fit we can simply take the best returned
+model.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># model_callback</span>
+<span class="k">class</span> <span class="nc">CVDecisionTree</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_grid</span><span class="p">,</span> <span class="n">folds</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_param_grid</span> <span class="o">=</span> <span class="n">param_grid</span>   <span class="c1"># parameter grid for CV</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_folds</span> <span class="o">=</span> <span class="n">folds</span>             <span class="c1"># number of CV folds to use in grid search</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n_jobs</span> <span class="o">=</span> <span class="n">n_jobs</span>           <span class="c1"># number of jobs to use</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">new_model</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span>
+            <span class="n">estimator</span><span class="o">=</span><span class="n">DecisionTreeRegressor</span><span class="p">(</span><span class="n">splitter</span><span class="o">=</span><span class="s2">&quot;random&quot;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">17</span><span class="p">),</span>
+            <span class="n">param_grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_param_grid</span><span class="p">,</span>
+            <span class="n">cv</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_folds</span><span class="p">,</span>
+            <span class="n">n_jobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_jobs</span><span class="p">,</span>
+            <span class="n">refit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">new_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+        <span class="n">new_model</span> <span class="o">=</span> <span class="n">new_model</span><span class="o">.</span><span class="n">best_estimator_</span>   <span class="c1"># refit=True to get the best estimator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">new_model</span>
+
+        <span class="c1"># new model should have a predict method, but we will implement our own</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># create param_grid for model_callback kwargs</span>
+<span class="n">param_grid</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="s1">&#39;min_samples_split&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span>
+      <span class="s2">&quot;max_depth&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+<span class="p">}</span>
+
+<span class="c1"># model_callback_kwargs</span>
+<span class="n">model_callback_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;param_grid&quot;</span><span class="p">:</span> <span class="n">param_grid</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fit-the-model-using-logitlink-and-logloss">
+<h2>Fit the model using LogitLink and LogLoss<a class="headerlink" href="#fit-the-model-using-logitlink-and-logloss" title="Permalink to this headline">¶</a></h2>
+<p>First, let’s fit a model for the binary target using the same link/loss
+function as ordinary logistic regression.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>  <span class="c1"># catch sklearn utils warning</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+
+    <span class="c1"># fit model</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">BoostedModel</span><span class="p">(</span>
+        <span class="n">link</span><span class="o">=</span><span class="n">LogitLink</span><span class="p">(),</span>
+        <span class="n">loss</span><span class="o">=</span><span class="n">LogLoss</span><span class="p">(),</span>
+        <span class="n">weights</span><span class="o">=</span><span class="s2">&quot;newton&quot;</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+        <span class="n">step_type</span><span class="o">=</span><span class="s2">&quot;decaying&quot;</span><span class="p">,</span>
+        <span class="n">validation_fraction</span><span class="o">=</span><span class="mf">0.30</span><span class="p">,</span>
+        <span class="n">validation_stratify</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">validation_iter_stop</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+        <span class="n">model_callback</span><span class="o">=</span><span class="n">CVDecisionTree</span><span class="p">,</span>                 <span class="c1"># use our customer wrapper</span>
+        <span class="n">model_callback_kwargs</span><span class="o">=</span><span class="n">model_callback_kwargs</span><span class="p">,</span>   <span class="c1"># with our param grid</span>
+    <span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+    <span class="n">preds</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of model iterations: </span><span class="si">{:d}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">get_iterations</span><span class="p">()))</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Number</span> <span class="n">of</span> <span class="n">model</span> <span class="n">iterations</span><span class="p">:</span> <span class="mi">500</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="plot-the-loss-history">
+<h2>Plot the loss history<a class="headerlink" href="#plot-the-loss-history" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">6.5</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">get_loss_history</span><span class="p">(),</span> <span class="n">label</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Training&quot;</span><span class="p">,</span> <span class="s2">&quot;Holdout&quot;</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<img alt="_images/binary_logistic_fit_plot.png" src="_images/binary_logistic_fit_plot.png" />
+</div>
+<div class="section" id="try-a-different-link-and-loss-pair">
+<h2>Try a Different Link and Loss Pair<a class="headerlink" href="#try-a-different-link-and-loss-pair" title="Permalink to this headline">¶</a></h2>
+<p>To demonstrate how easy it is to switch the link and loss function,
+let’s refit the model with CLogLogLink and BetaLoss functions.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>  <span class="c1"># catch sklearn utils warning</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+
+    <span class="c1"># fit model</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">BoostedModel</span><span class="p">(</span>
+        <span class="n">link</span><span class="o">=</span><span class="n">CLogLogLink</span><span class="p">(),</span>
+        <span class="n">loss</span><span class="o">=</span><span class="n">LeakyBetaLoss</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">5.0</span><span class="p">),</span>
+        <span class="n">weights</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">step_type</span><span class="o">=</span><span class="s2">&quot;decaying&quot;</span><span class="p">,</span>
+        <span class="n">validation_fraction</span><span class="o">=</span><span class="mf">0.30</span><span class="p">,</span>
+        <span class="n">validation_stratify</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">validation_iter_stop</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+        <span class="n">model_callback</span><span class="o">=</span><span class="n">CVDecisionTree</span><span class="p">,</span>                 <span class="c1"># use our customer wrapper</span>
+        <span class="n">model_callback_kwargs</span><span class="o">=</span><span class="n">model_callback_kwargs</span><span class="p">,</span>   <span class="c1"># with our param grid</span>
+    <span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+    <span class="n">preds</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of model iterations: </span><span class="si">{:d}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">get_iterations</span><span class="p">()))</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Number</span> <span class="n">of</span> <span class="n">model</span> <span class="n">iterations</span><span class="p">:</span> <span class="mi">500</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="plot-the-loss-history-again-for-cloglog-and-leakybetaloss">
+<h2>Plot the loss history again for CLogLog and LeakyBetaLoss<a class="headerlink" href="#plot-the-loss-history-again-for-cloglog-and-leakybetaloss" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">6.5</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">get_loss_history</span><span class="p">(),</span> <span class="n">label</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Training&quot;</span><span class="p">,</span> <span class="s2">&quot;Holdout&quot;</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<img alt="_images/binary_betaloss_fit_plot.png" src="_images/binary_betaloss_fit_plot.png" />
+</div>
+</div>
+
+
+           </div>
+
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="boosted_linear_model_example.html" class="btn btn-neutral float-right" title="BoostedLinearModel with SimplePLS Algorithm Example" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="quantile_regression_example.html" class="btn btn-neutral float-left" title="Quantile Regression with Different Algorithms" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Benjamin Cross.
+
+    </p>
+  </div>
+
+
+
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+
+
+
+
+
+</body>
+</html>
