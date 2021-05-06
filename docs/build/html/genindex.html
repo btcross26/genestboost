@@ -61,7 +61,7 @@
 
 
               <div class="version">
-                0.1.0-beta
+                0.1.1-beta
               </div>
 
 
@@ -89,10 +89,14 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_link_function.html">Custom Link Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_loss_function.html">Custom Loss Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_callbacks.html">Model Callbacks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="weak_learners.html">Weak Learners</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">genestboost</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/btcross26/genestboost">GitHub Repo</a></li>
 </ul>
 
@@ -163,7 +167,8 @@
 <h1 id="index">Index</h1>
 
 <div class="genindex-jumpbox">
- <a href="#A"><strong>A</strong></a>
+ <a href="#_"><strong>_</strong></a>
+ | <a href="#A"><strong>A</strong></a>
  | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
@@ -179,6 +184,50 @@
  | <a href="#S"><strong>S</strong></a>
 
 </div>
+<h2 id="_">_</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="genestboost.html#genestboost.BoostedLinearModel.__init__">__init__() (genestboost.BoostedLinearModel method)</a>
+
+      <ul>
+        <li><a href="genestboost.html#genestboost.BoostedModel.__init__">(genestboost.BoostedModel method)</a>
+</li>
+        <li><a href="genestboost.html#genestboost.BoostedModel.InitialModel.__init__">(genestboost.BoostedModel.InitialModel method)</a>
+</li>
+        <li><a href="genestboost.link_functions.html#genestboost.link_functions.CLogLogLink.__init__">(genestboost.link_functions.CLogLogLink method)</a>
+</li>
+        <li><a href="genestboost.link_functions.html#genestboost.link_functions.CubeRootLink.__init__">(genestboost.link_functions.CubeRootLink method)</a>
+</li>
+        <li><a href="genestboost.link_functions.html#genestboost.link_functions.LogLink.__init__">(genestboost.link_functions.LogLink method)</a>
+</li>
+        <li><a href="genestboost.link_functions.html#genestboost.link_functions.Logp1Link.__init__">(genestboost.link_functions.Logp1Link method)</a>
+</li>
+        <li><a href="genestboost.link_functions.html#genestboost.link_functions.PowerLink.__init__">(genestboost.link_functions.PowerLink method)</a>
+</li>
+        <li><a href="genestboost.link_functions.html#genestboost.link_functions.ReciprocalLink.__init__">(genestboost.link_functions.ReciprocalLink method)</a>
+</li>
+        <li><a href="genestboost.link_functions.html#genestboost.link_functions.SqrtLink.__init__">(genestboost.link_functions.SqrtLink method)</a>
+</li>
+        <li><a href="genestboost.loss_functions.html#genestboost.loss_functions.BetaLoss.__init__">(genestboost.loss_functions.BetaLoss method)</a>
+</li>
+        <li><a href="genestboost.loss_functions.html#genestboost.loss_functions.LeakyBetaLoss.__init__">(genestboost.loss_functions.LeakyBetaLoss method)</a>
+</li>
+        <li><a href="genestboost.loss_functions.html#genestboost.loss_functions.LogLoss.__init__">(genestboost.loss_functions.LogLoss method)</a>
+</li>
+        <li><a href="genestboost.loss_functions.html#genestboost.loss_functions.QuantileLoss.__init__">(genestboost.loss_functions.QuantileLoss method)</a>
+</li>
+        <li><a href="genestboost.loss_functions.html#genestboost.loss_functions.QuasiLogLoss.__init__">(genestboost.loss_functions.QuasiLogLoss method)</a>
+</li>
+        <li><a href="genestboost.loss_functions.html#genestboost.loss_functions.StudentTLoss.__init__">(genestboost.loss_functions.StudentTLoss method)</a>
+</li>
+        <li><a href="genestboost.html#genestboost.ModelDataSets.__init__">(genestboost.ModelDataSets method)</a>
+</li>
+        <li><a href="genestboost.weak_learners.html#genestboost.weak_learners.SimplePLS.__init__">(genestboost.weak_learners.SimplePLS method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -220,14 +269,16 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="genestboost.link_functions.html#genestboost.link_functions.CLogLogLink">CLogLogLink (class in genestboost.link_functions)</a>
 </li>
+      <li><a href="genestboost.weak_learners.html#genestboost.weak_learners.SimplePLS.coef_">coef_ (genestboost.weak_learners.SimplePLS attribute)</a>
+</li>
       <li><a href="genestboost.html#genestboost.BoostedModel.compute_gradients">compute_gradients() (genestboost.BoostedModel method)</a>
 </li>
       <li><a href="genestboost.html#genestboost.BoostedModel.compute_link">compute_link() (genestboost.BoostedModel method)</a>
 </li>
-      <li><a href="genestboost.html#genestboost.BoostedModel.compute_loss">compute_loss() (genestboost.BoostedModel method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="genestboost.html#genestboost.BoostedModel.compute_loss">compute_loss() (genestboost.BoostedModel method)</a>
+</li>
       <li><a href="genestboost.html#genestboost.BoostedModel.compute_newton_weights">compute_newton_weights() (genestboost.BoostedModel method)</a>
 </li>
       <li><a href="genestboost.html#genestboost.BoostedModel.compute_p_residuals">compute_p_residuals() (genestboost.BoostedModel method)</a>
@@ -415,14 +466,16 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="genestboost.link_functions.html#genestboost.link_functions.IdentityLink">IdentityLink (class in genestboost.link_functions)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="genestboost.html#genestboost.BoostedLinearModel.initialize_model">initialize_model() (genestboost.BoostedLinearModel method)</a>
 
       <ul>
         <li><a href="genestboost.html#genestboost.BoostedModel.initialize_model">(genestboost.BoostedModel method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="genestboost.weak_learners.html#genestboost.weak_learners.SimplePLS.intercept_">intercept_ (genestboost.weak_learners.SimplePLS attribute)</a>
+</li>
   </ul></td>
 </tr></table>
 

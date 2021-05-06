@@ -62,7 +62,7 @@
 
 
               <div class="version">
-                0.1.0-beta
+                0.1.1-beta
               </div>
 
 
@@ -90,10 +90,14 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_link_function.html">Custom Link Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_loss_function.html">Custom Loss Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_callbacks.html">Model Callbacks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="weak_learners.html">Weak Learners</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">genestboost</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/btcross26/genestboost">GitHub Repo</a></li>
 </ul>
 
@@ -164,27 +168,31 @@
 
   <div class="section" id="welcome-to-genestboost-s-documentation">
 <h1>Welcome to genestboost’s documentation!<a class="headerlink" href="#welcome-to-genestboost-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p><code class="code docutils literal notranslate"><span class="pre">genestboost</span></code> is an ML boosting library that separates the modeling algorithm from the boosting algorithm. The result is that you can boost any generic regression model, not just trees. Build a forward-thinking (forward-propagating) neural network if you wish, or build an ensemble of support vector machines if you would so desire. Mix and match link and loss functions at will.</p>
+<img alt="_images/qr_different_alg_plot.png" src="_images/qr_different_alg_plot.png" />
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#first-section">First section</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#first-section">First section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantile_regression_example.html">Quantile Regression with Different Algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="binary_target_with_custom_wrapper_example.html">Binary Target Boosting with Custom Model Callback Wrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="boosted_linear_model_example.html">BoostedLinearModel with SimplePLS Algorithm Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="alternative_fitting_procedure_example.html">Alternative Fitting Procedure with Surrogate Loss Function</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="quickstart.html#first-section">First section</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_link_function.html">Custom Link Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_loss_function.html">Custom Loss Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_callbacks.html">Model Callbacks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="weak_learners.html">Weak Learners</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">genestboost</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="genestboost.html">genestboost package</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#first-section">First section</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">genestboost</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="genestboost.html">genestboost package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#beta">0.1.1-beta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id3">0.1.0-beta</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/btcross26/genestboost">GitHub Repo</a></li>
