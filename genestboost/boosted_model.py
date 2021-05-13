@@ -700,7 +700,7 @@ class BoostedModel:
         if model_data.has_validation_set():
             if (
                 self.get_iterations() > self.validation_iter_stop
-                and self._loss_list[-self.validation_iter_stop][1]
+                and self._loss_list[-self.validation_iter_stop - 1][1]
                 < self._loss_list[-1][1]
             ):
                 return True
