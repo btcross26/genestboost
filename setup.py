@@ -23,7 +23,6 @@ PROJECT_URLS = {
 }
 
 CLASSIFIERS = [
-    "Intended Audience :: Everyone",
     "Natural Language :: English",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3.8",
@@ -73,7 +72,7 @@ VERSION = re.match(
 ).group(1)
 URL = PROJECT_URLS["Source Code"]
 AUTHORS = (HERE / "AUTHORS").read_text().split("\n")
-LICENSE = (HERE / "LICENSE.txt").read_text()
+LICENSE = "BSD 3-Clause"
 
 
 def install_pkg():
@@ -85,7 +84,8 @@ def install_pkg():
         long_description=LONG,
         url=URL,
         project_urls=PROJECT_URLS,
-        author=AUTHORS,
+        author=AUTHORS[0],
+        author_email=EMAIL,
         maintainer=AUTHORS[0],
         license=LICENSE,
         python_requires=">=3.8.0",
