@@ -45,6 +45,7 @@ Alternative Fitting Procedure
         train_test_split(X, y, test_size=0.30, stratify=y, random_state=13)
     )
 
+    # notice no validation set arguments in the init - we will compute holdout in our loop below
     model = BoostedLinearModel(
         link=LogitLink(),
         loss=LogLoss(),
@@ -52,10 +53,7 @@ Alternative Fitting Procedure
         model_callback_kwargs={},
         alpha=5.0,
         step_type="decaying",
-        weights="newton",
-        validation_fraction=0.30,
-        validation_iter_stop=20,
-        validation_stratify=True)
+        weights="newton",)
 
     # HELPER
     def calc_roc(yp, yp_val):
@@ -65,14 +63,16 @@ Alternative Fitting Procedure
     # instead of using fit, we will use a for-loop to fit the model while using
     # ROC-AUC on the holdout set to determine stoppage
     yp, eta_p = model.initialize_model(X_train, y_train)   ### IMPORTANT - initializes the model
-    yp_val = model.predict(X_val)
-    loss_list = [(roc_auc_score(y_train, yp), roc_auc_score(y_val, yp_val))]   # rocauc loss [(train, val)]
+    eta_p_val = model.decision_function(X_val)
+    yp_val = model.compute_link(eta_p_val, inverse=True)
+    loss_list = [calc_roc(yp, yp_val)]   # rocauc loss [(train, val)]
 
     # main loop
     max_iterations, min_iterations, iter_stop = 2000, 20, 20
     for i in range(max_iterations):
         yp, eta_p = model.boost(X_train, y_train, yp, eta_p, SimplePLS, {})
-        yp_val = model.predict(X_val)   # inefficient - future addition - prediction on model by index
+        eta_p_val += model.decision_function_single(X_val)   # predict on only the last model for performance
+        yp_val = model.compute_link(eta_p_val, inverse=True)
         loss_list.append(calc_roc(yp, yp_val))
 
         if i >= min_iterations and i > iter_stop:
