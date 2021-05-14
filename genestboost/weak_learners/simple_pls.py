@@ -24,13 +24,13 @@ class SimplePLS:
 
         Parameters
         ----------
-        max_vars: int, optional
+        max_vars: int, optional (default=1)
             The maximum number of variables to use in the regression. The default value
             is 1, which is the special case of simple one-variable least squares
             regression. If None, then max_vars will be set to the number of variables
             in the X model matrix during the fitting process.
 
-        filter_threshold: float, optional
+        filter_threshold: float, optional (default=None)
             The correlation filter threshold to use. If the ratio of the absolute value
             of the correlation coefficient for a predictor to the absolute value of the
             maximum correlation coefficient of all predictors is less than the filter
@@ -79,7 +79,7 @@ class SimplePLS:
         y: numpy.ndarray, shape (n_samples, )
             The target vector
 
-        weights: numpy.ndarray, optional
+        weights: numpy.ndarray, optional (default=None)
             A value of weights to use for the linear regression fit. The default value
             is None, which results in equal weighting for all observations. If a value
             is provided, it should have the same dimensions as the target vector, y.

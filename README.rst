@@ -26,6 +26,7 @@ Examples
 - `Binary Target Boosting with Custom Model Callback Wrapper <https://btcross26.github.io/genestboost/build/html/binary_target_with_custom_wrapper_example.html>`_
 - `BoostedLinearModel with SimplePLS Algorithm <https://btcross26.github.io/genestboost/build/html/boosted_linear_model_example.html>`_
 - `Alternative Fitting Procedure with Surrogate Loss Function <https://btcross26.github.io/genestboost/build/html/alternative_fitting_procedure_example.html>`_
+- `Forward Propagating Neural Network <https://btcross26.github.io/genestboost/build/html/forward_neural_network_example.html>`_
 
 
 Installation
@@ -36,6 +37,12 @@ Create a virtual environment with Python 3.8 and install from git:
 .. code-block::
 
     $ pip install git+https://github.com/btcross26/genestboost.git
+
+Alternatively, you can install directly from PyPI:
+
+.. code-block:: bash
+
+    $ pip install genestboost
 
 
 Documentation

@@ -63,7 +63,7 @@
 
 
               <div class="version">
-                0.1.1-beta
+                0.2.0-beta
               </div>
 
 
@@ -91,6 +91,7 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how_it_works.html">How It Works</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="custom_link_function.html">Custom Link Functions</a></li>
@@ -198,11 +199,11 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>max_vars</strong> (<em>int</em><em>, </em><em>optional</em>) – The maximum number of variables to use in the regression. The default value
+<li><p><strong>max_vars</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=1</em><em>)</em>) – The maximum number of variables to use in the regression. The default value
 is 1, which is the special case of simple one-variable least squares
 regression. If None, then max_vars will be set to the number of variables
 in the X model matrix during the fitting process.</p></li>
-<li><p><strong>filter_threshold</strong> (<em>float</em><em>, </em><em>optional</em>) – The correlation filter threshold to use. If the ratio of the absolute value
+<li><p><strong>filter_threshold</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – The correlation filter threshold to use. If the ratio of the absolute value
 of the correlation coefficient for a predictor to the absolute value of the
 maximum correlation coefficient of all predictors is less than the filter
 threshold value, then the predictor will be excluded from the regression.
@@ -246,7 +247,7 @@ including the public attributes housing the coefficients and intercept.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_predictors</em><em>)</em>) – The input model matrix. Should be of dtype float.</p></li>
 <li><p><strong>y</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>)</em>) – The target vector</p></li>
-<li><p><strong>weights</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – A value of weights to use for the linear regression fit. The default value
+<li><p><strong>weights</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – A value of weights to use for the linear regression fit. The default value
 is None, which results in equal weighting for all observations. If a value
 is provided, it should have the same dimensions as the target vector, y.
 The weights are applied to the correlation calculation only. They are not
