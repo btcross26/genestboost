@@ -372,6 +372,40 @@ class BoostedModel:
             eta_p += lr * model.predict(X[:, : self._msi])
         return eta_p
 
+    def decision_function_single(
+        self, X: np.ndarray, model_index: int = -1, apply_learning_rate: bool = True,
+    ) -> np.ndarray:
+        """
+        Compute the link for a specific ensemble model by index.
+
+        Parameters
+        ----------
+        X: np.ndarray
+            The model matrix. If `init_type` was set as "residuals", then the model
+            scores for which to calculate residuals should form the last column of the
+            input matrix.
+
+        model_index: int (default=-1)
+            The model iteration for which to compute the decision function. By default,
+            it is -1. This corresponds to the model from the most recent boosting
+            iteration.
+
+        apply_learning_rate: bool (default=True)
+            If True, then the predictions from the selected model on `X` will be
+            multiplied by the corresponding learning rate. Otherwise if False, the
+            predictions of the selected model will be returned as if the learning rate
+            was equal to 1.0.
+
+        Returns
+        -------
+        np.ndarray
+            The computed link values for the selected model index.
+        """
+        model, lr = self._model_list[model_index]
+        lr = lr if apply_learning_rate else 1.0
+        eta_p = lr * model.predict(X[:, : self._msi])
+        return eta_p
+
     def fit(
         self,
         X: np.ndarray,
