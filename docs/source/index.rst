@@ -15,6 +15,7 @@ Welcome to genestboost's documentation!
    :caption: Contents:
 
    introduction
+   how_it_works
    installation
    examples
    custom_link_function

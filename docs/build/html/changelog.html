@@ -62,7 +62,7 @@
 
 
               <div class="version">
-                0.1.1-beta
+                0.2.0-beta
               </div>
 
 
@@ -90,6 +90,7 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how_it_works.html">How It Works</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="custom_link_function.html">Custom Link Functions</a></li>
@@ -98,8 +99,9 @@
 <li class="toctree-l1"><a class="reference internal" href="weak_learners.html">Weak Learners</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">genestboost</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#beta">0.1.1-beta</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id3">0.1.0-beta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#beta">0.2.0-beta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">0.1.1-beta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">0.1.0-beta</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/btcross26/genestboost">GitHub Repo</a></li>
@@ -173,15 +175,24 @@
   <div class="section" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="beta">
-<h2>0.1.1-beta<a class="headerlink" href="#beta" title="Permalink to this headline">¶</a></h2>
+<h2>0.2.0-beta<a class="headerlink" href="#beta" title="Permalink to this headline">¶</a></h2>
+<p>A release that comes with added functionality + a bugfix and enhanced/updated documentation. The release comes with the following items:</p>
+<ul class="simple">
+<li><p>Added functionality for computing the decision function on a given model index in the <code class="code docutils literal notranslate"><span class="pre">BoostedModel</span></code> class;</p></li>
+<li><p>Fixes intended functionality of <cite>validation_iter_stop</cite> in the BoostedModel class <a class="reference external" href="https://github.com/btcross26/genestboost/issues/22">(#22)</a>; and</p></li>
+<li><p>An example has been added to the documentation showing how a forward-propagating neural network can be built using <code class="code docutils literal notranslate"><span class="pre">pytorch</span></code>.</p></li>
+</ul>
+</div>
+<div class="section" id="id2">
+<h2>0.1.1-beta<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
 <p>A bugfix release that comes with enhanced/updated documentation. The release comes with the following bugfixes:</p>
 <ul class="simple">
 <li><p>Fixes both training and holdout stopping criteria in the main BoostedModel class <a class="reference external" href="https://github.com/btcross26/genestboost/issues/18">(#18)</a>; and</p></li>
 <li><p>Fixes internal learning rate calculation logic in the BoostedModel class <a class="reference external" href="https://github.com/btcross26/genestboost/issues/17">(#17)</a>.</p></li>
 </ul>
 </div>
-<div class="section" id="id3">
-<h2>0.1.0-beta<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id5">
+<h2>0.1.0-beta<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
 <p>The initial release provides boosting functionality via two main classes: BoostedModel and BoostedLinearModel.</p>
 <p>The former is the most general class available and is meant to be used to build a boosted ensemble with any regression algorithm. The key is to provide a callable that returns a model object implementing a fit and predict method. Arguments can be passed to the callable via the model_kwargs_dict argument.</p>
 <p>The latter class, BoostedLinearModel, is meant to be used with linear models that have <code class="code docutils literal notranslate"><span class="pre">coef_</span></code> and <code class="code docutils literal notranslate"><span class="pre">intercept_</span></code> attributes. The class provides additional methods relevant to linear models, and it streamlines prediction of the ensemble by taking advantage of the fact that the sum of linear models is simply a linear model.</p>

@@ -60,6 +60,10 @@
 
 
 
+              <div class="version">
+                0.1.1-beta
+              </div>
+
 
 
 
@@ -84,7 +88,16 @@
 
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../genestboost.html">genestboost package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../custom_link_function.html">Custom Link Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../custom_loss_function.html">Custom Loss Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../model_callbacks.html">Model Callbacks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../weak_learners.html">Weak Learners</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">genestboost</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/btcross26/genestboost">GitHub Repo</a></li>
 </ul>
 
 
@@ -107,7 +120,7 @@
 
       <div class="wy-nav-content">
 
-        <div class="rst-content">
+        <div class="rst-content style-external-links">
 
 
 
@@ -166,10 +179,10 @@
 <span class="kn">from</span> <span class="nn">..type_hints</span> <span class="kn">import</span> <span class="n">Model</span>
 
 
-<div class="viewcode-block" id="SimplePLS"><a class="viewcode-back" href="../../../genestboost.weak_learners.html#genestboost.weak_learners.simple_pls.SimplePLS">[docs]</a><span class="k">class</span> <span class="nc">SimplePLS</span><span class="p">:</span>
+<div class="viewcode-block" id="SimplePLS"><a class="viewcode-back" href="../../../genestboost.weak_learners.html#genestboost.weak_learners.SimplePLS">[docs]</a><span class="k">class</span> <span class="nc">SimplePLS</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Implementation for SimplePLS, a partial-PLS component regression model.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="SimplePLS.__init__"><a class="viewcode-back" href="../../../genestboost.weak_learners.html#genestboost.weak_learners.SimplePLS.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">max_vars</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">filter_threshold</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -177,13 +190,13 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        max_vars: int, optional</span>
+<span class="sd">        max_vars: int, optional (default=1)</span>
 <span class="sd">            The maximum number of variables to use in the regression. The default value</span>
 <span class="sd">            is 1, which is the special case of simple one-variable least squares</span>
 <span class="sd">            regression. If None, then max_vars will be set to the number of variables</span>
 <span class="sd">            in the X model matrix during the fitting process.</span>
 
-<span class="sd">        filter_threshold: float, optional</span>
+<span class="sd">        filter_threshold: float, optional (default=None)</span>
 <span class="sd">            The correlation filter threshold to use. If the ratio of the absolute value</span>
 <span class="sd">            of the correlation coefficient for a predictor to the absolute value of the</span>
 <span class="sd">            maximum correlation coefficient of all predictors is less than the filter</span>
@@ -213,9 +226,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_y_mean</span><span class="p">:</span> <span class="nb">float</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_y_std</span><span class="p">:</span> <span class="nb">float</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_multiplier</span><span class="p">:</span> <span class="nb">float</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_pls_intercept</span><span class="p">:</span> <span class="nb">float</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pls_intercept</span><span class="p">:</span> <span class="nb">float</span></div>
 
-<div class="viewcode-block" id="SimplePLS.fit"><a class="viewcode-back" href="../../../genestboost.weak_learners.html#genestboost.weak_learners.simple_pls.SimplePLS.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span>
+<div class="viewcode-block" id="SimplePLS.fit"><a class="viewcode-back" href="../../../genestboost.weak_learners.html#genestboost.weak_learners.SimplePLS.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -232,7 +245,7 @@
 <span class="sd">        y: numpy.ndarray, shape (n_samples, )</span>
 <span class="sd">            The target vector</span>
 
-<span class="sd">        weights: numpy.ndarray, optional</span>
+<span class="sd">        weights: numpy.ndarray, optional (default=None)</span>
 <span class="sd">            A value of weights to use for the linear regression fit. The default value</span>
 <span class="sd">            is None, which results in equal weighting for all observations. If a value</span>
 <span class="sd">            is provided, it should have the same dimensions as the target vector, y.</span>
@@ -270,7 +283,7 @@
 
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="SimplePLS.predict"><a class="viewcode-back" href="../../../genestboost.weak_learners.html#genestboost.weak_learners.simple_pls.SimplePLS.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<div class="viewcode-block" id="SimplePLS.predict"><a class="viewcode-back" href="../../../genestboost.weak_learners.html#genestboost.weak_learners.SimplePLS.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compute model predictions for the given model matrix, X.</span>
 

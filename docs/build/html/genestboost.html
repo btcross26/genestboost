@@ -63,7 +63,7 @@
 
 
               <div class="version">
-                0.1.1-beta
+                0.2.0-beta
               </div>
 
 
@@ -91,6 +91,7 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how_it_works.html">How It Works</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="custom_link_function.html">Custom Link Functions</a></li>
@@ -715,6 +716,34 @@ the predictions from models up to <cite>model_index</cite> (i.e., [:model_index]
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The link of the computed model predictions.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genestboost.BoostedModel.decision_function_single">
+<code class="sig-name descname"><span class="pre">decision_function_single</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apply_learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/genestboost/boosted_model.html#BoostedModel.decision_function_single"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#genestboost.BoostedModel.decision_function_single" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the link for a specific ensemble model by index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>np.ndarray</em>) – The model matrix. If <cite>init_type</cite> was set as “residuals”, then the model
+scores for which to calculate residuals should form the last column of the
+input matrix.</p></li>
+<li><p><strong>model_index</strong> (<em>int</em><em> (</em><em>default=-1</em><em>)</em>) – The model iteration for which to compute the decision function. By default,
+it is -1. This corresponds to the model from the most recent boosting
+iteration.</p></li>
+<li><p><strong>apply_learning_rate</strong> (<em>bool</em><em> (</em><em>default=True</em><em>)</em>) – If True, then the predictions from the selected model on <cite>X</cite> will be
+multiplied by the corresponding learning rate. Otherwise if False, the
+predictions of the selected model will be returned as if the learning rate
+was equal to 1.0.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The computed link values for the selected model index.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.ndarray</p>

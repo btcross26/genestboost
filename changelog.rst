@@ -1,6 +1,16 @@
 Changelog
 =========
 
+0.2.0-beta
+----------
+
+A release that comes with added functionality + a bugfix and enhanced/updated documentation. The release comes with the following items:
+
+- Added functionality for computing the decision function on a given model index in the :code:`BoostedModel` class;
+- Fixes intended functionality of `validation_iter_stop` in the BoostedModel class `(#22) <https://github.com/btcross26/genestboost/issues/22>`_; and
+- An example has been added to the documentation showing how a forward-propagating neural network can be built using :code:`pytorch`.
+
+
 0.1.1-beta
 ----------
 

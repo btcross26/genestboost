@@ -38,7 +38,7 @@
 
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Custom Link Functions" href="custom_link_function.html" />
+    <link rel="next" title="Forward-Propagating Neural Network Example" href="forward_neural_network_example.html" />
     <link rel="prev" title="BoostedLinearModel with SimplePLS Algorithm Example" href="boosted_linear_model_example.html" />
 </head>
 
@@ -63,7 +63,7 @@
 
 
               <div class="version">
-                0.1.1-beta
+                0.2.0-beta
               </div>
 
 
@@ -91,6 +91,7 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how_it_works.html">How It Works</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="quantile_regression_example.html">Quantile Regression with Different Algorithms</a></li>
@@ -104,6 +105,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#order-that-variables-entered-the-model">Order that Variables Entered the Model</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="forward_neural_network_example.html">Forward-Propagating Neural Network Example</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="custom_link_function.html">Custom Link Functions</a></li>
@@ -222,6 +224,7 @@ can be customized.</p>
     <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.30</span><span class="p">,</span> <span class="n">stratify</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span>
 <span class="p">)</span>
 
+<span class="c1"># notice no validation set arguments in the init - we will compute holdout in our loop below</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">BoostedLinearModel</span><span class="p">(</span>
     <span class="n">link</span><span class="o">=</span><span class="n">LogitLink</span><span class="p">(),</span>
     <span class="n">loss</span><span class="o">=</span><span class="n">LogLoss</span><span class="p">(),</span>
@@ -229,10 +232,7 @@ can be customized.</p>
     <span class="n">model_callback_kwargs</span><span class="o">=</span><span class="p">{},</span>
     <span class="n">alpha</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
     <span class="n">step_type</span><span class="o">=</span><span class="s2">&quot;decaying&quot;</span><span class="p">,</span>
-    <span class="n">weights</span><span class="o">=</span><span class="s2">&quot;newton&quot;</span><span class="p">,</span>
-    <span class="n">validation_fraction</span><span class="o">=</span><span class="mf">0.30</span><span class="p">,</span>
-    <span class="n">validation_iter_stop</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-    <span class="n">validation_stratify</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">weights</span><span class="o">=</span><span class="s2">&quot;newton&quot;</span><span class="p">,)</span>
 
 <span class="c1"># HELPER</span>
 <span class="k">def</span> <span class="nf">calc_roc</span><span class="p">(</span><span class="n">yp</span><span class="p">,</span> <span class="n">yp_val</span><span class="p">):</span>
@@ -242,14 +242,16 @@ can be customized.</p>
 <span class="c1"># instead of using fit, we will use a for-loop to fit the model while using</span>
 <span class="c1"># ROC-AUC on the holdout set to determine stoppage</span>
 <span class="n">yp</span><span class="p">,</span> <span class="n">eta_p</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">initialize_model</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>   <span class="c1">### IMPORTANT - initializes the model</span>
-<span class="n">yp_val</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_val</span><span class="p">)</span>
-<span class="n">loss_list</span> <span class="o">=</span> <span class="p">[(</span><span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">yp</span><span class="p">),</span> <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y_val</span><span class="p">,</span> <span class="n">yp_val</span><span class="p">))]</span>   <span class="c1"># rocauc loss [(train, val)]</span>
+<span class="n">eta_p_val</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">decision_function</span><span class="p">(</span><span class="n">X_val</span><span class="p">)</span>
+<span class="n">yp_val</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">compute_link</span><span class="p">(</span><span class="n">eta_p_val</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">loss_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">calc_roc</span><span class="p">(</span><span class="n">yp</span><span class="p">,</span> <span class="n">yp_val</span><span class="p">)]</span>   <span class="c1"># rocauc loss [(train, val)]</span>
 
 <span class="c1"># main loop</span>
 <span class="n">max_iterations</span><span class="p">,</span> <span class="n">min_iterations</span><span class="p">,</span> <span class="n">iter_stop</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">20</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iterations</span><span class="p">):</span>
     <span class="n">yp</span><span class="p">,</span> <span class="n">eta_p</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">boost</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">eta_p</span><span class="p">,</span> <span class="n">SimplePLS</span><span class="p">,</span> <span class="p">{})</span>
-    <span class="n">yp_val</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_val</span><span class="p">)</span>   <span class="c1"># inefficient - future addition - prediction on model by index</span>
+    <span class="n">eta_p_val</span> <span class="o">+=</span> <span class="n">model</span><span class="o">.</span><span class="n">decision_function_single</span><span class="p">(</span><span class="n">X_val</span><span class="p">)</span>   <span class="c1"># predict on only the last model for performance</span>
+    <span class="n">yp_val</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">compute_link</span><span class="p">(</span><span class="n">eta_p_val</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">loss_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">calc_roc</span><span class="p">(</span><span class="n">yp</span><span class="p">,</span> <span class="n">yp_val</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">min_iterations</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">iter_stop</span><span class="p">:</span>
@@ -311,7 +313,7 @@ corresponding features in the data set to get standardized coefficients.</p>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="custom_link_function.html" class="btn btn-neutral float-right" title="Custom Link Functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="forward_neural_network_example.html" class="btn btn-neutral float-right" title="Forward-Propagating Neural Network Example" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="boosted_linear_model_example.html" class="btn btn-neutral float-left" title="BoostedLinearModel with SimplePLS Algorithm Example" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
