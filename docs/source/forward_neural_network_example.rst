@@ -1,7 +1,7 @@
-Forward-Thinking Neural Network Example
+Forward-Propagating Neural Network Example
 =======================================
 
-This notebook demonstrates building a neural network in a forward,
+This example demonstrates building a neural network in a forward,
 greedy manner. The code below utilizes ``pytorch``, with the version
 listed under imports. ``pytorch`` is not included in the ``genestboost``
 ‘setup.py’ file and must be installed separately. The dataset used to
@@ -19,7 +19,7 @@ but getting this right in all the right places can be tricky and may be
 the source of bugs. Getting input and output sizes correct in advancing
 layers can be tricky as well.
 
-In the cells that follow, three layers are built manually: two
+In the code that follows, three layers are built manually: two
 convolutional layers and one dense layer that creates the final output.
 With a little creativity, subclassing, and some elbow grease, the
 process could be automated. Due to a lack of computing power on the
