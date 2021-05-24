@@ -27,7 +27,7 @@ jobs:
           conda create -q -n py39 python=3.9
       - name: Run pytest
         env:
-          TOXENV: py38,py39
+          TOXENV: py37,py38,py39
         run: |
           export PY37_PATH=$CONDA/envs/py37/bin
           export PY39_PATH=$CONDA/envs/py39/bin
