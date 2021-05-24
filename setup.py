@@ -11,8 +11,14 @@ NAME = "genestboost"
 EMAIL = "btcross26@yahoo.com"
 PACKAGES = find_packages()
 KEYWORDS = [""]
-DESCRIPTION = "Generic estimator boosting"
-LONG = "Generic boosting framework for any regression estimator"
+DESCRIPTION = "General boosting framework for any regression estimator"
+LONG = """
+:code:`genestboost` is an ML boosting library that separates the modeling algorithm from
+the boosting algorithm. The result is that you can boost any generic regression
+model, not just trees. Build a forward-thinking (forward-propagating) neural network if
+you wish, or build an ensemble of support vector machines if you would so desire. Mix
+and match link and loss functions at will.
+"""
 
 PROJECT_URLS = {
     "Documentation": (
@@ -25,7 +31,9 @@ PROJECT_URLS = {
 CLASSIFIERS = [
     "Natural Language :: English",
     "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
 ]
 
 INSTALL_REQUIRES = [
@@ -82,13 +90,14 @@ def install_pkg():
         version=VERSION,
         description=DESCRIPTION,
         long_description=LONG,
+        long_description_content_type="text/x-rst",
         url=URL,
         project_urls=PROJECT_URLS,
         author=AUTHORS[0],
         author_email=EMAIL,
         maintainer=AUTHORS[0],
         license=LICENSE,
-        python_requires=">=3.8.0",
+        python_requires=">=3.7.0,<3.10",
         packages=PACKAGES,
         install_requires=INSTALL_REQUIRES,
         classifiers=CLASSIFIERS,
