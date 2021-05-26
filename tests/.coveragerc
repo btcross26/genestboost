@@ -2,4 +2,5 @@
 omit =
     *setup.py
     *type_hints.py
-    *base_class.py
+    **/base_class.py
+    **/__init__.py
