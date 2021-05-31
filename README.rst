@@ -80,8 +80,8 @@ Boost simple neural networks to predict a binary target:
     plt.legend(loc="best")
 
 
-Examples
---------
+Additional Examples
+-------------------
 - `Quantile Regression with Different Modeling Algorithms <https://btcross26.github.io/genestboost/build/html/quantile_regression_example.html>`_
 - `Binary Target Boosting with Custom Model Callback Wrapper <https://btcross26.github.io/genestboost/build/html/binary_target_with_custom_wrapper_example.html>`_
 - `BoostedLinearModel with SimplePLS Algorithm <https://btcross26.github.io/genestboost/build/html/boosted_linear_model_example.html>`_
