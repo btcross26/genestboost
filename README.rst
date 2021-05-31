@@ -101,7 +101,7 @@ In the future, the library will be restructured slightly under the hood, and the
 Installation
 ------------
 
-Create a virtual environment with Python 3.8 and install from git:
+Create a virtual environment with Python >=3.7,<=3.9, and install from git:
 
 .. code-block::
 
@@ -112,6 +112,12 @@ Alternatively, you can install directly from PyPI:
 .. code-block:: bash
 
     $ pip install genestboost
+
+Or from conda-forge:
+
+.. code-block:: bash
+
+    $ conda install -c conda-forge genestboost
 
 
 Documentation
