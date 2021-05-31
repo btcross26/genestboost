@@ -17,8 +17,8 @@
 .. image:: https://img.shields.io/conda/vn/conda-forge/genestboost.svg
       :target: https://anaconda.org/conda-forge/genestboost
 
-genestboost
-===========
+|
+.. image:: https://user-images.githubusercontent.com/7505706/120132584-968dd780-c198-11eb-8843-55bc23310657.png
 
 `Documentation Home <https://btcross26.github.io/genestboost/build/html/index.html>`__ | `Quick Coding Example`_ | `Additional Examples`_ | `Limitations`_ | `Installation`_ | `Changelog <https://github.com/btcross26/genestboost/changelog.rst>`__
 
