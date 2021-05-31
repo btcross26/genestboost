@@ -25,7 +25,7 @@ genestboost
 
 .. image:: docs/source/images/qr_different_alg_plot.png
 
-Separating the two algorithms may not give the most optimal performance outcomes when it comes to training and prediction speeds. The tool is also programmed in pure Python - for now. Thus, in its current state the library is primarily for research and development. In particular, the library classes can be easily extended to handle custom loss functions and custom link functions. The library can also serve as a foundation for more specialized boosting algorithms when the need to optimize for performance arises.
+
 Quick Coding Example
 --------------------
 
@@ -72,7 +72,7 @@ Boost simple neural networks to predict a binary target:
     # fit the model
     model.fit(X, y, min_iterations=10, iterations=100)
 
-In the future, the library will be restructured slightly under the hood, and there are plans to parallelize ensemble prediction and move some performance bottlenecks to Nim (i.e., C-extensions). Support for boosting of multivariate targets will be added when time permits.
+    # evaluate the model
     print(model.get_iterations())
     predictions = model.predict(X)        # predicted y's (probabilities in this case)
     scores = model.decision_function(X)   # predicted links (logits in this case)
@@ -87,6 +87,14 @@ Examples
 - `BoostedLinearModel with SimplePLS Algorithm <https://btcross26.github.io/genestboost/build/html/boosted_linear_model_example.html>`_
 - `Alternative Fitting Procedure with Surrogate Loss Function <https://btcross26.github.io/genestboost/build/html/alternative_fitting_procedure_example.html>`_
 - `Forward Propagating Neural Network <https://btcross26.github.io/genestboost/build/html/forward_neural_network_example.html>`_
+
+
+Limitations
+-----------
+
+Separating the boosting and modeling algorithm may not give the most optimal performance outcomes when it comes to training and prediction speeds. The tool is also programmed in pure Python - for now. Thus, in its current state the library is primarily for research and development. In particular, the library classes can be easily extended to handle custom loss functions and custom link functions. The library can also serve as a foundation for more specialized boosting algorithms when the need to optimize for performance arises.
+
+In the future, the library will be restructured slightly under the hood, and there are plans to parallelize ensemble prediction and move some performance bottlenecks to Nim (i.e., C-extensions). Support for boosting of multivariate targets will be added when time permits.
 
 
 Installation
