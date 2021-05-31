@@ -1,8 +1,5 @@
 .. README.rst
 
-genestboost
-===========
-
 .. image:: https://img.shields.io/badge/python-3.7-green.svg
       :target: https://www.python.org
 .. image:: https://img.shields.io/badge/python-3.8-green.svg
@@ -20,6 +17,10 @@ genestboost
 .. image:: https://img.shields.io/conda/vn/conda-forge/genestboost.svg
       :target: https://anaconda.org/conda-forge/genestboost
 
+genestboost
+===========
+
+`Documentation Home <https://btcross26.github.io/genestboost/build/html/index.html>`__ | `Examples <https://btcross26.github.io/genestboost/build/html/examples.html>`__ `Changelog <https://btcross26.github.io/genestboost/build/html/changelog.html>`__
 
 :code:`genestboost` is an ML boosting library that separates the modeling algorithm from the boosting algorithm. The result is that you can boost any generic regression model, not just trees. Build a forward-thinking (forward-propagating) neural network if you wish, or build an ensemble of support vector machines if you would so desire. Mix and match link and loss functions at will.
 
