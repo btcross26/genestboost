@@ -116,7 +116,7 @@ Alternatively, you can install directly from PyPI:
 Documentation
 -------------
 
-Documentation is a work in progress. The most recent documentation is available on `GitHub Pages <https://btcross26.github.io/genestboost/build/html/index.html>`_
+Documentation is a work in progress. The most recent documentation is available on `GitHub Pages <https://btcross26.github.io/genestboost/build/html/index.html>`_.
 
 
 Bugs / Requests
