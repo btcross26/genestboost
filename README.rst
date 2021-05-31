@@ -129,3 +129,9 @@ Changelog
 ---------
 
 Consult the `Changelog <https://btcross26.github.io/genestboost/build/html/changelog.html>`_ for the latest release information.
+
+
+Contributing
+------------
+
+If you would like to contribute, please fork this repository, create a branch off of :code:`main` for your contribution, and submit a PR to the :code:`dev_staging` branch. Also, please create an issue describing the nature of the contribution if it has not already been done.
