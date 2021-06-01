@@ -130,7 +130,7 @@ Order that Variables Entered the Model
 
 .. code:: ipython3
 
-    # Order by index number - notice the first 19 variables are selected (informative features)
+    # Order by index number - 19 of the first 20 variables are selected (informative features)
     sorted(model.get_coefficient_order())
 
 

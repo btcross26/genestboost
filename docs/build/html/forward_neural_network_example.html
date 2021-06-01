@@ -63,7 +63,7 @@
 
 
               <div class="version">
-                0.2.0-beta
+                0.3.0
               </div>
 
 
@@ -91,9 +91,8 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="how_it_works.html">How It Works</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quick_coding_example.html">Quick Coding Example</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="examples.html">Additional Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="quantile_regression_example.html">Quantile Regression with Different Algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="binary_target_with_custom_wrapper_example.html">Binary Target Boosting with Custom Model Callback Wrapper</a></li>
 <li class="toctree-l2"><a class="reference internal" href="boosted_linear_model_example.html">BoostedLinearModel with SimplePLS Algorithm Example</a></li>
@@ -121,6 +120,7 @@
 <li class="toctree-l1"><a class="reference internal" href="model_callbacks.html">Model Callbacks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="weak_learners.html">Weak Learners</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">genestboost</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/btcross26/genestboost">GitHub Repo</a></li>
 </ul>
@@ -171,7 +171,7 @@
 
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
 
-          <li><a href="examples.html">Examples</a> &raquo;</li>
+          <li><a href="examples.html">Additional Examples</a> &raquo;</li>
 
       <li>Forward-Propagating Neural Network Example</li>
 
@@ -202,16 +202,17 @@ demonstrate will be the MNIST dataset. <code class="docutils literal notranslate
 implement a convolutional neural network. As multivariate targets are
 not yet supported, the problem solved will be to predict a binary target
 - here, the digit 5 is arbitrarily chosen as the positive target
-classes. Any other digit is in the ‘other’ class.</p>
+class. Any other digit is in the ‘other’ class.</p>
 <p>The main thing to be aware of in going through the example is that
 <code class="docutils literal notranslate"><span class="pre">pytorch</span></code> utilizes its own tensor type under the hood, while
-<code class="docutils literal notranslate"><span class="pre">genestboost</span></code> performs calculations using numpy arrays. Switching
+<code class="docutils literal notranslate"><span class="pre">genestboost</span></code> performs calculations using <code class="docutils literal notranslate"><span class="pre">numpy</span></code> arrays. Switching
 between the two is easy using <code class="docutils literal notranslate"><span class="pre">torch.numpy</span></code> or <code class="docutils literal notranslate"><span class="pre">torch.from_numpy</span></code>,
 but getting this right in all the right places can be tricky and may be
 the source of bugs. Getting input and output sizes correct in advancing
 layers can be tricky as well.</p>
 <p>In the code that follows, three layers are built manually: two
-convolutional layers and one dense layer that creates the final output.
+convolutional layers and one dense layer. After that, final dense layer
+is trained using <cite>pytorch</cite> that creates the final output.
 With a little creativity, subclassing, and some elbow grease, the
 process could be automated. Due to a lack of computing power on the
 machine for which this example is being run, the number of layers has

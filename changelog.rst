@@ -1,6 +1,14 @@
 Changelog
 =========
 
+0.3.0
+-----
+
+* Expanded support to Python 3.7 and Python 3.9 (previously only 3.8 was supported in 'setup.py');
+* Refactored and updated docs and README.rst file; and
+* Added initial continuous integration testing for multiple platforms on PR to dev or main branches by way of GitHub actions.
+
+
 0.2.0-beta
 ----------
 

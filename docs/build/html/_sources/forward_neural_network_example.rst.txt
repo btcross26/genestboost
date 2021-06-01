@@ -9,18 +9,19 @@ demonstrate will be the MNIST dataset. ``pytorch`` will be used to
 implement a convolutional neural network. As multivariate targets are
 not yet supported, the problem solved will be to predict a binary target
 - here, the digit 5 is arbitrarily chosen as the positive target
-classes. Any other digit is in the ‘other’ class.
+class. Any other digit is in the ‘other’ class.
 
 The main thing to be aware of in going through the example is that
 ``pytorch`` utilizes its own tensor type under the hood, while
-``genestboost`` performs calculations using numpy arrays. Switching
+``genestboost`` performs calculations using ``numpy`` arrays. Switching
 between the two is easy using ``torch.numpy`` or ``torch.from_numpy``,
 but getting this right in all the right places can be tricky and may be
 the source of bugs. Getting input and output sizes correct in advancing
 layers can be tricky as well.
 
 In the code that follows, three layers are built manually: two
-convolutional layers and one dense layer that creates the final output.
+convolutional layers and one dense layer. After that, final dense layer
+is trained using `pytorch` that creates the final output.
 With a little creativity, subclassing, and some elbow grease, the
 process could be automated. Due to a lack of computing power on the
 machine for which this example is being run, the number of layers has
