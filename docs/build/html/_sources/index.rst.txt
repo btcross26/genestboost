@@ -15,14 +15,14 @@ Welcome to genestboost's documentation!
    :caption: Contents:
 
    introduction
-   how_it_works
-   installation
+   quick_coding_example
    examples
    custom_link_function
    custom_loss_function
    model_callbacks
    weak_learners
    modules
+   installation
    changelog
    GitHub Repo <https://github.com/btcross26/genestboost>
 

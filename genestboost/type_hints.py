@@ -9,16 +9,20 @@ Custom type hints for use in various places of module
 
 from __future__ import annotations
 
-# import sys
-# PYTHON_VERSION = float("{:d}.{:d}".format(_sys.version_info[:2]))
+import sys
+
 # import Protocol and self return type type hints depending on Python version
-# if PYTHON_VERSION < 3.8:
-#     from typing_extensions import Protocol
-# else:  # Python 3.8+
+PYTHON_VERSION = float("{:d}.{:d}".format(*sys.version_info[:2]))
+if PYTHON_VERSION < 3.8:
+    from typing_extensions import Protocol  # type: ignore
+else:  # Python 3.8+
+    from typing import Protocol  # type: ignore
+
 from typing import Any, Dict
-from typing import Protocol as Protocol  # type: ignore
 
 import numpy as np
+
+# from typing import Protocol as Protocol  # type: ignore
 
 
 class Predictor(Protocol):
