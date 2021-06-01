@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.3.1
+-----
+
+Fixed the documentation link in 'setup.py' - should now work correctly on PyPI.
+
+
 0.3.0
 -----
 

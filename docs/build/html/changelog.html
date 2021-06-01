@@ -62,7 +62,7 @@
 
 
               <div class="version">
-                0.3.0
+                0.3.1
               </div>
 
 
@@ -99,10 +99,11 @@
 <li class="toctree-l1"><a class="reference internal" href="modules.html">genestboost</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#id1">0.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">0.3.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">0.3.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#beta">0.2.0-beta</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id3">0.1.1-beta</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id6">0.1.0-beta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">0.1.1-beta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">0.1.0-beta</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/btcross26/genestboost">GitHub Repo</a></li>
@@ -176,7 +177,11 @@
   <div class="section" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="id1">
-<h2>0.3.0<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<h2>0.3.1<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>Fixed the documentation link in ‘setup.py’ - should now work correctly on PyPI.</p>
+</div>
+<div class="section" id="id2">
+<h2>0.3.0<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>Expanded support to Python 3.7 and Python 3.9 (previously only 3.8 was supported in ‘setup.py’);</p></li>
 <li><p>Refactored and updated docs and README.rst file; and</p></li>
@@ -192,16 +197,16 @@
 <li><p>An example has been added to the documentation showing how a forward-propagating neural network can be built using <code class="code docutils literal notranslate"><span class="pre">pytorch</span></code>.</p></li>
 </ul>
 </div>
-<div class="section" id="id3">
-<h2>0.1.1-beta<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id4">
+<h2>0.1.1-beta<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
 <p>A bugfix release that comes with enhanced/updated documentation. The release comes with the following bugfixes:</p>
 <ul class="simple">
 <li><p>Fixes both training and holdout stopping criteria in the main BoostedModel class <a class="reference external" href="https://github.com/btcross26/genestboost/issues/18">(#18)</a>; and</p></li>
 <li><p>Fixes internal learning rate calculation logic in the BoostedModel class <a class="reference external" href="https://github.com/btcross26/genestboost/issues/17">(#17)</a>.</p></li>
 </ul>
 </div>
-<div class="section" id="id6">
-<h2>0.1.0-beta<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id7">
+<h2>0.1.0-beta<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
 <p>The initial release provides boosting functionality via two main classes: BoostedModel and BoostedLinearModel.</p>
 <p>The former is the most general class available and is meant to be used to build a boosted ensemble with any regression algorithm. The key is to provide a callable that returns a model object implementing a fit and predict method. Arguments can be passed to the callable via the model_kwargs_dict argument.</p>
 <p>The latter class, BoostedLinearModel, is meant to be used with linear models that have <code class="code docutils literal notranslate"><span class="pre">coef_</span></code> and <code class="code docutils literal notranslate"><span class="pre">intercept_</span></code> attributes. The class provides additional methods relevant to linear models, and it streamlines prediction of the ensemble by taking advantage of the fact that the sum of linear models is simply a linear model.</p>

@@ -21,9 +21,7 @@ and match link and loss functions at will.
 """
 
 PROJECT_URLS = {
-    "Documentation": (
-        "https://github.com/pages/btcross26/genestboost/build/html/index.html"
-    ),
+    "Documentation": ("https://btcross26.github.io/genestboost/build/html/index.html"),
     "Bug Tracker": "https://github.com/btcross26/genestboost/issues",
     "Source Code": "https://github.com/btcross26/genestboost",
 }
