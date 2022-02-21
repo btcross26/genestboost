@@ -37,6 +37,7 @@ class BoostedModel:
         validation_fraction: float = 0.0,
         validation_stratify: bool = False,
         validation_iter_stop: int = 10,
+        validation_tol: float = 0.0,
         tol: Optional[float] = None,
     ):
         """
@@ -105,6 +106,12 @@ class BoostedModel:
             holdout loss is greater at the current iteration than `validation_iter_stop`
             iterations prior, then stop model fitting.
 
+        validation_tol: float (default=0.0)
+            Minimum change in validation criteria to prevent stoppage. If set to 0.0
+            (i.e., the default value), then stoppage will only occur if the most
+            recent value is greater than the value `validation_iter_stop` iterations
+            ago.
+
         tol: float, optional (default=None)
             Early stopping criteria based on training loss. If training loss fails to
             improve by at least `tol`, then stop training. If None, then training loss
@@ -126,6 +133,7 @@ class BoostedModel:
         self.validation_fraction = validation_fraction
         self.validation_stratify = validation_stratify
         self.validation_iter_stop = validation_iter_stop
+        self.validation_tol = validation_tol
         self.tol = tol
 
         # additional vars used during the fitting process
@@ -735,7 +743,7 @@ class BoostedModel:
             if (
                 self.get_iterations() > self.validation_iter_stop
                 and self._loss_list[-self.validation_iter_stop - 1][1]
-                < self._loss_list[-1][1]
+                < self._loss_list[-1][1] + self.validation_tol
             ):
                 return True
 
