@@ -26,6 +26,7 @@ class BoostedLinearModel(BoostedModel):
         loss: BaseLoss,
         model_callback: Callable[..., LinearModel],
         model_callback_kwargs: Optional[Dict[str, Any]] = None,
+        bootstrap: Optional[float] = None,
         weights: Union[str, WeightsCallback] = "none",
         alpha: float = 1.0,
         step_type: str = "default",
@@ -55,6 +56,13 @@ class BoostedLinearModel(BoostedModel):
 
         model_callback_kwargs: dict, optional (default=None)
             A dictionary of keyword arguments to pass to `model_callback`.
+
+        bootstrap: float, optional (default=None)
+            An optional float in the interval (0.0, 1.0] specifying the fraction of
+            training set observations to subsample with replacement for the model fit
+            step. If None (the default), then no sampling is performed. If 1.0, then
+            a bootstrapped sample with the same number of observations as the training
+            set will be used in the fit.
 
         weights: Union[str, WeightsCallback]: str or Callable
             A string specificying the type of weights (one of "none" or "newton"), or a
@@ -115,6 +123,7 @@ class BoostedLinearModel(BoostedModel):
             loss,
             model_callback,
             model_callback_kwargs,
+            bootstrap,
             weights,
             alpha,
             step_type,
@@ -138,6 +147,7 @@ class BoostedLinearModel(BoostedModel):
         eta_p: np.ndarray,
         model_callback: ModelCallback,
         model_callback_kwargs: Dict[str, Any],
+        bootstrap: Optional[float] = None,
         weights: Optional[np.ndarray] = None,
     ) -> Tuple[np.ndarray, np.ndarray]:
         """
@@ -174,6 +184,13 @@ class BoostedLinearModel(BoostedModel):
         model_callback_kwargs: dict, optional (default=None)
             A dictionary of keyword arguments to pass to `model_callback`.
 
+        bootstrap: float, optional (default=None)
+            An optional float in the interval (0.0, 1.0] specifying the fraction of
+            training set observations to subsample with replacement for the model fit
+            step. If None (the default), then no sampling is performed. If 1.0, then
+            a bootstrapped sample with the same number of observations as the training
+            set will be used in the fit.
+
         weights: np.ndarray, optional (default=None)
             Sample weights (by observation) to use for fitting. Should be positive.
             Observations with higher weights will affect the model fit more. If 'None',
@@ -185,7 +202,7 @@ class BoostedLinearModel(BoostedModel):
             A tuple of the updated target predictions and target prediction links.
         """
         yp_next, eta_p_next = super().boost(
-            X, yt, yp, eta_p, model_callback, model_callback_kwargs, weights
+            X, yt, yp, eta_p, model_callback, model_callback_kwargs, bootstrap, weights
         )
         model, lr = self._model_list[-1]
         self.coef_ += lr * model.coef_  # type: ignore

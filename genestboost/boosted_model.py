@@ -28,6 +28,7 @@ class BoostedModel:
         loss: BaseLoss,
         model_callback: ModelCallback,
         model_callback_kwargs: Optional[Dict[str, Any]] = None,
+        bootstrap: Optional[float] = None,
         weights: Union[str, WeightsCallback] = "none",
         alpha: float = 1.0,
         step_type: str = "decaying",
@@ -55,6 +56,13 @@ class BoostedModel:
 
         model_callback_kwargs: dict, optional (default=None)
             A dictionary of keyword arguments to pass to `model_callback`.
+
+        bootstrap: float, optional (default=None)
+            An optional float in the interval (0.0, 1.0] specifying the fraction of
+            training set observations to subsample with replacement for the model fit
+            step. If None (the default), then no sampling is performed. If 1.0, then
+            a bootstrapped sample with the same number of observations as the training
+            set will be used in the fit.
 
         weights: Union[str, WeightsCallback]: str or Callable
             A string specificying the type of weights (one of "none" or "newton"), or a
@@ -118,6 +126,7 @@ class BoostedModel:
             dict() if model_callback_kwargs is None else model_callback_kwargs
         )  # type: Dict[str, Any]
         self.weights = weights
+        self.bootstrap = bootstrap
         self.alpha = alpha
         self.step_type = step_type
         self.step_decay_factor = step_decay_factor
@@ -154,6 +163,7 @@ class BoostedModel:
         eta_p: np.ndarray,
         model_callback: ModelCallback,
         model_callback_kwargs: Dict[str, Any],
+        bootstrap: Optional[float] = None,
         weights: Optional[np.ndarray] = None,
     ) -> Tuple[np.ndarray, np.ndarray]:
         """
@@ -190,6 +200,13 @@ class BoostedModel:
         model_callback_kwargs: dict, optional (default=None)
             A dictionary of keyword arguments to pass to `model_callback`.
 
+        bootstrap: float, optional (default=None)
+            An optional float in the interval (0.0, 1.0] specifying the fraction of
+            training set observations to subsample with replacement for the model fit
+            step. If None (the default), then no sampling is performed. If 1.0, then
+            a bootstrapped sample with the same number of observations as the training
+            set will be used in the fit.
+
         weights: np.ndarray, optional (default=None)
             Sample weights (by observation) to use for fitting. Should be positive.
             Observations with higher weights will affect the model fit more. If 'None',
@@ -203,7 +220,13 @@ class BoostedModel:
         model_ = model_callback(**model_callback_kwargs)
         weights = 1.0 if weights is None else weights
         p_residuals = self.compute_p_residuals(yt, yp) * weights
-        model_ = model_.fit(X[:, : self._msi], p_residuals)
+        if not bootstrap:
+            model_ = model_.fit(X[:, : self._msi], p_residuals)
+        else:
+            train_index = np.random.choice(
+                X.shape[0], int(bootstrap * X.shape[0]), replace=True
+            )
+            model_ = model_.fit(X[train_index, : self._msi], p_residuals)
         preds = model_.predict(X[:, : self._msi])
         learning_rate = self._compute_beta(yt, eta_p, preds)
         eta_p_next = eta_p + learning_rate * preds
@@ -478,6 +501,7 @@ class BoostedModel:
                 eta_p_train,
                 self.model_callback,
                 self.model_callback_kwargs,
+                self.bootstrap,
                 model_data.weights_train,
             )
 
