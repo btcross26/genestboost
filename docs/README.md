@@ -473,4 +473,213 @@ The firing-pattern clustering with MMR selection should produce a pool where eve
 
 ### Pareto Front vs. Constrained Single-Objective
 
-Run the Pareto front (dollar recall vs. case recall) at least once to understand the tradeoff shape. If the two objectives are highly correlated across the frontier, the case recall floor is unnecessary. If there's a sharp elbow, that tells you exactly where to set `min_case_recall` for subsequent constrained single-objective runs with CMA-ES.
+Run the Pareto front (dollar recall vs. case recall) at least once to understand the tradeoff shape. If the two objectives are highly correlated across the frontier, the case recall floor is unnecessary. If there's a sharp elbow, that tells you exactly where to set `min_case_recall` for subsequent constrained single-objective runs with CMA-# MILP for Fraud Rule Optimization
+
+## What is MILP?
+
+Mixed-Integer Linear Programming (MILP) is an optimization framework where you minimize or maximize a linear objective function, subject to linear constraints, with the requirement that some or all decision variables must take integer values (often binary 0/1). The solver explores feasible combinations of integer variables using branch-and-bound, cutting planes, and LP relaxations — brute-force search made tractable.
+
+**Tooling:** Google's open-source OR-Tools library (`ortools.linear_solver.pywraplp`) supports SCIP as a backend solver for MILP problems.
+
+---
+
+## The Problem
+
+Given a dataset with:
+
+- A **ground truth binary column** (e.g., confirmed fraud)
+- **Hundreds of candidate binary rule columns** (e.g., alert rules)
+
+Find the smallest or least-complex subset of rules such that their **OR** (at least one fires) achieves a minimum hit rate on the ground truth, subject to operational constraints like a cap on total alert volume.
+
+This is a **weighted set cover** problem — covering the positive-label rows with the fewest (or cheapest) rule columns.
+
+---
+
+## Core Formulation
+
+### Decision Variables
+
+| Variable | Meaning |
+|----------|---------|
+| $z_j \in \{0,1\}$ | Whether candidate rule $j$ is selected |
+| $f_i \in \{0,1\}$ | Whether row $i$ is "fired on" (at least one selected rule hits) |
+
+The $z_j$ variables are the true decisions. The $f_i$ variables are mechanical bookkeeping — fully determined by the $z_j$ choices — needed only to express the hit rate and volume constraints linearly.
+
+### Linearizing the OR Condition
+
+For the OR of selected rules, the only constraints needed are:
+
+$$f_i \geq z_j \quad \text{for all } (i, j) \text{ where } x_{ij} = 1$$
+
+This says: if rule $j$ is selected ($z_j = 1$) and rule $j$ fires on row $i$ ($x_{ij} = 1$), then row $i$ must be flagged ($f_i = 1$).
+
+No upper-bound constraint on $f_i$ is needed. Since $f_i \in \{0,1\}$ by its domain and $f_i$ is not rewarded in the objective, the solver has no incentive to push it to 1 unless forced by some active $z_j$.
+
+The constraint set is extremely sparse — you only generate entries where rules actually fire.
+
+### Objective: Minimize Number of Rules
+
+$$\text{minimize} \sum_j z_j$$
+
+### Constraint: Minimum Recall (Hit Rate on Positives)
+
+$$\sum_{i:\, y_i = 1} f_i \;\geq\; \tau \cdot N^+$$
+
+where $\tau$ is the target recall and $N^+$ is the total number of positive-label rows.
+
+### Constraint: Maximum Alert Volume
+
+$$\sum_i f_i \;\leq\; M$$
+
+where $M$ is the maximum number of rows allowed to fire.
+
+---
+
+## Adding Rule Complexity
+
+Instead of treating all rules equally, assign a complexity cost $c_j$ to each rule (e.g., 1, 2, 10). The objective becomes:
+
+$$\text{minimize} \sum_j c_j \cdot z_j$$
+
+This is the general **weighted set cover**. Minimizing number of rules is the special case where all $c_j = 1$.
+
+You can also combine both — minimize total complexity while capping the number of rules:
+
+$$\text{minimize} \sum_j c_j \cdot z_j$$
+
+$$\sum_j z_j \leq K$$
+
+This says: among all feasible sets of $\leq K$ rules meeting recall and volume constraints, find the one with lowest total complexity.
+
+---
+
+## Full Formulation (with Aggregation)
+
+### Variables
+
+- $z_j \in \{0,1\}$ for each candidate rule $j$
+- $f_k \in \{0,1\}$ for each distinct row-pattern group $k$
+
+### Objective
+
+$$\text{minimize} \sum_j c_j \cdot z_j$$
+
+### Constraints
+
+| Constraint | Expression | Purpose |
+|------------|------------|---------|
+| OR linkage | $f_k \geq z_j$ for all $(k,j)$ where $x_{kj} = 1$ | If a selected rule fires on pattern $k$, flag it |
+| Minimum recall | $\sum_k w_k^+ \cdot f_k \geq \tau \cdot N^+$ | Cover enough fraud |
+| Maximum volume | $\sum_k w_k \cdot f_k \leq M$ | Don't blow up the alert queue |
+| Max rules (optional) | $\sum_j z_j \leq K$ | Limit number of active rules |
+
+Where:
+
+- $w_k$ = total number of rows in pattern group $k$
+- $w_k^+$ = number of positive-label rows in pattern group $k$
+- $N^+$ = total number of positive-label rows
+
+---
+
+## Row Aggregation
+
+### The Principle
+
+Rows with identical binary patterns across all candidate rule columns are indistinguishable from the solver's perspective. They can be collapsed into a single representative with a weight. This is exact — not an approximation.
+
+This technique is standard in operations research (called "row aggregation," "demand aggregation," or "scenario reduction" depending on the domain).
+
+### Why It Works Here
+
+1. **Drop non-firing rows entirely.** Rows where no candidate rule fires have $f_k = 0$ guaranteed. They contribute nothing to any constraint.
+2. **Collapse among firing rows.** If you have 100k rows where at least one rule fires, the number of distinct binary patterns is typically far smaller — often a few thousand — because fraud rules are correlated and sparse.
+3. **The aggregation is valid as long as grouped rows have identical coefficients in every constraint.** If you later add constraints that differentiate rows within a group (e.g., per-customer caps, time-windowed limits), you'd need to re-partition.
+
+### Example
+
+| Scenario | Row Count |
+|----------|-----------|
+| Total transactions | 5,000,000 |
+| Rows where ≥1 rule fires | 100,000 |
+| Distinct binary patterns | ~2,000–5,000 |
+
+The solver operates on the ~2,000–5,000 pattern groups, not millions of rows.
+
+---
+
+## Exploring the Pareto Frontier (Recall vs. Complexity)
+
+The tradeoff between recall and complexity can be mapped by sweeping one parameter while optimizing the other.
+
+### Approach 1: Sweep the Recall Threshold
+
+Solve the MILP at $\tau = 0.95, 0.90, 0.85, \ldots$ and collect the optimal complexity at each level:
+
+$$\text{minimize} \sum_j c_j \cdot z_j \quad \text{subject to recall} \geq \tau$$
+
+### Approach 2: Sweep the Complexity Budget (Flipped Formulation)
+
+Put recall in the objective and complexity in the constraint:
+
+$$\text{maximize} \sum_k w_k^+ \cdot f_k$$
+
+$$\sum_j c_j \cdot z_j \leq C$$
+
+Then sweep $C$ upward. At each budget level you get the best recall achievable.
+
+### Flipping is General
+
+These two approaches trace the same Pareto frontier from different axes. This is a general principle in optimization: "minimize A subject to B ≥ threshold" and "maximize B subject to A ≤ budget" yield the same set of Pareto-optimal points. The aggregation and constraint structure remain identical — you're just reassigning which linear expression is the objective and which is a constraint.
+
+The two formulations may have different computational performance (LP relaxation tightness, branching behavior), so if one direction is slow, it's worth trying the flip.
+
+### The Typical Shape
+
+The frontier usually has a clear **elbow** — you get a lot of recall cheaply with the first few rules, then it gets expensive fast. That elbow is the natural operating point and often the most valuable output for stakeholder conversations.
+
+---
+
+## Infeasibility
+
+MILP solvers return a status flag indicating whether a feasible solution exists:
+
+```python
+status = solver.Solve()
+if status == pywraplp.Solver.INFEASIBLE:
+    # no feasible solution exists
+```
+
+Infeasibility is common and informative. You could easily create contradictory demands — "achieve 95% recall with at most 3 rules and cap alerts at 500" — where no combination of rules satisfies all constraints simultaneously.
+
+### Diagnostic Use
+
+Relax one constraint at a time to find the binding bottleneck:
+
+- Is it the recall floor?
+- The volume cap?
+- The max number of rules?
+- The complexity budget?
+
+This conversation with stakeholders is often more valuable than the solution itself.
+
+### Why Infeasibility Is More Common in MILP Than Continuous LP
+
+In continuous optimization (e.g., structural engineering), the feasible region typically has a continuous interior — you can always find some feasible point even if it's at a boundary. With integer constraints, you're restricted to lattice points, and the feasible set can easily be empty. There's no continuous interior to fall back on.
+
+---
+
+## Summary of Key Insights
+
+- **OR linearization** is simpler than AND — you only need $f_i \geq z_j$ where $x_{ij} = 1$
+- **No upper bound on $f_i$ needed** — domain ($\{0,1\}$) and lack of objective incentive handle it
+- **Weighted set cover** generalizes naturally from "fewest rules" to "least complex rules"
+- **Stacking business constraints** (recall floor, volume cap, rule count limit, complexity budget) is just adding rows to the formulation — no algorithmic redesign
+- **Row aggregation** reduces millions of rows to thousands of pattern groups exactly
+- **Pareto frontier** exploration is a simple loop of MILP solves, and the objective/constraint roles can be flipped
+- **Infeasibility is a feature** — it reveals which business requirements conflict
+
+
+
+
